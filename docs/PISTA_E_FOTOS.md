@@ -2,7 +2,7 @@
 
 ## Testar no Windows
 
-1. Abra a versão que mostra **ESTÚDIO 07 / GARAGEM E PISTA**.
+1. Abra a versão que mostra **ESTÚDIO 08 / PISTA E RONCOS**.
 2. Personalize o Gol como quiser e clique em **Testar carro**, no rodapé.
 3. Clique dentro da janela do jogo para os controles receberem o teclado.
 4. Use **W** para acelerar progressivamente; **S** freia e, depois de parar, engata ré. **A/D** viram e **Espaço** aciona o freio de mão.

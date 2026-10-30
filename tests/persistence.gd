@@ -69,7 +69,7 @@ func run() -> void:
 	var legacy_store := Store.new(legacy_path)
 	check(legacy_store.load_customization().wheel_inches == 17,"Arquivo v1 lido do disco")
 	check(legacy_store.save_customization(migrated),"Arquivo v1 atualizado para v2")
-	check(int(JSON.parse_string(FileAccess.get_file_as_string(legacy_path)).schema_version) == 3,"Schema atualizado")
+	check(int(JSON.parse_string(FileAccess.get_file_as_string(legacy_path)).schema_version) == 4,"Schema atualizado")
 	check(int(JSON.parse_string(FileAccess.get_file_as_string(legacy_path + ".bak")).schema_version) == 1,"Arquivo v1 original no backup")
 	var first := store.document(state)
 	state.body_color = Color("2367ac")
@@ -101,7 +101,7 @@ func run() -> void:
 		{"film_intensity":1.1}, {"film":6}, {"finish":3},
 		{"body_color":[1,0]}, {"wheel_color":[1,0,"x"]},
 		{"body_color":[1.2,0,0]}, {"vehicle_id":"other_car"},
-		{"schema_version":4}, {"schema_version":"1"},
+		{"schema_version":5}, {"schema_version":"1"},
 		{"film":0,"film_intensity":0.5},
 		{"sport_intake":1}, {"turbo_visual":"true"}, {"strut_brace":null},
 		{"audio_setup":4}, {"upholstery":3}, {"interior_color":[1,2,0]},

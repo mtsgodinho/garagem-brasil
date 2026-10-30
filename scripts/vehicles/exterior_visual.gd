@@ -1,12 +1,15 @@
 extends RefCounted
 ## Peças próprias, sem marcas/recursos de terceiros. Mantêm o corpo móvel independente.
 
-static func bumper(parent: Node3D, front: bool, touring: bool, paint: Material) -> void:
+static func bumper(parent: Node3D, front: bool, touring: bool, paint: Material, low: bool = false, drop: float = 0.0) -> void:
 	var st := SurfaceTool.new()
 	st.begin(Mesh.PRIMITIVE_TRIANGLES)
 	var levels := [Vector2(0.36,0.77),Vector2(0.40,0.85),Vector2(0.55,0.86),Vector2(0.72,0.81)]
 	if touring:
 		levels = [Vector2(0.39,0.79),Vector2(0.43,0.83),Vector2(0.61,0.84),Vector2(0.74,0.81)]
+	if low:
+		levels[0].x = 0.105+drop
+		levels[1].x = 0.15+drop
 	var vertices: Array[Vector3] = []
 	for level in levels:
 		for i in 33:
@@ -18,6 +21,17 @@ static func bumper(parent: Node3D, front: bool, touring: bool, paint: Material) 
 			var indices: Array = [a,a+33,a+34,a,a+34,a+1] if front else [a,a+34,a+33,a,a+1,a+34]
 			for index in indices:
 				st.add_vertex(vertices[index])
+	# Side returns give the bumper real depth instead of a hanging front sheet.
+	for side in [-1.0,1.0]:
+		for j in 3:
+			var y0: float = levels[j].x
+			var y1: float = levels[j+1].x
+			var x0: float = side*levels[j].y
+			var x1: float = side*levels[j+1].y
+			var nose := -1.99 if front else 1.96
+			var back := -1.64 if front else 1.64
+			var quad: Array[Vector3] = [Vector3(x0,y0,nose),Vector3(x1,y1,nose),Vector3(x1,y1,back),Vector3(x0,y0,back)]
+			for index in [0,1,2,0,2,3]: st.add_vertex(quad[index])
 	st.generate_normals()
 	var part := MeshInstance3D.new()
 	part.name = "FrontCustomBumper" if front else "RearCustomBumper"
@@ -58,21 +72,37 @@ static func build(car: Node3D, parent: Node3D, state: Resource, decal: Material)
 	var black: Material = car.material(Color("15191d"),0.05,0.6)
 	var paint: Material = car.body_material.duplicate()
 	paint.cull_mode = BaseMaterial3D.CULL_DISABLED
-	if state.bumper_style > 0:
-		bumper(parent,true,state.bumper_style == 2,paint)
-		bumper(parent,false,state.bumper_style == 2,paint)
+	var front: int = state.front_bumper_style if state.front_bumper_style >= 0 else state.bumper_style
+	var rear: int = state.rear_bumper_style if state.rear_bumper_style >= 0 else state.bumper_style
+	var drop: float = state.lowering_cm/100.0
+	if front > 0:
+		bumper(parent,true,front == 2,paint,front == 3,drop)
 		car.box(parent,"SportIntake",Vector3(0.82,0.16,0.025),Vector3(0,0.53,-2.085),black)
 		for x in [-0.59,0.59]:
 			car.box(parent,"SideIntake",Vector3(0.20,0.105,0.024),Vector3(x,0.53,-2.065),black)
-		car.box(parent,"RearDiffuser",Vector3(1.15,0.105,0.035),Vector3(0,0.425,2.02),black)
+	if rear > 0:
+		bumper(parent,false,rear == 2,paint,rear == 3,drop)
+		car.box(parent,"RearDiffuser",Vector3(1.15,0.105,0.035),Vector3(0,0.1575+drop if rear == 3 else 0.425,2.02),black)
 	if state.fender_style > 0:
 		for side in [-1.0,1.0]:
 			for z in [-1.22,1.23]:
 				arc(parent,side,z,state.fender_style == 2,paint,state.lowering_cm/100.0)
-	if state.body_kit > 0:
+	var skirt: int = state.side_skirt_style if state.side_skirt_style >= 0 else (1 if state.body_kit > 0 else 0)
+	if skirt > 0:
 		for side in [-1.0,1.0]:
-			car.box(parent,"SideSkirt",Vector3(0.11,0.085,1.51),Vector3(side*0.79,0.49,0.04),paint)
-		car.box(parent,"FrontLip",Vector3(1.66,0.035,0.20),Vector3(0,0.375 if state.bumper_style > 0 else 0.435,-1.99),black)
+			var height: float = 0.545-(0.105+drop) if skirt == 2 else 0.085
+			var y: float = 0.545-height/2.0 if skirt == 2 else 0.49
+			var part: Node3D
+			if skirt == 2:
+				var bottom := 0.105+drop
+				var outline: Array[Vector2] = [Vector2(-0.715,bottom+0.03),Vector2(-0.715,0.545),Vector2(0.795,0.545),Vector2(0.795,bottom+0.03),Vector2(0.72,bottom),Vector2(-0.64,bottom)]
+				part = car.profile(parent,"SideSkirt",outline,0.11,paint)
+				part.position.x = side*0.79
+			else:
+				part = car.box(parent,"SideSkirt",Vector3(0.11,height,1.51),Vector3(side*0.79,y,0.04),paint)
+			part.set_meta("skirt",true)
+	if state.body_kit > 0:
+		car.box(parent,"FrontLip",Vector3(1.66,0.035,0.20),Vector3(0,0.1225+drop if front == 3 else (0.375 if front > 0 else 0.435),-1.99),black)
 		if state.body_kit == 2:
 			for x in [-0.50,0.50]:
 				var mount: Node = car.box(car.get_node("Hatch"),"WingMount",Vector3(0.045,0.10,0.10),Vector3(x,0.05,-0.07),black)

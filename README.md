@@ -1,6 +1,6 @@
 # Garagem Brasil
 
-Protótipo 0.7.0 em **Godot 4.6.3 / GDScript**, renderer **Compatibility**.
+Protótipo 0.8.0 em **Godot 4.6.3 / GDScript**, renderer **Compatibility**.
 A garagem e a personalização foram aprovadas pelo usuário no Windows. O usuário confirmou o salvamento e pediu mais semelhança com fotos reais. Esta entrega revisa **carroceria, materiais, pneus, iluminação e enquadramento**, preservando as personalizações e os saves.
 
 ## Abrir no Windows (sem programação)
@@ -12,6 +12,14 @@ A garagem e a personalização foram aprovadas pelo usuário no Windows. O usuá
 5. Arraste com o botão esquerdo sobre a cena para girar ao redor do carro. Use a roda do mouse para aproximar/afastar. Pressione **R** ou clique em **Restaurar câmera** para voltar à posição inicial. **Sair** fecha o jogo.
 
 Não há executável Windows exportado nesta entrega. O projeto deve ser executado pelo Godot; exportação e validação do executável pertencem à finalização. Não houve teste em Windows neste ambiente Linux.
+
+## Novidade 0.8.0 — filtros, roncos e peças baixas
+
+Em **Motor / som**, role o painel: há quatro filtros, ronco Automático pelo filtro e quatro perfis manuais, volume e **Ouvir prévia (W para acelerar)**. O som é sintetizado e varia durante a direção; não usa gravações reais ou pagas.
+
+Em **Exterior**, escolha dianteiro, traseiro e saia lateral independentemente. Cada um tem opção **Baixo • arrasta no chão**, com borda no nível do piso conforme o rebaixamento. É contato visual, sem simulação de raspagem/desgaste.
+
+[Instruções e roteiro de teste](docs/FILTROS_RONCOS_E_KITS_BAIXOS.md). Tudo é salvo; a versão nova precisa de teste visual e auditivo no Windows. Pista e modo foto também estão incluídos.
 
 ## Novidade 0.7.0 — dirigir e fotografar
 
@@ -37,11 +45,11 @@ O painel à direita tem nove categorias: Pintura, Rodas, Vidros, Aberturas, Moto
 - **Interior:** escolha Tecido, Couro sintético ou Esportivo bicolor. Há cores independentes para bancos e painel/portas. No bicolor, as laterais dos bancos usam a cor do interior. **Ver interior** abre as portas e aproxima a câmera.
 - **Restaurar câmera** ou R retorna à vista geral, inclusive depois de usar os botões de detalhe.
 
-Motor e som são montagens visuais nesta entrega: não alteram potência nem reproduzem áudio. O interior e a geometria continuam simplificados. Ao reabrir o jogo, as peças começam fechadas; as escolhas de acessórios e cores são preservadas.
+As peças do motor não alteram potência; o ronco do motor agora é sintetizado e ajustável. As caixas do porta-malas ainda não reproduzem áudio. O interior e a geometria continuam simplificados. Ao reabrir o jogo, as peças começam fechadas; as escolhas de acessórios e cores são preservadas.
 
 ## Salvamento: como usar
 
-A versão atual mostra **ESTÚDIO 07 / GARAGEM E PISTA** e o botão **Salvar modificações** abaixo das abas.
+A versão atual mostra **ESTÚDIO 08 / PISTA E RONCOS** e o botão **Salvar modificações** abaixo das abas.
 
 - Ao parar de alterar uma opção por 0,6 segundo, o jogo salva automaticamente. O rodapé indica alterações pendentes, sucesso ou falha.
 - O botão **Salvar modificações** grava imediatamente.
@@ -51,13 +59,13 @@ A versão atual mostra **ESTÚDIO 07 / GARAGEM E PISTA** e o botão **Salvar mod
 
 No Windows, os dados ficam em `%APPDATA%\Godot\app_userdata\Garagem Brasil\garagem\customization.json`. Para abrir a pasta, pressione **Win+R**, cole `%APPDATA%\Godot\app_userdata\Garagem Brasil\garagem` e pressione Enter. Não é necessário editar esse arquivo para jogar.
 
-O formato atual (schema 3) lê saves dos schemas 1 e 2, mantendo pintura/rodas/vidros e usando padrões para as novas opções. O jogo mantém `.bak` com a versão válida anterior. Se o principal estiver inválido, tenta esse backup; se ambos forem inválidos, abre com os padrões e mostra um aviso. Arquivos inválidos ou incompatíveis são preservados como `.invalid-<data>.json` antes de uma nova gravação. Falha em preservar ou gravar interrompe o salvamento e mantém o estado pendente.
+O formato atual (schema 4) lê saves dos schemas 1 a 3, mantendo pintura/rodas/vidros e usando padrões para as novas opções. O jogo mantém `.bak` com a versão válida anterior. Se o principal estiver inválido, tenta esse backup; se ambos forem inválidos, abre com os padrões e mostra um aviso. Arquivos inválidos ou incompatíveis são preservados como `.invalid-<data>.json` antes de uma nova gravação. Falha em preservar ou gravar interrompe o salvamento e mantém o estado pendente.
 
 O arquivo é compartilhado pelas cópias do projeto com o nome Garagem Brasil no mesmo usuário Windows: extrair uma versão nova em outra pasta não deve apagar as escolhas já salvas. As escolhas feitas na versão anterior sem salvamento não podem ser recuperadas automaticamente.
 
 ## O que testar para aprovar esta entrega
 
-1. Abra a versão que mostra **ESTÚDIO 07 / GARAGEM E PISTA**.
+1. Abra a versão que mostra **ESTÚDIO 08 / PISTA E RONCOS**.
 2. Escolha uma cor diferente, acabamento e brilho; troque modelo, cor e tamanho das rodas; escolha uma película e intensidade.
 3. Teste abrir/fechar todas as peças; selecione peças de motor, uma caixa de som, estofado e cores do interior.
 4. Clique em **Salvar modificações** e confira a mensagem verde **Modificações salvas neste computador**.
@@ -140,3 +148,5 @@ Consulte [o planejamento e a arquitetura](docs/PLANO.md). A direção arcade est
 Validação 0.6.0: testes de exterior/suspensão (55 verificações), dez rodas, migração de saves antigos e gravação/reabertura de todas as novas escolhas; capturas reais dos kits e adesivos. Executados no Linux; a versão nova ainda precisa do teste no Windows.
 
 Validação 0.7.0: 18 verificações de direção/colisão/pausa/foto/retorno e PNGs reais salvos na pista e garagem. As verificações das etapas anteriores continuam executadas por tools/verify-cloud.py.
+
+Validação 0.8.0: 55 verificações de filtros/roncos/peças baixas, geração de quatro WAVs de teste e reabertura em processos independentes com os novos campos. Áudio gerado em 16 kHz e reproduzido pelo motor; validação auditiva em Windows pendente.

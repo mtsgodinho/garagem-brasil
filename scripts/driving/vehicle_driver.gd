@@ -3,6 +3,7 @@ extends CharacterBody3D
 const Car = preload("res://scripts/vehicles/placeholder_car.gd")
 var customization: Resource
 var visual: Node3D
+var engine_audio: AudioStreamPlayer
 var speed := 0.0
 var steering := 0.0
 var throttle := 0.0
@@ -25,6 +26,8 @@ func _ready() -> void:
 	add_child(visual)
 	visual.position.y = -0.105
 	visual.apply_customization(customization)
+	engine_audio = load("res://scripts/driving/engine_audio.gd").new()
+	add_child(engine_audio)
 	reset_vehicle()
 
 func reset_vehicle() -> void:
@@ -68,3 +71,7 @@ func _physics_process(delta: float) -> void:
 		wheel.rotation.x -= speed/0.32*delta
 		wheel.rotation.y = -steering if str(wheel.name).contains("Front") else 0.0
 	if position.y < -5: reset_vehicle()
+
+func _process(_delta: float) -> void:
+	if engine_audio != null:
+		engine_audio.update_engine(customization,speed,throttle,controls_enabled)

@@ -38,6 +38,10 @@ static func engine(car: Node3D, parent: Node3D) -> void:
 	parent.add_child(sport)
 	cylinder(sport,"PolishedIntake",Vector3(-0.29,0.23,-0.2),0.045,0.35,metal,Vector3(0,0,PI/2))
 	cylinder(sport,"SportFilter",Vector3(-0.53,0.23,-0.2),0.075,0.17,red,Vector3(0,0,PI/2))
+	var twin := cylinder(sport,"TwinFilter",Vector3(-0.53,0.23,-0.36),0.065,0.16,red,Vector3(0,0,PI/2))
+	twin.visible = false
+	var cold: Node3D = car.box(sport,"ColdBox",Vector3(0.23,0.18,0.28),Vector3(-0.51,0.20,-0.19),dark)
+	cold.visible = false
 	var turbo := Node3D.new()
 	turbo.name = "TurboKit"
 	parent.add_child(turbo)

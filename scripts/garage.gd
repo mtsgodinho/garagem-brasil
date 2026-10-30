@@ -15,6 +15,8 @@ var store: RefCounted
 var save_timer: Timer
 var dirty := false
 var exit_dialog: ConfirmationDialog
+var engine_audio: AudioStreamPlayer
+var preview_engine := false
 var track: Node3D
 var photo: Node3D
 var studio_environment: Environment
@@ -129,6 +131,8 @@ func _ready() -> void:
 	camera.near = 0.1
 	camera.h_offset = 0.9
 	add_child(camera)
+	engine_audio = load("res://scripts/driving/engine_audio.gd").new()
+	add_child(engine_audio)
 	create_ui()
 
 func create_ui() -> void:
@@ -141,6 +145,7 @@ func create_ui() -> void:
 	customization_ui.exit_requested.connect(request_exit)
 	customization_ui.save_requested.connect(save_now)
 	customization_ui.view_requested.connect(camera.focus_detail)
+	customization_ui.preview_requested.connect(func(active: bool) -> void: preview_engine = active)
 	customization_ui.drive_requested.connect(enter_track)
 	customization_ui.photo_requested.connect(enter_photo)
 	customization_ui.opening_requested.connect(get_node("VehicleVisual").set_part_open)
@@ -180,6 +185,12 @@ func request_exit() -> void:
 			add_child(exit_dialog)
 		exit_dialog.popup_centered()
 		return
+	preview_engine = false
+	engine_audio.stop_sound()
+	if track != null:
+		track.driver.controls_enabled = false
+		track.driver.engine_audio.stop_sound()
+	await get_tree().create_timer(0.05).timeout
 	get_tree().quit()
 
 func _notification(what: int) -> void:
@@ -189,6 +200,8 @@ func _notification(what: int) -> void:
 func enter_track() -> void:
 	if track != null or photo != null: return
 	if dirty and not save_now(): return
+	preview_engine = false
+	customization_ui.preview_check.set_pressed_no_signal(false)
 	studio_environment = get_node("WorldEnvironment").environment
 	get_node("WorldEnvironment").environment = null
 	visible = false
@@ -205,6 +218,7 @@ func leave_track() -> void:
 	if track == null: return
 	track.world.environment = null
 	track.driver.controls_enabled = false
+	track.driver.engine_audio.stop_sound()
 	track.queue_free()
 	track = null
 	get_node("WorldEnvironment").environment = studio_environment
@@ -247,3 +261,10 @@ func _unhandled_key_input(event: InputEvent) -> void:
 	if track == null and photo == null and event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_P:
 		get_viewport().set_input_as_handled()
 		enter_photo()
+
+func _process(_delta: float) -> void:
+	if engine_audio == null: return
+	var active := preview_engine and track == null and photo == null
+	var rev := 1.0 if Input.is_physical_key_pressed(KEY_W) else 0.15
+	engine_audio.update_engine(customization,0,rev,active)
+	if active: engine_audio.target_rpm = lerpf(950,5000,rev)

@@ -79,6 +79,7 @@ func run() -> void:
 	garage.leave_track()
 	await process_frame
 	check(garage.customization.body_color.is_equal_approx(Color("cc2345")),"Volta com escolhas preservadas")
+	await create_timer(0.05).timeout
 	if not failed:
 		print("PASS: %d verificações de direção, pausa, foto e retorno" % checks)
 		quit()

@@ -202,6 +202,13 @@ func apply_customization(state: Resource) -> void:
 	seat_trim_material.roughness = seat_material.roughness
 	get_node("EngineBay/StockIntake").visible = not state.sport_intake
 	get_node("EngineBay/SportIntake").visible = state.sport_intake
+	var intake: int = state.intake_style
+	if intake == 0 and state.sport_intake: intake = 1
+	get_node("EngineBay/StockIntake").visible = intake == 0
+	get_node("EngineBay/SportIntake").visible = intake > 0
+	get_node("EngineBay/SportIntake/SportFilter").visible = intake in [1,2]
+	get_node("EngineBay/SportIntake/TwinFilter").visible = intake == 2
+	get_node("EngineBay/SportIntake/ColdBox").visible = intake == 3
 	get_node("EngineBay/TurboKit").visible = state.turbo_visual
 	get_node("EngineBay/StrutBrace").visible = state.strut_brace
 	if current_audio != state.audio_setup:
@@ -211,7 +218,7 @@ func apply_customization(state: Resource) -> void:
 	apply_exterior(state)
 
 func apply_exterior(state: Resource) -> void:
-	var signature: Array = [state.bumper_style,state.fender_style,state.body_kit,state.sticker_style,state.sticker_color,state.body_color,state.finish,state.gloss,state.lowering_cm]
+	var signature: Array = [state.bumper_style,state.fender_style,state.body_kit,state.sticker_style,state.sticker_color,state.body_color,state.finish,state.gloss,state.lowering_cm,state.front_bumper_style,state.rear_bumper_style,state.side_skirt_style]
 	decal_material.albedo_color = Color(state.sticker_color,1.0)
 	decal_material.roughness = 0.6
 	decal_material.cull_mode = BaseMaterial3D.CULL_DISABLED
@@ -221,7 +228,9 @@ func apply_exterior(state: Resource) -> void:
 	for node in get_node("Body").get_children():
 		var label := str(node.name)
 		if label in ["FrontBumper","RearBumper"] or label.begins_with("Fog") or label.begins_with("LowerGrille") or label.begins_with("LowerSlat"):
-			node.visible = state.bumper_style == 0
+			var front: bool = label != "RearBumper"
+			var override_style: int = state.front_bumper_style if front else state.rear_bumper_style
+			node.visible = (override_style if override_style >= 0 else state.bumper_style) == 0
 		if node is MeshInstance3D:
 			var material_source: Material = node.mesh.surface_get_material(0)
 			if str(node.name).begins_with("TailLamp") and material_source != null and material_source.resource_name in ["RedLens","ReverseLens","AmberLens"]:

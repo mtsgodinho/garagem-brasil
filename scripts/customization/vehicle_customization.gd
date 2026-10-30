@@ -41,3 +41,12 @@ const STICKERS := ["Sem adesivo", "Faixa lateral", "Listras duplas", "Número 06
 @export var sticker_style := 0
 @export var sticker_color := Color("e6e6e6")
 @export_range(0.0, 6.0) var lowering_cm := 0.0
+
+const INTAKES := ["Original • caixa de ar", "Cônico esportivo", "Duplo fluxo", "Admissão fria • caixa fechada"]
+const ENGINE_SOUNDS := ["Automático pelo filtro", "Original suave", "Grave encorpado", "Esportivo agudo", "Turbo / assobio"]
+@export var intake_style := 0
+@export var engine_sound := 0
+@export_range(0.0, 1.0) var engine_volume := 0.5
+@export var front_bumper_style := -1
+@export var rear_bumper_style := -1
+@export var side_skirt_style := -1

@@ -72,3 +72,7 @@ Schema 3 persiste sete campos adicionais e amplia o catálogo para dez rodas, pr
 ## Pista e modo foto — 0.7.0
 
 Etapa autorizada pelo usuário após Estúdio 06. Pista de 2,4 km com gravidade, colisão e direção arcade CharacterBody3D; cenas/visuais separados do estado de personalização. HUD, duas câmeras, menu de pausa, reposicionamento e retorno à garagem sem perder escolhas. Modo foto orbital reutilizado em garagem/pista, congela movimento e grava PNG sem HUD, com nomes sem sobrescrita. Validado no Linux; aguarda teste no Windows. Consulte PISTA_E_FOTOS.md.
+
+## Filtros, roncos e kits baixos — 0.8.0
+
+Escopo adicional autorizado durante pista/foto. Quatro filtros, quatro timbres sintetizados e automático conforme filtro/turbo. AudioStreamGenerator independente do visual, com volume e prévia na garagem; sem amostras externas. Partes mecânicas não alteram potência. Dianteiro/traseiro/saia têm escolhas próprias e versão baixa que toca o piso visualmente, sem atrito/dano de raspagem. Schema 4 mantém migração de schemas 1–3. Testes numéricos e WAVs não substituem teste auditivo no Windows.

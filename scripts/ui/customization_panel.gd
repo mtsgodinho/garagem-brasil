@@ -2,6 +2,7 @@ extends CanvasLayer
 
 const State = preload("res://scripts/customization/vehicle_customization.gd")
 
+signal preview_requested(active: bool)
 signal drive_requested
 signal photo_requested
 signal customization_changed
@@ -41,6 +42,13 @@ var tail_option: OptionButton
 var sticker_option: OptionButton
 var sticker_picker: ColorPickerButton
 var lowering_slider: HSlider
+var intake_option: OptionButton
+var sound_option: OptionButton
+var volume_slider: HSlider
+var preview_check: CheckButton
+var front_option: OptionButton
+var rear_option: OptionButton
+var skirt_option: OptionButton
 var category_buttons: Array[Button] = []
 
 func setup(customization: Resource) -> void:
@@ -106,7 +114,7 @@ func build() -> void:
 	root.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	root.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(root)
-	var heading := label("GARAGEM BRASIL\nESTÚDIO 07 / GARAGEM E PISTA",22)
+	var heading := label("GARAGEM BRASIL\nESTÚDIO 08 / PISTA E RONCOS",22)
 	heading.position = Vector2(28,22)
 	root.add_child(heading)
 	var panel := PanelContainer.new()
@@ -343,6 +351,8 @@ func build_mechanics(column: VBoxContainer) -> void:
 	sport_intake_check = check_button(column,"Filtro esportivo",state.sport_intake)
 	sport_intake_check.toggled.connect(func(enabled: bool) -> void:
 		state.sport_intake = enabled
+		state.intake_style = 1 if enabled else 0
+		intake_option.select(state.intake_style)
 		changed()
 		request_open("hood",true))
 	turbo_check = check_button(column,"Kit turbo visual",state.turbo_visual)
@@ -356,6 +366,22 @@ func build_mechanics(column: VBoxContainer) -> void:
 		changed()
 		request_open("hood",true))
 	note(column,"Peças visuais: não alteram potência ou física nesta entrega.")
+	intake_option = exterior_option(column,"Modelo de filtro",State.INTAKES,"intake_style")
+	intake_option.item_selected.connect(func(index: int) -> void:
+		state.sport_intake = index > 0
+		sport_intake_check.set_pressed_no_signal(index > 0)
+		changed()
+		request_open("hood",true))
+	sound_option = exterior_option(column,"Ronco do motor",State.ENGINE_SOUNDS,"engine_sound")
+	column.add_child(label("Volume do motor"))
+	volume_slider = slider(0,1,0.05,state.engine_volume)
+	column.add_child(volume_slider)
+	volume_slider.value_changed.connect(func(value: float) -> void:
+		state.engine_volume = value
+		changed())
+	preview_check = check_button(column,"Ouvir prévia (W para acelerar)",false)
+	preview_check.toggled.connect(func(active: bool) -> void: preview_requested.emit(active))
+	note(column,"Roncos sintetizados: Automático adapta ao filtro e prioriza o turbo instalado. As peças continuam sem alterar potência.")
 	column.add_child(HSeparator.new())
 	column.add_child(label("Som no porta-malas"))
 	audio_option = dropdown(State.AUDIO_NAMES,state.audio_setup)
@@ -412,7 +438,10 @@ func exterior_option(column: VBoxContainer, title: String, choices: Array, field
 	return option
 
 func build_exterior(column: VBoxContainer) -> void:
-	bumper_option = exterior_option(column,"Para-choques dianteiro e traseiro",State.BUMPERS,"bumper_style")
+	bumper_option = exterior_option(column,"Conjunto de para-choques",State.BUMPERS,"bumper_style")
+	front_option = independent_option(column,"Para-choque dianteiro",["Usar conjunto","Original","Esportivo","Touring","Baixo • arrasta no chão"],"front_bumper_style")
+	rear_option = independent_option(column,"Para-choque traseiro",["Usar conjunto","Original","Esportivo","Touring","Baixo • arrasta no chão"],"rear_bumper_style")
+	skirt_option = independent_option(column,"Saia lateral",["Usar body kit","Sem saia","Esportiva","Baixa • arrasta no chão"],"side_skirt_style")
 	fender_option = exterior_option(column,"Para-lamas / alargadores",State.FENDERS,"fender_style")
 	kit_option = exterior_option(column,"Body kit",State.KITS,"body_kit")
 	tail_option = exterior_option(column,"Sinaleiras / lanternas traseiras",State.TAILLIGHTS,"taillight_style")
@@ -438,3 +467,12 @@ func build_suspension(column: VBoxContainer) -> void:
 		value.text = "Rebaixamento: %.1f cm" % amount
 		changed())
 	note(column,"Regulagem visual de 0 a 6 cm. As rodas continuam apoiadas no piso; a carroceria e seus acessórios descem juntos. Ainda não simula suspensão durante a direção.")
+
+func independent_option(column: VBoxContainer, title: String, options: Array, field: String) -> OptionButton:
+	column.add_child(label(title))
+	var option := dropdown(options,int(state.get(field))+1)
+	column.add_child(option)
+	option.item_selected.connect(func(index: int) -> void:
+		state.set(field,index-1)
+		changed())
+	return option

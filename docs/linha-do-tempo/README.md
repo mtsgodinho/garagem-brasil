@@ -79,6 +79,35 @@ Não substituir imagens antigas: criar arquivos numerados para cada novo marco.
 | 066 | 30/10/2026 | acabamento final caixa de roda | Captura Linux / 0.6.0 | [Imagem](imagens/066-acabamento-final-caixa-de-roda.png) |
 | 067 | 30/10/2026 | revestimento interno final | Captura Linux / 0.6.0 | [Imagem](imagens/067-revestimento-interno-final.png) |
 
+| 068 | 30/10/2026 | garagem testar carro | Captura Linux / 0.7.0 | [Imagem](imagens/068-garagem-testar-carro.png) |
+| 069 | 30/10/2026 | pista terceira pessoa | Captura Linux / 0.7.0 | [Imagem](imagens/069-pista-terceira-pessoa.png) |
+| 070 | 30/10/2026 | dirigindo velocimetro | Captura Linux / 0.7.0 | [Imagem](imagens/070-dirigindo-velocimetro.png) |
+| 071 | 30/10/2026 | camera de capo (prévia com atraso de câmera, corrigido no 080) | Captura Linux / 0.7.0 | [Imagem](imagens/071-camera-de-capo.png) |
+| 072 | 30/10/2026 | menu da pista | Captura Linux / 0.7.0 | [Imagem](imagens/072-menu-da-pista.png) |
+| 073 | 30/10/2026 | modo foto pista | Captura Linux / 0.7.0 | [Imagem](imagens/073-modo-foto-pista.png) |
+| 074 | 30/10/2026 | retorno garagem | Captura Linux / 0.7.0 | [Imagem](imagens/074-retorno-garagem.png) |
+| 075 | 30/10/2026 | foto sem interface pista | Captura Linux / 0.7.0 | [Imagem](imagens/075-foto-sem-interface-pista.png) |
+| 076 | 30/10/2026 | foto sem interface garagem | Captura Linux / 0.7.0 | [Imagem](imagens/076-foto-sem-interface-garagem.png) |
+| 077 | 30/10/2026 | garagem testar carro | Captura Linux / 0.7.0 | [Imagem](imagens/077-garagem-testar-carro.png) |
+| 078 | 30/10/2026 | pista terceira pessoa | Captura Linux / 0.7.0 | [Imagem](imagens/078-pista-terceira-pessoa.png) |
+| 079 | 30/10/2026 | dirigindo velocimetro | Captura Linux / 0.7.0 | [Imagem](imagens/079-dirigindo-velocimetro.png) |
+| 080 | 30/10/2026 | camera de capo | Captura Linux / 0.7.0 | [Imagem](imagens/080-camera-de-capo.png) |
+| 081 | 30/10/2026 | menu da pista | Captura Linux / 0.7.0 | [Imagem](imagens/081-menu-da-pista.png) |
+| 082 | 30/10/2026 | modo foto pista | Captura Linux / 0.7.0 | [Imagem](imagens/082-modo-foto-pista.png) |
+| 083 | 30/10/2026 | retorno garagem | Captura Linux / 0.7.0 | [Imagem](imagens/083-retorno-garagem.png) |
+| 084 | 30/10/2026 | foto pista sem hud final | Captura Linux / 0.7.0 | [Imagem](imagens/084-foto-pista-sem-hud-final.png) |
+| 085 | 30/10/2026 | foto garagem sem hud final | Captura Linux / 0.7.0 | [Imagem](imagens/085-foto-garagem-sem-hud-final.png) |
+| 086 | 30/10/2026 | parachoques e saia arrastando | Captura Linux / 0.8.0 | [Imagem](imagens/086-parachoques-e-saia-arrastando.png) |
+| 087 | 30/10/2026 | saia lateral no piso | Captura Linux / 0.8.0 | [Imagem](imagens/087-saia-lateral-no-piso.png) |
+| 088 | 30/10/2026 | parachoque traseiro baixo | Captura Linux / 0.8.0 | [Imagem](imagens/088-parachoque-traseiro-baixo.png) |
+| 089 | 30/10/2026 | filtro duplo e ronco automatico | Captura Linux / 0.8.0 | [Imagem](imagens/089-filtro-duplo-e-ronco-automatico.png) |
+| 090 | 30/10/2026 | admissao fria | Captura Linux / 0.8.0 | [Imagem](imagens/090-admissao-fria.png) |
+| 091 | 30/10/2026 | pista com kit baixo e ronco | Captura Linux / 0.8.0 | [Imagem](imagens/091-pista-com-kit-baixo-e-ronco.png) |
+| 092 | 30/10/2026 | kit baixo com volume final | Captura Linux / 0.8.0 | [Imagem](imagens/092-kit-baixo-com-volume-final.png) |
+| 093 | 30/10/2026 | saia baixa final | Captura Linux / 0.8.0 | [Imagem](imagens/093-saia-baixa-final.png) |
+| 094 | 30/10/2026 | traseiro baixo final | Captura Linux / 0.8.0 | [Imagem](imagens/094-traseiro-baixo-final.png) |
+| 095 | 30/10/2026 | duplo fluxo final | Captura Linux / 0.8.0 | [Imagem](imagens/095-duplo-fluxo-final.png) |
+
 ## Registro relatado pelo usuário
 
 Em 30/10/2026, o usuário enviou no chat uma captura mostrando a primeira execução no Windows, antes da correção das faces laterais. A imagem permanece no histórico da conversa; o arquivo original não está disponível no sistema de arquivos deste ambiente e não foi incluído nesta pasta. Não confundir a captura Linux acima com a captura Windows do usuário.
@@ -121,3 +150,9 @@ Os registros 038–040 mostram a evolução inicial da malha/luz; 041–048 e 04
 O usuário pediu para-choques, para-lamas, body kits, sinaleiras, adesivos, rebaixamento, mais rodas e cores. Registros 059–064 mostram testes dos acessórios; 065 preserva a correção das caixas internas com rebaixamento máximo. As sete imagens são capturas reais no Linux, ainda sem validação no Windows.
 
 Os registros 066–067 preservam o refinamento das tampas internas das caixas de roda para não expor pneus ao rebaixar o veículo.
+
+## Pista, fotos, roncos e peças baixas — 0.7.0 / 0.8.0
+
+O usuário autorizou pista e modo foto após mostrar o Estúdio 06 no Windows. Durante a implementação pediu mais filtros, roncos conforme filtro e opções independentes de dianteiro/traseiro/saia que arrastem no chão. Os registros 068–085 documentam pista/foto, incluindo a prévia inicial e a correção da câmera de capô; 086–095 documentam filtros e peças baixas, com acabamento final dos volumes em 092–095. PNGs sem interface na pista e garagem foram gerados pelo modo foto real do jogo. Fotos enviadas pelo usuário continuam apenas no chat quando o arquivo original não está acessível.
+
+As peças baixas encostam visualmente no piso; não há simulação de desgaste/raspagem. Áudio sintetizado foi validado por amostras numéricas e arquivos WAV; o ambiente Linux usa driver Dummy e a verificação auditiva no Windows permanece pendente. Não foi publicado áudio pessoal ou material externo.
