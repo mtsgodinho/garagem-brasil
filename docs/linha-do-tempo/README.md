@@ -72,3 +72,7 @@ Em 30/10/2026, após mostrar o Estúdio 02 no Windows, o usuário autorizou a pr
 ## Ampliação da garagem interativa
 
 Em 30/10/2026, durante a implementação do salvamento autorizado, o usuário pediu portas, capô e porta-malas articulados, peças de motor, caixas de som e estofados/cor do interior. Os registros 020–028 preservam a primeira prévia; os registros 029–037 mostram a revisão do encaixe do capô e das molduras. Motor e caixas são recursos visuais, sem simulação mecânica ou áudio. O teste dessa entrega no Windows continua pendente.
+
+## Capturas do Estúdio 04 no Windows — 30/10/2026
+
+O usuário enviou duas imagens no chat mostrando a versão 0.4.0 no Windows: vista traseira com caixa de quatro falantes e vista lateral com portas, capô e tampa traseira abertos. As imagens mostram bancos roxos, interior azul e a mensagem “Modificações salvas neste computador”. Isso confirma a exibição desses recursos e a indicação de gravação; ainda falta confirmar que as escolhas voltam após fechar e reabrir. O editor mostra “Depurador (5)”, sem o conteúdo das mensagens visível; não é possível classificá-las por essas capturas. Os arquivos originais não estão acessíveis neste ambiente e permanecem no histórico do chat, sem cópia na pasta de imagens.
