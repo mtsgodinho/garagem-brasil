@@ -3,7 +3,7 @@ extends RefCounted
 ## Arquivos inválidos nunca são apagados: são preservados antes da gravação.
 
 const State = preload("res://scripts/customization/vehicle_customization.gd")
-const SCHEMA_VERSION := 1
+const SCHEMA_VERSION := 2
 const VEHICLE_ID := "gol_g3_placeholder"
 const MAX_BYTES := 65536
 
@@ -41,12 +41,19 @@ func document(state: Resource) -> Dictionary:
 		"wheel_inches": state.wheel_inches,
 		"film": state.film,
 		"film_intensity": state.film_intensity,
+		"sport_intake": state.sport_intake,
+		"turbo_visual": state.turbo_visual,
+		"strut_brace": state.strut_brace,
+		"audio_setup": state.audio_setup,
+		"upholstery": state.upholstery,
+		"interior_color": [state.interior_color.r,state.interior_color.g,state.interior_color.b],
+		"seat_color": [state.seat_color.r,state.seat_color.g,state.seat_color.b],
 	}
 
 func decode(data: Variant) -> Resource:
 	if not data is Dictionary:
 		return null
-	if not number(data.get("schema_version"),1,1,true) or data.get("vehicle_id") != VEHICLE_ID:
+	if not number(data.get("schema_version"),1,SCHEMA_VERSION,true) or data.get("vehicle_id") != VEHICLE_ID:
 		return null
 	if not valid_color(data.get("body_color")) or not valid_color(data.get("wheel_color")):
 		return null
@@ -55,6 +62,14 @@ func decode(data: Variant) -> Resource:
 			return null
 	if int(data.film) == 0 and not is_zero_approx(float(data.film_intensity)):
 		return null
+	if int(data.schema_version) >= 2:
+		for key in ["sport_intake","turbo_visual","strut_brace"]:
+			if typeof(data.get(key)) != TYPE_BOOL:
+				return null
+		if not number(data.get("audio_setup"),0,3,true) or not number(data.get("upholstery"),0,2,true):
+			return null
+		if not valid_color(data.get("interior_color")) or not valid_color(data.get("seat_color")):
+			return null
 	var state := State.new()
 	state.body_color = Color(data.body_color[0],data.body_color[1],data.body_color[2])
 	state.wheel_color = Color(data.wheel_color[0],data.wheel_color[1],data.wheel_color[2])
@@ -64,6 +79,14 @@ func decode(data: Variant) -> Resource:
 	state.wheel_inches = int(data.wheel_inches)
 	state.film = int(data.film)
 	state.film_intensity = float(data.film_intensity)
+	if int(data.schema_version) >= 2:
+		state.sport_intake = data.sport_intake
+		state.turbo_visual = data.turbo_visual
+		state.strut_brace = data.strut_brace
+		state.audio_setup = int(data.audio_setup)
+		state.upholstery = int(data.upholstery)
+		state.interior_color = Color(data.interior_color[0],data.interior_color[1],data.interior_color[2])
+		state.seat_color = Color(data.seat_color[0],data.seat_color[1],data.seat_color[2])
 	return state
 
 func read_state(file_path: String) -> Resource:

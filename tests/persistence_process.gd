@@ -35,6 +35,13 @@ func run() -> void:
 		ui.size_slider.value = 17
 		choose(ui.film_option,5)
 		ui.film_slider.value = 0.84
+		ui.sport_intake_check.button_pressed = true
+		ui.turbo_check.button_pressed = true
+		ui.brace_check.button_pressed = true
+		choose(ui.audio_option,3)
+		choose(ui.upholstery_option,2)
+		ui.interior_picker.color_changed.emit(Color("d0ba87"))
+		ui.seat_picker.color_changed.emit(Color("ad6044"))
 		check(garage.dirty,"Alteração marca estado pendente")
 		if mode == "failure":
 			DirAccess.make_dir_recursive_absolute(garage.save_path + ".tmp")
@@ -58,6 +65,14 @@ func run() -> void:
 		check(ui.body_picker.color.is_equal_approx(expected),"Seletor inicializado com cor salva")
 		check(ui.wheel_option.selected == 3 and ui.size_slider.value == 17,"Controles das rodas sincronizados")
 		check(ui.film_option.selected == 5 and is_equal_approx(ui.film_slider.value,0.84),"Controles dos vidros sincronizados")
+		check(state.sport_intake and state.turbo_visual and state.strut_brace,"Peças do motor restauradas")
+		check(state.audio_setup == 3 and state.upholstery == 2,"Som e estofado restaurados")
+		check(ui.sport_intake_check.button_pressed and ui.turbo_check.button_pressed and ui.brace_check.button_pressed,"Controles do motor sincronizados")
+		check(ui.audio_option.selected == 3 and ui.upholstery_option.selected == 2,"Controles de som e interior sincronizados")
+		check(ui.interior_picker.color.is_equal_approx(Color("d0ba87")),"Cor do interior restaurada")
+		check(ui.seat_picker.color.is_equal_approx(Color("ad6044")),"Cor dos bancos restaurada")
+		for part in garage.get_node("VehicleVisual").part_open.values():
+			check(not part,"Peças começam fechadas após reabrir")
 		check(ui.status.text == "Modificações carregadas.","Carregamento informado")
 		var visual: Node3D = garage.get_node("VehicleVisual")
 		check(visual.body_material.albedo_color.is_equal_approx(expected),"Visual inicia com cor salva")
@@ -66,7 +81,7 @@ func run() -> void:
 		ui.body_picker.color_changed.emit(Color("268349"))
 		check(garage.dirty,"Há alteração ainda não salva")
 		print("PASS: fechamento com alteração pendente solicitado")
-		garage.request_exit()
+		garage.notification(Node.NOTIFICATION_WM_CLOSE_REQUEST)
 		return
 	else:
 		check(false,"Modo desconhecido")

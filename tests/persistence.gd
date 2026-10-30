@@ -43,9 +43,31 @@ func run() -> void:
 	state.wheel_inches = 17
 	state.select_film(5)
 	state.film_intensity = 0.81
+	state.sport_intake = true
+	state.turbo_visual = true
+	state.strut_brace = true
+	state.audio_setup = 3
+	state.upholstery = 2
+	state.interior_color = Color("b9a580")
+	state.seat_color = Color("a55335")
 	check(store.save_customization(state),"Primeira gravação")
 	check(store.document(store.load_customization()) == store.document(state),"Todos os campos preservados no JSON")
 	check(not FileAccess.file_exists(path + ".tmp"),"Temporário promovido após sucesso")
+	var legacy := store.document(state).duplicate(true)
+	legacy.schema_version = 1
+	for key in ["sport_intake","turbo_visual","strut_brace","audio_setup","upholstery","interior_color","seat_color"]:
+		legacy.erase(key)
+	var migrated := store.decode(legacy)
+	check(migrated != null,"Save da versão anterior aceito")
+	check(migrated.body_color == state.body_color and migrated.wheel_inches == 17,"Migração mantém pintura e rodas")
+	check(not migrated.turbo_visual and migrated.audio_setup == 0,"Novas opções recebem padrões na migração")
+	var legacy_path := base + "/legacy.json"
+	raw(legacy_path,JSON.stringify(legacy))
+	var legacy_store := Store.new(legacy_path)
+	check(legacy_store.load_customization().wheel_inches == 17,"Arquivo v1 lido do disco")
+	check(legacy_store.save_customization(migrated),"Arquivo v1 atualizado para v2")
+	check(int(JSON.parse_string(FileAccess.get_file_as_string(legacy_path)).schema_version) == 2,"Schema atualizado")
+	check(int(JSON.parse_string(FileAccess.get_file_as_string(legacy_path + ".bak")).schema_version) == 1,"Arquivo v1 original no backup")
 	var first := store.document(state)
 	state.body_color = Color("2367ac")
 	check(store.save_customization(state),"Substituição do arquivo existente")
@@ -76,8 +98,11 @@ func run() -> void:
 		{"film_intensity":1.1}, {"film":6}, {"finish":3},
 		{"body_color":[1,0]}, {"wheel_color":[1,0,"x"]},
 		{"body_color":[1.2,0,0]}, {"vehicle_id":"other_car"},
-		{"schema_version":2}, {"schema_version":"1"},
+		{"schema_version":3}, {"schema_version":"1"},
 		{"film":0,"film_intensity":0.5},
+		{"sport_intake":1}, {"turbo_visual":"true"}, {"strut_brace":null},
+		{"audio_setup":4}, {"upholstery":3}, {"interior_color":[1,2,0]},
+		{"seat_color":[0,0]},
 	]:
 		var data := valid.duplicate(true)
 		data.merge(change,true)

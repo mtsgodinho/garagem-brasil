@@ -4,6 +4,8 @@ const State = preload("res://scripts/customization/vehicle_customization.gd")
 
 signal customization_changed
 signal restore_camera
+signal view_requested(part: String)
+signal opening_requested(part: String, opened: bool)
 signal save_requested
 signal exit_requested
 
@@ -22,6 +24,15 @@ var finish_value: Label
 var size_value: Label
 var status: Label
 var save_button: Button
+var opening_checks: Dictionary = {}
+var sport_intake_check: CheckButton
+var turbo_check: CheckButton
+var brace_check: CheckButton
+var audio_option: OptionButton
+var upholstery_option: OptionButton
+var interior_picker: ColorPickerButton
+var seat_picker: ColorPickerButton
+var category_buttons: Array[Button] = []
 
 func setup(customization: Resource) -> void:
 	state = customization
@@ -86,7 +97,7 @@ func build() -> void:
 	root.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	root.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(root)
-	var heading := label("GARAGEM BRASIL\nESTÚDIO 03 / SALVAMENTO",22)
+	var heading := label("GARAGEM BRASIL\nESTÚDIO 04 / GARAGEM INTERATIVA",22)
 	heading.position = Vector2(28,22)
 	root.add_child(heading)
 	var panel := PanelContainer.new()
@@ -107,12 +118,35 @@ func build() -> void:
 	column.add_theme_constant_override("separation",12)
 	panel.add_child(column)
 	column.add_child(label("PERSONALIZAR",20))
+	var categories := GridContainer.new()
+	categories.columns = 3
+	categories.add_theme_constant_override("h_separation",4)
+	categories.add_theme_constant_override("v_separation",4)
+	column.add_child(categories)
+	var group := ButtonGroup.new()
+	var titles := ["Pintura","Rodas","Vidros","Aberturas","Motor / som","Interior"]
+	for index in titles.size():
+		var button := Button.new()
+		button.text = titles[index]
+		button.toggle_mode = true
+		button.button_group = group
+		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		button.custom_minimum_size.y = 32
+		button.pressed.connect(func() -> void: tabs.current_tab = index)
+		category_buttons.append(button)
+		categories.add_child(button)
+	category_buttons[0].button_pressed = true
 	tabs = TabContainer.new()
+	tabs.tabs_visible = false
+	tabs.tab_changed.connect(func(index: int) -> void: category_buttons[index].set_pressed_no_signal(true))
 	tabs.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	column.add_child(tabs)
 	build_paint(page("Pintura"))
 	build_wheels(page("Rodas"))
 	build_film(page("Vidros"))
+	build_openings(page("Aberturas"))
+	build_mechanics(page("Motor e som"))
+	build_interior(page("Interior"))
 	save_button = Button.new()
 	save_button.text = "Salvar modificações"
 	save_button.custom_minimum_size.y = 36
@@ -242,3 +276,107 @@ func build_film(column: VBoxContainer) -> void:
 func set_save_status(text: String, warning: bool = false) -> void:
 	status.text = text
 	status.modulate = Color("e3b36c") if warning else Color("98d7b0")
+
+func check_button(column: VBoxContainer, text: String, value: bool) -> CheckButton:
+	var button := CheckButton.new()
+	button.text = text
+	button.button_pressed = value
+	button.custom_minimum_size.y = 34
+	column.add_child(button)
+	return button
+
+func request_open(part: String, opened: bool) -> void:
+	if opening_checks.has(part):
+		opening_checks[part].set_pressed_no_signal(opened)
+	opening_requested.emit(part,opened)
+
+func build_openings(column: VBoxContainer) -> void:
+	column.add_child(label("Abrir e fechar"))
+	for spec in [["left_door","Porta esquerda"],["right_door","Porta direita"],["hood","Capô"],["trunk","Porta-malas"]]:
+		var key: String = spec[0]
+		var button := check_button(column,spec[1],false)
+		opening_checks[key] = button
+		button.toggled.connect(func(opened: bool) -> void: opening_requested.emit(key,opened))
+	var row := HBoxContainer.new()
+	column.add_child(row)
+	for opened in [true,false]:
+		var button := Button.new()
+		button.text = "Abrir tudo" if opened else "Fechar tudo"
+		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		button.custom_minimum_size.y = 34
+		button.pressed.connect(func() -> void:
+			for key in opening_checks:
+				request_open(key,opened))
+		row.add_child(button)
+	note(column,"Duas portas laterais neste hatch provisório. As aberturas são animadas; ao reabrir o jogo, as peças começam fechadas.")
+
+func build_mechanics(column: VBoxContainer) -> void:
+	column.add_child(label("Peças do motor"))
+	var show_engine := Button.new()
+	show_engine.text = "Ver motor (abrir capô)"
+	show_engine.custom_minimum_size.y = 34
+	show_engine.pressed.connect(func() -> void:
+		request_open("hood",true)
+		view_requested.emit("hood"))
+	column.add_child(show_engine)
+	sport_intake_check = check_button(column,"Filtro esportivo",state.sport_intake)
+	sport_intake_check.toggled.connect(func(enabled: bool) -> void:
+		state.sport_intake = enabled
+		changed()
+		request_open("hood",true))
+	turbo_check = check_button(column,"Kit turbo visual",state.turbo_visual)
+	turbo_check.toggled.connect(func(enabled: bool) -> void:
+		state.turbo_visual = enabled
+		changed()
+		request_open("hood",true))
+	brace_check = check_button(column,"Barra de amarração",state.strut_brace)
+	brace_check.toggled.connect(func(enabled: bool) -> void:
+		state.strut_brace = enabled
+		changed()
+		request_open("hood",true))
+	note(column,"Peças visuais: não alteram potência ou física nesta entrega.")
+	column.add_child(HSeparator.new())
+	column.add_child(label("Som no porta-malas"))
+	audio_option = dropdown(State.AUDIO_NAMES,state.audio_setup)
+	column.add_child(audio_option)
+	audio_option.item_selected.connect(func(index: int) -> void:
+		state.audio_setup = index
+		changed()
+		request_open("trunk",true))
+	var show_trunk := Button.new()
+	show_trunk.text = "Ver porta-malas (abrir)"
+	show_trunk.custom_minimum_size.y = 34
+	show_trunk.pressed.connect(func() -> void:
+		request_open("trunk",true)
+		view_requested.emit("trunk"))
+	column.add_child(show_trunk)
+	note(column,"Montagens visuais de caixas e falantes; ainda não reproduzem áudio.")
+
+func build_interior(column: VBoxContainer) -> void:
+	column.add_child(label("Estofado"))
+	upholstery_option = dropdown(State.UPHOLSTERIES,state.upholstery)
+	column.add_child(upholstery_option)
+	upholstery_option.item_selected.connect(func(index: int) -> void:
+		state.upholstery = index
+		changed())
+	column.add_child(label("Cor dos bancos"))
+	seat_picker = picker(state.seat_color)
+	column.add_child(seat_picker)
+	seat_picker.color_changed.connect(func(color: Color) -> void:
+		state.seat_color = color
+		changed())
+	column.add_child(label("Cor do painel e portas"))
+	interior_picker = picker(state.interior_color)
+	column.add_child(interior_picker)
+	interior_picker.color_changed.connect(func(color: Color) -> void:
+		state.interior_color = color
+		changed())
+	var show := Button.new()
+	show.text = "Ver interior (abrir portas)"
+	show.custom_minimum_size.y = 34
+	show.pressed.connect(func() -> void:
+		request_open("left_door",true)
+		request_open("right_door",true)
+		view_requested.emit("interior"))
+	column.add_child(show)
+	note(column,"Tecido, couro sintético e esportivo bicolor são materiais simplificados. No bicolor, as laterais dos bancos usam a cor do interior.")

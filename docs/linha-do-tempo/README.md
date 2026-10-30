@@ -27,6 +27,25 @@ Não substituir imagens antigas: criar arquivos numerados para cada novo marco.
 | 018 | 30/10/2026 | Nova instância da garagem carregando as escolhas do arquivo | Captura Linux / protótipo 0.3.0 | [Imagem](imagens/018-modificacoes-carregadas.png) |
 | 019 | 30/10/2026 | Recuperação do backup após corrupção simulada do principal | Captura Linux / protótipo 0.3.0 | [Imagem](imagens/019-recuperacao-de-backup.png) |
 
+| 020 | 30/10/2026 | Prévia da carroceria com peças móveis fechadas | Captura Linux / protótipo 0.4.0 | [Imagem](imagens/020-garagem-articulada-fechada.png) |
+| 021 | 30/10/2026 | Prévia das quatro aberturas animadas | Captura Linux / protótipo 0.4.0 | [Imagem](imagens/021-portas-capo-porta-malas-abertos.png) |
+| 022 | 30/10/2026 | Prévia do motor com filtro, turbo e barra | Captura Linux / protótipo 0.4.0 | [Imagem](imagens/022-pecas-do-motor.png) |
+| 023 | 30/10/2026 | Prévia da caixa compacta | Captura Linux / protótipo 0.4.0 | [Imagem](imagens/023-caixa-som-1.png) |
+| 024 | 30/10/2026 | Prévia da caixa dupla | Captura Linux / protótipo 0.4.0 | [Imagem](imagens/024-caixa-som-2.png) |
+| 025 | 30/10/2026 | Prévia do paredão compacto | Captura Linux / protótipo 0.4.0 | [Imagem](imagens/025-caixa-som-3.png) |
+| 026 | 30/10/2026 | Prévia do estofado de tecido | Captura Linux / protótipo 0.4.0 | [Imagem](imagens/026-estofado-0.png) |
+| 027 | 30/10/2026 | Prévia do couro sintético | Captura Linux / protótipo 0.4.0 | [Imagem](imagens/027-estofado-1.png) |
+| 028 | 30/10/2026 | Prévia do esportivo bicolor | Captura Linux / protótipo 0.4.0 | [Imagem](imagens/028-estofado-2.png) |
+| 029 | 30/10/2026 | Capô fechado com encaixe corrigido | Captura Linux / protótipo 0.4.0 | [Imagem](imagens/029-garagem-articulada-fechada.png) |
+| 030 | 30/10/2026 | Portas, capô e tampa traseira abertos com molduras | Captura Linux / protótipo 0.4.0 | [Imagem](imagens/030-portas-capo-porta-malas-abertos.png) |
+| 031 | 30/10/2026 | Motor visual com três acessórios | Captura Linux / protótipo 0.4.0 | [Imagem](imagens/031-pecas-do-motor.png) |
+| 032 | 30/10/2026 | Caixa compacta com um subwoofer | Captura Linux / protótipo 0.4.0 | [Imagem](imagens/032-caixa-som-1.png) |
+| 033 | 30/10/2026 | Caixa dupla com dois subwoofers | Captura Linux / protótipo 0.4.0 | [Imagem](imagens/033-caixa-som-2.png) |
+| 034 | 30/10/2026 | Paredão compacto com quatro falantes | Captura Linux / protótipo 0.4.0 | [Imagem](imagens/034-caixa-som-3.png) |
+| 035 | 30/10/2026 | Estofado de tecido e interior personalizado | Captura Linux / protótipo 0.4.0 | [Imagem](imagens/035-estofado-0.png) |
+| 036 | 30/10/2026 | Estofado de couro sintético | Captura Linux / protótipo 0.4.0 | [Imagem](imagens/036-estofado-1.png) |
+| 037 | 30/10/2026 | Estofado esportivo bicolor | Captura Linux / protótipo 0.4.0 | [Imagem](imagens/037-estofado-2.png) |
+
 ## Registro relatado pelo usuário
 
 Em 30/10/2026, o usuário enviou no chat uma captura mostrando a primeira execução no Windows, antes da correção das faces laterais. A imagem permanece no histórico da conversa; o arquivo original não está disponível no sistema de arquivos deste ambiente e não foi incluído nesta pasta. Não confundir a captura Linux acima com a captura Windows do usuário.
@@ -49,3 +68,7 @@ O usuário enviou no chat uma captura do Estúdio 02 em execução no Windows, c
 ## Aceite da personalização
 
 Em 30/10/2026, após mostrar o Estúdio 02 no Windows, o usuário autorizou a próxima entrega de salvamento. Os registros 017–019 documentam testes isolados no Linux e não substituem o teste de salvamento no Windows.
+
+## Ampliação da garagem interativa
+
+Em 30/10/2026, durante a implementação do salvamento autorizado, o usuário pediu portas, capô e porta-malas articulados, peças de motor, caixas de som e estofados/cor do interior. Os registros 020–028 preservam a primeira prévia; os registros 029–037 mostram a revisão do encaixe do capô e das molduras. Motor e caixas são recursos visuais, sem simulação mecânica ou áudio. O teste dessa entrega no Windows continua pendente.

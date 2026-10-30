@@ -23,7 +23,7 @@ O veículo expõe nós `Body`, `Glass`, `Interior` e `Wheels`; cada roda tem seu
 
 ## Salvamento — implementado, aguarda teste do usuário
 
-- `scripts/persistence/customization_store.gd`: JSON schema 1 associado ao veículo, validação estrita de todos os campos e valores, arquivo temporário, backup válido anterior e preservação de originais inválidos/incompatíveis antes de substituir.
+- `scripts/persistence/customization_store.gd`: JSON schema 2 (com leitura/migração do schema 1) associado ao veículo, validação estrita de todos os campos e valores, arquivo temporário, backup válido anterior e preservação de originais inválidos/incompatíveis antes de substituir.
 - `garage.gd`: carrega antes de montar a interface, aplica ao visual, agenda autosave após 0,6 s sem mudanças, permite gravação manual e tenta gravar ao sair. Em falha, conserva estado pendente e solicita confirmação antes de descartar ao sair.
 - `customization_panel.gd`: botão de gravação e mensagens de estado; controles iniciam com dados carregados.
 - Os testes usam caminhos isolados ou desativam persistência para não modificar dados reais do jogador. O teste entre processos usa a mesma inicialização da cena do jogo.
@@ -32,6 +32,16 @@ O salvamento atual atende um veículo e um usuário local. Próximos veículos e
 
 Aprovação desta entrega precede implementação de direção.
 
+## Ampliação solicitada — garagem interativa (aguarda teste do usuário)
+
+- `placeholder_car.gd` mantém pivôs independentes de portas esquerda/direita, capô e hatch traseiro; os tweens podem ser invertidos sem reconstruir o carro. Janelas e painéis acompanham seus pivôs e compartilham os materiais de personalização.
+- Carroceria recortada para deixar vãos reais, capô com perfil inclinado e molduras próprias da tampa traseira; cofre e porta-malas deixam de depender da silhueta fechada.
+- `accessory_visuals.gd` monta peças próprias do motor e três caixas de som; estado define visibilidade das peças e só reconstrói a caixa ao trocar a montagem.
+- Estofado/cor dos bancos e cor do interior são materiais independentes; couro usa menor rugosidade e esportivo bicolor usa contraste nas laterais.
+- Seis categorias visíveis no painel, controles de aberturas e botões que enquadram motor, porta-malas e interior.
+- Schema 2 persiste as novas escolhas; a posição aberta/fechada é transitória e reinicia fechada. Schema 1 é lido com os padrões das novas opções.
+- Não implementa potência, física, áudio de caixas, animação de personagens ou modelo definitivo do Gol G3.
+
 ## Plano das entregas
 
 1. **Personalização:** recurso `VehicleDefinition` para catálogo e cenas de cada carro; estado `VehicleCustomization` separado do visual; controladores de materiais de carroceria/vidros e catálogo de cinco rodas. Interface lateral em português. Validar mudança visual imediata.
@@ -39,7 +49,7 @@ Aprovação desta entrega precede implementação de direção.
 3. **Direção:** cena de pista separada, controlador de física separado do visual, mesmo estado aplicado ao entrar/sair. Testar aceleração, freio, ré, direção, câmeras, velocímetro e retorno.
 4. **Finalização:** menus completos, configurações de resolução/qualidade, medição em hardware representativo, templates oficiais e exportação Windows. Teste de aceitação no Windows é obrigatório antes de declarar a plataforma validada.
 
-Cada entrega deve ser testada e revisada antes da seguinte. Catálogos de peças por categoria e pontos de montagem no modelo permitirão extensões de exterior, suspensão, mecânica e interior, sem misturar essas regras com a câmera ou o cenário. Essas extensões ainda são planejamento, não funcionalidades implementadas.
+Cada entrega deve ser testada e revisada antes da seguinte. Catálogos de peças por categoria e pontos de montagem no modelo permitirão extensões de exterior, suspensão, mecânica e interior, sem misturar essas regras com a câmera ou o cenário. As opções visuais de motor e interior descritas acima já foram implementadas; as demais extensões continuam planejadas.
 
 ## Recursos e limitações
 

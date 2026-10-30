@@ -26,7 +26,7 @@ func run() -> void:
 	var ui: CanvasLayer = garage.customization_ui
 	var car: Node3D = garage.get_node("VehicleVisual")
 	var state: Resource = garage.customization
-	check(ui.tabs.get_tab_count() == 3, "Três categorias disponíveis")
+	check(ui.tabs.get_tab_count() == 6, "Seis categorias disponíveis")
 	check(ui.wheel_option.item_count == 5, "Cinco desenhos de rodas")
 	check(ui.film_option.item_count == 6, "Seis opções de película")
 	var original_glass: Color = car.glass_material.albedo_color

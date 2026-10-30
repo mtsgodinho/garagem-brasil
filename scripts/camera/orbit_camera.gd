@@ -10,6 +10,7 @@ func _ready() -> void:
 	update_view()
 
 func reset_view() -> void:
+	target = Vector3(0,0.95,0)
 	yaw = 0.65
 	pitch = 0.27
 	distance = 6.6
@@ -36,4 +37,20 @@ func _unhandled_input(event: InputEvent) -> void:
 		pitch = clampf(pitch + event.relative.y * 0.006, 0.06, 0.95)
 	if event is InputEventKey and event.pressed and event.keycode == KEY_R:
 		reset_view()
+	update_view()
+
+func focus_detail(part: String) -> void:
+	var views := {
+		"hood":[0.65,0.60,4.8,Vector3(0,1.0,-0.6)],
+		"trunk":[2.65,0.35,5.4,Vector3(0,1.0,0.5)],
+		"interior":[1.25,0.40,4.6,Vector3(0,1.0,0.12)],
+	}
+	if not views.has(part):
+		return
+	var view: Array = views[part]
+	yaw = view[0]
+	pitch = view[1]
+	distance = view[2]
+	target = view[3]
+	dragging = false
 	update_view()

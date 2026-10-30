@@ -115,6 +115,8 @@ func create_ui() -> void:
 	customization_ui.restore_camera.connect(camera.reset_view)
 	customization_ui.exit_requested.connect(request_exit)
 	customization_ui.save_requested.connect(save_now)
+	customization_ui.view_requested.connect(camera.focus_detail)
+	customization_ui.opening_requested.connect(get_node("VehicleVisual").set_part_open)
 	if persistence_enabled:
 		customization_ui.set_save_status(store.message,store.load_result in ["invalid","recovered"])
 	apply_customization()
