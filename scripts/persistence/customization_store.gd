@@ -3,7 +3,7 @@ extends RefCounted
 ## Arquivos inválidos nunca são apagados: são preservados antes da gravação.
 
 const State = preload("res://scripts/customization/vehicle_customization.gd")
-const SCHEMA_VERSION := 2
+const SCHEMA_VERSION := 3
 const VEHICLE_ID := "gol_g3_placeholder"
 const MAX_BYTES := 65536
 
@@ -48,6 +48,10 @@ func document(state: Resource) -> Dictionary:
 		"upholstery": state.upholstery,
 		"interior_color": [state.interior_color.r,state.interior_color.g,state.interior_color.b],
 		"seat_color": [state.seat_color.r,state.seat_color.g,state.seat_color.b],
+		"bumper_style":state.bumper_style,"fender_style":state.fender_style,
+		"body_kit":state.body_kit,"taillight_style":state.taillight_style,
+		"sticker_style":state.sticker_style,"lowering_cm":state.lowering_cm,
+		"sticker_color":[state.sticker_color.r,state.sticker_color.g,state.sticker_color.b],
 	}
 
 func decode(data: Variant) -> Resource:
@@ -57,7 +61,7 @@ func decode(data: Variant) -> Resource:
 		return null
 	if not valid_color(data.get("body_color")) or not valid_color(data.get("wheel_color")):
 		return null
-	for field in [["finish",0,2,true],["gloss",0,1,false],["wheel_model",0,4,true],["wheel_inches",13,17,true],["film",0,5,true],["film_intensity",0,1,false]]:
+	for field in [["finish",0,2,true],["gloss",0,1,false],["wheel_model",0,9 if int(data.schema_version) >= 3 else 4,true],["wheel_inches",13,17,true],["film",0,5,true],["film_intensity",0,1,false]]:
 		if not number(data.get(field[0]),field[1],field[2],field[3]):
 			return null
 	if int(data.film) == 0 and not is_zero_approx(float(data.film_intensity)):
@@ -69,6 +73,12 @@ func decode(data: Variant) -> Resource:
 		if not number(data.get("audio_setup"),0,3,true) or not number(data.get("upholstery"),0,2,true):
 			return null
 		if not valid_color(data.get("interior_color")) or not valid_color(data.get("seat_color")):
+			return null
+	if int(data.schema_version) >= 3:
+		for field in [["bumper_style",2],["fender_style",2],["body_kit",2],["taillight_style",3],["sticker_style",3]]:
+			if not number(data.get(field[0]),0,field[1],true):
+				return null
+		if not number(data.get("lowering_cm"),0,6) or not valid_color(data.get("sticker_color")):
 			return null
 	var state := State.new()
 	state.body_color = Color(data.body_color[0],data.body_color[1],data.body_color[2])
@@ -87,6 +97,10 @@ func decode(data: Variant) -> Resource:
 		state.upholstery = int(data.upholstery)
 		state.interior_color = Color(data.interior_color[0],data.interior_color[1],data.interior_color[2])
 		state.seat_color = Color(data.seat_color[0],data.seat_color[1],data.seat_color[2])
+	if int(data.schema_version) >= 3:
+		for key in ["bumper_style","fender_style","body_kit","taillight_style","sticker_style","lowering_cm"]:
+			state.set(key,data[key])
+		state.sticker_color = Color(data.sticker_color[0],data.sticker_color[1],data.sticker_color[2])
 	return state
 
 func read_state(file_path: String) -> Resource:

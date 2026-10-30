@@ -1,6 +1,6 @@
 # Garagem Brasil
 
-Protótipo 0.5.0 em **Godot 4.6.3 / GDScript**, renderer **Compatibility**.
+Protótipo 0.6.0 em **Godot 4.6.3 / GDScript**, renderer **Compatibility**.
 A garagem e a personalização foram aprovadas pelo usuário no Windows. O usuário confirmou o salvamento e pediu mais semelhança com fotos reais. Esta entrega revisa **carroceria, materiais, pneus, iluminação e enquadramento**, preservando as personalizações e os saves.
 
 ## Abrir no Windows (sem programação)
@@ -15,10 +15,10 @@ Não há executável Windows exportado nesta entrega. O projeto deve ser executa
 
 ## Personalização: como usar
 
-O painel à direita tem seis categorias: Pintura, Rodas, Vidros, Aberturas, Motor / som e Interior. As mudanças aparecem imediatamente, sem botão de confirmação:
+O painel à direita tem nove categorias: Pintura, Rodas, Vidros, Aberturas, Motor / som, Interior, Exterior, Adesivos e Suspensão. As mudanças aparecem imediatamente, sem botão de confirmação:
 
 - **Pintura:** clique na amostra grande para escolher qualquer cor, ou em uma das seis cores rápidas. Selecione Brilhante, Metálica ou Fosca e ajuste o brilho.
-- **Rodas:** escolha um dos cinco desenhos, clique na amostra para mudar a cor e ajuste o aro de 13 a 17 polegadas. As quatro rodas mudam juntas. O diâmetro externo do pneu permanece igual; o perfil muda para acomodar o aro.
+- **Rodas:** escolha um dos dez desenhos, clique na amostra para mudar a cor e ajuste o aro de 13 a 17 polegadas. As quatro rodas mudam juntas. O diâmetro externo do pneu permanece igual; o perfil muda para acomodar o aro.
 - **Vidros:** escolha Sem película, Clara, Média, Escura, Extremamente escura ou Espelhada. O tipo define uma intensidade inicial; o slider permite ajustar. Sem película desativa o slider. A intensidade é apenas visual. A espelhada usa reflexos do ambiente de estúdio e não reflete todos os objetos da garagem.
 
 ## Portas, capô, motor, som e interior
@@ -33,7 +33,7 @@ Motor e som são montagens visuais nesta entrega: não alteram potência nem rep
 
 ## Salvamento: como usar
 
-A versão atual mostra **ESTÚDIO 05 / REVISÃO VISUAL** e o botão **Salvar modificações** abaixo das abas.
+A versão atual mostra **ESTÚDIO 06 / TUNAGEM EXTERNA** e o botão **Salvar modificações** abaixo das abas.
 
 - Ao parar de alterar uma opção por 0,6 segundo, o jogo salva automaticamente. O rodapé indica alterações pendentes, sucesso ou falha.
 - O botão **Salvar modificações** grava imediatamente.
@@ -43,13 +43,13 @@ A versão atual mostra **ESTÚDIO 05 / REVISÃO VISUAL** e o botão **Salvar mod
 
 No Windows, os dados ficam em `%APPDATA%\Godot\app_userdata\Garagem Brasil\garagem\customization.json`. Para abrir a pasta, pressione **Win+R**, cole `%APPDATA%\Godot\app_userdata\Garagem Brasil\garagem` e pressione Enter. Não é necessário editar esse arquivo para jogar.
 
-O formato atual (schema 2) lê saves do schema 1, mantendo pintura/rodas/vidros e usando padrões para as novas opções. O jogo mantém `.bak` com a versão válida anterior. Se o principal estiver inválido, tenta esse backup; se ambos forem inválidos, abre com os padrões e mostra um aviso. Arquivos inválidos ou incompatíveis são preservados como `.invalid-<data>.json` antes de uma nova gravação. Falha em preservar ou gravar interrompe o salvamento e mantém o estado pendente.
+O formato atual (schema 3) lê saves dos schemas 1 e 2, mantendo pintura/rodas/vidros e usando padrões para as novas opções. O jogo mantém `.bak` com a versão válida anterior. Se o principal estiver inválido, tenta esse backup; se ambos forem inválidos, abre com os padrões e mostra um aviso. Arquivos inválidos ou incompatíveis são preservados como `.invalid-<data>.json` antes de uma nova gravação. Falha em preservar ou gravar interrompe o salvamento e mantém o estado pendente.
 
 O arquivo é compartilhado pelas cópias do projeto com o nome Garagem Brasil no mesmo usuário Windows: extrair uma versão nova em outra pasta não deve apagar as escolhas já salvas. As escolhas feitas na versão anterior sem salvamento não podem ser recuperadas automaticamente.
 
 ## O que testar para aprovar esta entrega
 
-1. Abra a versão que mostra **ESTÚDIO 05 / REVISÃO VISUAL**.
+1. Abra a versão que mostra **ESTÚDIO 06 / TUNAGEM EXTERNA**.
 2. Escolha uma cor diferente, acabamento e brilho; troque modelo, cor e tamanho das rodas; escolha uma película e intensidade.
 3. Teste abrir/fechar todas as peças; selecione peças de motor, uma caixa de som, estofado e cores do interior.
 4. Clique em **Salvar modificações** e confira a mensagem verde **Modificações salvas neste computador**.
@@ -69,6 +69,21 @@ Verificações de personalização que continuam disponíveis:
 - Conferir se o painel e seus textos cabem na janela do seu computador.
 
 O hatch agora usa uma **malha GLB original de estudo**, criada no Blender com carroceria curva, arcos de roda, faróis com refletores e interior arredondado. A estrutura tem cerca de 3,92 m de comprimento e 1,68 m de largura, sem retrovisores. Não é uma reprodução fiel do Volkswagen Gol G3 e não utiliza modelo pago. Vidros, carroceria, interior simplificado, faróis, lanternas, para-choques, retrovisores e quatro rodas são peças separadas. A fidelidade visual ainda não foi aprovada.
+
+## Tunagem externa 0.6.0
+
+- **Exterior:** para-choques Original, Esportivo ou Touring (dianteiro e traseiro juntos); para-lamas Original, Alargador discreto ou Wide body; kit Sem kit, Saias e lip ou Aero completo. O aerofólio acompanha a tampa traseira.
+- **Sinaleiras:** na mesma categoria Exterior, escolha Original, Fumê, Cristal ou Vermelha. São opções visuais, sem simulação elétrica nesta entrega.
+- **Adesivos:** faixa lateral, listras duplas no capô/teto ou número 06 nas portas; cor livre. As partes nos painéis móveis acompanham sua abertura. Não há importação de imagens externas nesta versão.
+- **Suspensão:** rebaixamento visual de 0 a 6 cm em passos de 0,5 cm. Rodas ficam no piso; a carroceria, motor e peças móveis descem juntos. As aberturas dos para-lamas e caixas internas são ajustadas para preservar espaço para os pneus. Isso é uma aproximação visual, sem suspensão dinâmica ou alteração da física.
+- **Rodas:** dez modelos, com cinco novos (rally, multirraios, malha cruzada, três raios e aero). Cor livre e tamanhos 13–17 permanecem disponíveis.
+- **Cores:** 18 amostras rápidas na Pintura, além do seletor livre para carroceria, rodas, adesivos e interior. Role dentro do painel para ver opções que não couberem na janela.
+
+Tudo é salvo automaticamente. O schema 3 mantém leitura dos saves anteriores, aplicando padrões às novas opções. Não apague seus arquivos de salvamento ao atualizar.
+
+Os acessórios novos são estudos procedurais próprios; não representam peças reais licenciadas. Para testar: compare cada opção, abra portas/capô/tampa com adesivos e aero, experimente altura 0/3/6 cm e confirme que as escolhas voltam após Sair/F5.
+
+Ideias para as próximas entregas: pista e direção, modo foto, perfis de montagens, faróis/setas funcionais, cambagem/espaçadores, som do motor/escapamento e outros veículos (Celta, Uno, Palio). Essas ideias ainda não foram implementadas nem autorizadas para a próxima etapa.
 
 ## Revisão visual 0.5.0
 
@@ -97,12 +112,12 @@ O teste gráfico `tests/render_capture.gd` requer display X11/OpenGL no Linux e 
 ## Validação e histórico de testes
 
 - Smoke test: cena, grupos de peças, quatro rodas, faces laterais voltadas para fora, câmera, zoom e restauração.
-- `tests/customization.gd`: **131 verificações** acionando a interface para cores, acabamentos, cinco geometrias, aros 13–17 nas quatro rodas, presets de película, intensidade, ausência de reconstrução ao trocar cor e isolamento de materiais entre veículos.
+- `tests/customization.gd`: **171 verificações** acionando a interface para cores, acabamentos, cinco geometrias, aros 13–17 nas quatro rodas, presets de película, intensidade, ausência de reconstrução ao trocar cor e isolamento de materiais entre veículos.
 - `tests/interaction.gd`: mouse enviado ao viewport real; slider altera o brilho sem girar a câmera, arrasto na cena gira a câmera, soltar sobre interface encerra o arrasto e clique abre o seletor de cores. Executado com display virtual.
 - Na etapa 0.2, `tests/render_customization.gd` produziu **15 capturas** OpenGL com cinco rodas, seis películas, pinturas e lados do veículo. Comparação de pixels da região do carro confirmou diferenças de pintura e transparência. Capturas finais arquivadas em [linha do tempo](docs/linha-do-tempo/README.md).
 - Testes gráficos executados em Linux / Mesa llvmpipe. O display virtual emite aviso de VSync não suportado. Isso não constitui medição de desempenho em hardware modesto.
 - `tests/persistence.gd`: **63 verificações** de serialização completa, backup, arquivo ausente/inválido, validação de tipos/limites/versão, migração de schema 1 para 2, preservação do original e falhas de gravação.
-- `tests/accessories.gd`: **51 verificações** de categorias, pivôs, animações e reversão, materiais nas peças móveis, filtros/turbo/barra, quatro opções de caixa, estofados, cores e enquadramento de detalhe.
+- `tests/accessories.gd`: **54 verificações** de categorias, pivôs, animações e reversão, materiais nas peças móveis, filtros/turbo/barra, quatro opções de caixa, estofados, cores e enquadramento de detalhe.
 - Na etapa 0.4, `tests/render_accessories.gd` produziu nove capturas finais das peças fechadas/abertas, motor, três caixas e três estofados; a primeira prévia também foi preservada na linha do tempo.
 - `tests/persistence_process.gd`: processos independentes gravaram por autosave, reabriram recuperando todos os campos, fecharam com alteração pendente e reabriram novamente; falha de gravação deixou o estado pendente e mostrou confirmação ao sair.
 - Na etapa 0.3, `tests/render_persistence.gd` produziu capturas da interface com sucesso de gravação, carregamento e recuperação de backup.
@@ -113,3 +128,5 @@ O teste gráfico `tests/render_capture.gd` requer display X11/OpenGL no Linux e 
 - A leitura GitHub funciona pela configuração de rede do ambiente; nenhum token foi solicitado.
 
 Consulte [o planejamento e a arquitetura](docs/PLANO.md). Direção e exportação de executável ainda não estão implementadas.
+
+Validação 0.6.0: testes de exterior/suspensão (55 verificações), dez rodas, migração de saves antigos e gravação/reabertura de todas as novas escolhas; capturas reais dos kits e adesivos. Executados no Linux; a versão nova ainda precisa do teste no Windows.

@@ -68,6 +68,17 @@ Não substituir imagens antigas: criar arquivos numerados para cada novo marco.
 | 057 | 30/10/2026 | Revisao final prata frente | Captura Linux / revisão final 0.5.0 | [Imagem](imagens/057-revisao-final-prata-frente.png) |
 | 058 | 30/10/2026 | Revisao final prata lateral | Captura Linux / revisão final 0.5.0 | [Imagem](imagens/058-revisao-final-prata-lateral.png) |
 
+| 059 | 30/10/2026 | exterior esportivo | Captura Linux / 0.6.0 | [Imagem](imagens/059-exterior-esportivo.png) |
+| 060 | 30/10/2026 | wide body rebaixado | Captura Linux / 0.6.0 | [Imagem](imagens/060-wide-body-rebaixado.png) |
+| 061 | 30/10/2026 | faixa lateral | Captura Linux / 0.6.0 | [Imagem](imagens/061-faixa-lateral.png) |
+| 062 | 30/10/2026 | listras conformadas | Captura Linux / 0.6.0 | [Imagem](imagens/062-listras-conformadas.png) |
+| 063 | 30/10/2026 | sinaleiras fume e aero | Captura Linux / 0.6.0 | [Imagem](imagens/063-sinaleiras-fume-e-aero.png) |
+| 064 | 30/10/2026 | aerofolio na tampa aberta | Captura Linux / 0.6.0 | [Imagem](imagens/064-aerofolio-na-tampa-aberta.png) |
+| 065 | 30/10/2026 | caixa de roda rebaixamento corrigida | Captura Linux / 0.6.0 | [Imagem](imagens/065-caixa-de-roda-rebaixamento-corrigida.png) |
+
+| 066 | 30/10/2026 | acabamento final caixa de roda | Captura Linux / 0.6.0 | [Imagem](imagens/066-acabamento-final-caixa-de-roda.png) |
+| 067 | 30/10/2026 | revestimento interno final | Captura Linux / 0.6.0 | [Imagem](imagens/067-revestimento-interno-final.png) |
+
 ## Registro relatado pelo usuário
 
 Em 30/10/2026, o usuário enviou no chat uma captura mostrando a primeira execução no Windows, antes da correção das faces laterais. A imagem permanece no histórico da conversa; o arquivo original não está disponível no sistema de arquivos deste ambiente e não foi incluído nesta pasta. Não confundir a captura Linux acima com a captura Windows do usuário.
@@ -104,3 +115,9 @@ O usuário enviou duas imagens no chat mostrando a versão 0.4.0 no Windows: vis
 Em 30/10/2026, o usuário confirmou que o salvamento funcionou e pediu aparência mais próxima de fotos reais. Enviou uma referência prata de quatro portas e outra cinza rebaixada. As imagens originais permanecem no chat, sem arquivo original acessível para cópia neste ambiente. O estudo desta revisão mantém duas portas e não pretende equivaler a uma reprodução fiel da referência de quatro portas.
 
 Os registros 038–040 mostram a evolução inicial da malha/luz; 041–048 e 049–056 preservam as duas passagens de inspeção; 057–058 mostram a revisão final após corrigir a posição das rodas. Todos são capturas reais do Godot no Linux, não imagens geradas por IA nem fotos do computador do usuário. Nenhuma captura antiga foi sobrescrita.
+
+## Tunagem externa — 0.6.0
+
+O usuário pediu para-choques, para-lamas, body kits, sinaleiras, adesivos, rebaixamento, mais rodas e cores. Registros 059–064 mostram testes dos acessórios; 065 preserva a correção das caixas internas com rebaixamento máximo. As sete imagens são capturas reais no Linux, ainda sem validação no Windows.
+
+Os registros 066–067 preservam o refinamento das tampas internas das caixas de roda para não expor pneus ao rebaixar o veículo.

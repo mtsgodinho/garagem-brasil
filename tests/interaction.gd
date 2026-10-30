@@ -27,6 +27,8 @@ func run() -> void:
 		await process_frame
 	var ui: CanvasLayer = garage.customization_ui
 	var camera: Camera3D = garage.camera
+	ui.tabs.get_child(0).ensure_control_visible(ui.gloss_slider)
+	await process_frame
 	var yaw: float = camera.yaw
 	var start: Vector2 = ui.gloss_slider.get_global_rect().get_center()
 	mouse_button(start,true)
@@ -43,6 +45,8 @@ func run() -> void:
 	await process_frame
 	assert(not is_equal_approx(camera.yaw,yaw),"Mouse na cena gira câmera")
 	assert(not camera.dragging,"Soltar sobre interface encerra órbita")
+	ui.tabs.get_child(0).ensure_control_visible(ui.body_picker)
+	await process_frame
 	start = ui.body_picker.get_global_rect().get_center()
 	mouse_button(start,true)
 	mouse_button(start,false)

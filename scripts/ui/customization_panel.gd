@@ -32,6 +32,13 @@ var audio_option: OptionButton
 var upholstery_option: OptionButton
 var interior_picker: ColorPickerButton
 var seat_picker: ColorPickerButton
+var bumper_option: OptionButton
+var fender_option: OptionButton
+var kit_option: OptionButton
+var tail_option: OptionButton
+var sticker_option: OptionButton
+var sticker_picker: ColorPickerButton
+var lowering_slider: HSlider
 var category_buttons: Array[Button] = []
 
 func setup(customization: Resource) -> void:
@@ -97,7 +104,7 @@ func build() -> void:
 	root.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	root.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(root)
-	var heading := label("GARAGEM BRASIL\nESTÚDIO 05 / REVISÃO VISUAL",22)
+	var heading := label("GARAGEM BRASIL\nESTÚDIO 06 / TUNAGEM EXTERNA",22)
 	heading.position = Vector2(28,22)
 	root.add_child(heading)
 	var panel := PanelContainer.new()
@@ -124,7 +131,7 @@ func build() -> void:
 	categories.add_theme_constant_override("v_separation",4)
 	column.add_child(categories)
 	var group := ButtonGroup.new()
-	var titles := ["Pintura","Rodas","Vidros","Aberturas","Motor / som","Interior"]
+	var titles := ["Pintura","Rodas","Vidros","Aberturas","Motor / som","Interior","Exterior","Adesivos","Suspensão"]
 	for index in titles.size():
 		var button := Button.new()
 		button.text = titles[index]
@@ -147,6 +154,9 @@ func build() -> void:
 	build_openings(page("Aberturas"))
 	build_mechanics(page("Motor e som"))
 	build_interior(page("Interior"))
+	build_exterior(page("Exterior"))
+	build_stickers(page("Adesivos"))
+	build_suspension(page("Suspensão"))
 	save_button = Button.new()
 	save_button.text = "Salvar modificações"
 	save_button.custom_minimum_size.y = 36
@@ -195,10 +205,11 @@ func build_paint(column: VBoxContainer) -> void:
 	body_picker.color_changed.connect(func(color: Color) -> void:
 		state.body_color = color
 		changed())
-	var palette := HBoxContainer.new()
+	var palette := GridContainer.new()
+	palette.columns = 6
 	palette.add_theme_constant_override("separation",6)
 	column.add_child(palette)
-	for hex in ["b8cbd5","c43c42","2469ad","183f36","e2bd57","171d26"]:
+	for hex in ["b8cbd5","c43c42","2469ad","183f36","e2bd57","171d26","f1f0e8","a6a6a6","643798","df7723","32b8a4","a74d7b","536575","6b161d","5f543c","91c943","222b58","c3a55e"]:
 		var swatch := Button.new()
 		swatch.custom_minimum_size = Vector2(30,28)
 		var style := StyleBoxFlat.new()
@@ -380,3 +391,40 @@ func build_interior(column: VBoxContainer) -> void:
 		view_requested.emit("interior"))
 	column.add_child(show)
 	note(column,"Tecido, couro sintético e esportivo bicolor são materiais simplificados. No bicolor, as laterais dos bancos usam a cor do interior.")
+
+func exterior_option(column: VBoxContainer, title: String, choices: Array, field: String) -> OptionButton:
+	column.add_child(label(title))
+	var option := dropdown(choices,state.get(field))
+	column.add_child(option)
+	option.item_selected.connect(func(index: int) -> void:
+		state.set(field,index)
+		changed())
+	return option
+
+func build_exterior(column: VBoxContainer) -> void:
+	bumper_option = exterior_option(column,"Para-choques dianteiro e traseiro",State.BUMPERS,"bumper_style")
+	fender_option = exterior_option(column,"Para-lamas / alargadores",State.FENDERS,"fender_style")
+	kit_option = exterior_option(column,"Body kit",State.KITS,"body_kit")
+	tail_option = exterior_option(column,"Sinaleiras / lanternas traseiras",State.TAILLIGHTS,"taillight_style")
+	note(column,"Peças procedurais próprias. O kit aero acrescenta saias, lip e aerofólio; os alargadores acompanham a carroceria.")
+
+func build_stickers(column: VBoxContainer) -> void:
+	sticker_option = exterior_option(column,"Desenho do adesivo",State.STICKERS,"sticker_style")
+	column.add_child(label("Cor do adesivo"))
+	sticker_picker = picker(state.sticker_color)
+	column.add_child(sticker_picker)
+	sticker_picker.color_changed.connect(func(color: Color) -> void:
+		state.sticker_color = color
+		changed())
+	note(column,"Faixa lateral, listras no capô/teto ou número nas portas. Os adesivos das portas e do capô acompanham a abertura das peças.")
+
+func build_suspension(column: VBoxContainer) -> void:
+	var value := label("Rebaixamento: %.1f cm" % state.lowering_cm)
+	column.add_child(value)
+	lowering_slider = slider(0,6,0.5,state.lowering_cm)
+	column.add_child(lowering_slider)
+	lowering_slider.value_changed.connect(func(amount: float) -> void:
+		state.lowering_cm = amount
+		value.text = "Rebaixamento: %.1f cm" % amount
+		changed())
+	note(column,"Regulagem visual de 0 a 6 cm. As rodas continuam apoiadas no piso; a carroceria e seus acessórios descem juntos. Ainda não simula suspensão durante a direção.")

@@ -62,3 +62,9 @@ Cada entrega deve ser testada e revisada antes da seguinte. Catálogos de peças
 ## Recursos e limitações
 
 Nenhum recurso pago ou modelo externo foi usado. O modelo definitivo exige geometria própria ou modelo gratuito com licença compatível documentada. Blender está disponível, mas não é dependência de execução. Reflexos de película e desempenho deverão respeitar o renderer Compatibility; não prometer reflexos de ray tracing.
+
+## Tunagem externa — 0.6.0 (solicitada, aguarda teste)
+
+`exterior_visual.gd` cria para-choques, alargadores, saias/lip/aero e adesivos; catálogos no Resource de personalização. O adaptador alterna as peças originais, tinturas de lanternas e cria acessórios ligados aos pivôs quando necessário. Suspensão visual desloca o corpo, mantendo rodas no chão e deformando apenas a região dos arcos, com caixas internas protegendo os pneus. Não é simulação de suspensão.
+
+Schema 3 persiste sete campos adicionais e amplia o catálogo para dez rodas, preservando a leitura de schemas 1/2. UI com nove categorias, 18 cores rápidas e seletores livres. Testes de reabertura verificam os novos campos. Os próximos recursos sugeridos continuam planejamento; não avançar para direção sem orientação do usuário.

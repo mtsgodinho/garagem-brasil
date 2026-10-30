@@ -45,6 +45,12 @@ func run() -> void:
 		choose(ui.upholstery_option,2)
 		ui.interior_picker.color_changed.emit(Color("d0ba87"))
 		ui.seat_picker.color_changed.emit(Color("ad6044"))
+		choose(ui.bumper_option,1)
+		choose(ui.fender_option,2)
+		choose(ui.kit_option,2)
+		choose(ui.tail_option,1)
+		choose(ui.sticker_option,2)
+		ui.lowering_slider.value = 5
 		check(garage.dirty,"Alteração marca estado pendente")
 		if mode == "failure":
 			DirAccess.make_dir_recursive_absolute(garage.save_path + ".tmp")
@@ -76,6 +82,9 @@ func run() -> void:
 		check(ui.seat_picker.color.is_equal_approx(Color("ad6044")),"Cor dos bancos restaurada")
 		for part in garage.get_node("VehicleVisual").part_open.values():
 			check(not part,"Peças começam fechadas após reabrir")
+		check(state.bumper_style == 1 and state.fender_style == 2 and state.body_kit == 2,"Exterior restaurado em novo processo")
+		check(state.taillight_style == 1 and state.sticker_style == 2 and state.lowering_cm == 5,"Lanternas adesivos e altura restaurados")
+		check(ui.bumper_option.selected == 1 and ui.lowering_slider.value == 5,"Controles externos sincronizados")
 		check(ui.status.text == "Modificações carregadas.","Carregamento informado")
 		var visual: Node3D = garage.get_node("VehicleVisual")
 		check(visual.body_material.albedo_color.is_equal_approx(expected),"Visual inicia com cor salva")

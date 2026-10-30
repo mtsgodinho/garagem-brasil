@@ -98,13 +98,13 @@ static func build(parent: Node3D, model: int, inches: int, rim: Material, tire: 
 		var x: float = side * 0.118
 		cylinder(parent, "BrakeDrum", radius - 0.009, 0.012, side * 0.111, dark)
 		ring(parent, radius, x, rim)
-		var count: int = [5,6,10,5,8][model]
+		var count: int = [5,6,10,5,8,8,12,10,3,6][model]
 		for i in count:
 			var angle := TAU * float(i) / float(count)
-			if model == 3:
-				spoke(parent, angle - 0.075, radius - 0.008, 0.018, x, rim)
-				spoke(parent, angle + 0.075, radius - 0.008, 0.018, x, rim)
+			if model in [3,7]:
+				spoke(parent, angle - (0.24 if model == 7 else 0.075), radius - 0.008, 0.018, x, rim)
+				spoke(parent, angle + (0.24 if model == 7 else 0.075), radius - 0.008, 0.018, x, rim)
 			else:
-				var width: float = [0.045,0.034,0.022,0.018,0.068][model]
-				spoke(parent, angle + (0.20 if model == 2 else 0.0), radius - 0.007, width, x, rim)
+				var width: float = [0.045,0.034,0.022,0.018,0.068,0.028,0.018,0.016,0.095,0.065][model]
+				spoke(parent, angle + (0.35 if model in [2,9] else 0.0), radius - 0.007, width, x, rim)
 		cylinder(parent, "CenterCap", 0.052 if model != 4 else 0.082, 0.020, side * 0.13, rim)

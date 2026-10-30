@@ -25,7 +25,7 @@ func run() -> void:
 	for node in car.find_children("*","MeshInstance3D",true,false):
 		for surface in node.mesh.get_surface_count():
 			var arrays: Array = node.mesh.surface_get_arrays(surface)
-			var indices: PackedInt32Array = arrays[Mesh.ARRAY_INDEX]
+			var indices: PackedInt32Array = arrays[Mesh.ARRAY_INDEX] if arrays[Mesh.ARRAY_INDEX] != null else PackedInt32Array()
 			var vertices: PackedVector3Array = arrays[Mesh.ARRAY_VERTEX]
 			triangles += (indices.size() if not indices.is_empty() else vertices.size())/3
 			for vertex in vertices:

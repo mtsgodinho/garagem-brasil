@@ -4,6 +4,7 @@ extends Node3D
 
 const Customization = preload("res://scripts/customization/vehicle_customization.gd")
 const ProceduralMaterials = preload("res://scripts/rendering/procedural_materials.gd")
+const Exterior = preload("res://scripts/vehicles/exterior_visual.gd")
 const Accessories = preload("res://scripts/vehicles/accessory_visuals.gd")
 const WheelVisual = preload("res://scripts/vehicles/wheel_visual.gd")
 
@@ -19,6 +20,12 @@ var part_tweens: Dictionary = {}
 var current_audio := -1
 var current_wheel_model := -1
 var current_wheel_inches := -1
+
+var base_positions: Dictionary = {}
+var base_shell: Mesh
+var last_drop := -1.0
+var exterior_signature: Array = []
+var decal_material := StandardMaterial3D.new()
 
 var body_material := StandardMaterial3D.new()
 var glass_material := StandardMaterial3D.new()
@@ -104,6 +111,27 @@ func _ready() -> void:
 					part.material_override = bindings[source.resource_name]
 				else:
 					part.set_surface_override_material(surface,bindings[source.resource_name])
+	# Close the inner faces of the rear wheel tubs so the tyre cannot show
+	# through the luggage lining when the body is lowered.
+	interior_material.cull_mode = BaseMaterial3D.CULL_DISABLED
+	for tub in get_node("Interior").get_children():
+		if str(tub.name).begins_with("InnerWheelTub"):
+			var side := signf(tub.get_aabb().get_center().x)
+			var points: Array[Vector3] = []
+			var start := asin((0.50-0.425)/0.345)
+			for i in 33:
+				var angle := start+(PI-2*start)*i/32.0
+				points.append(Vector3(side*0.50,0.425+0.345*sin(angle),1.23+0.345*cos(angle)))
+			var st := SurfaceTool.new()
+			st.begin(Mesh.PRIMITIVE_TRIANGLES)
+			for i in range(1,points.size()-1):
+				for index in [0,i,i+1]: st.add_vertex(points[index])
+			st.generate_normals()
+			var cap := MeshInstance3D.new()
+			cap.name = "InnerCap"
+			cap.mesh = st.commit()
+			cap.material_override = interior_material
+			tub.add_child(cap)
 	# Keep the public adapter names independent from Blender's unique-name suffixes.
 	for parent_name in ["LeftDoor","RightDoor"]:
 		var door := get_node(parent_name)
@@ -133,6 +161,13 @@ func _ready() -> void:
 			wheel.position = Vector3(x,0.425,z)
 			wheel_root.add_child(wheel)
 			wheels.append(wheel)
+	var exterior := Node3D.new()
+	exterior.name = "Exterior"
+	add_child(exterior)
+	for child in get_children():
+		if child is Node3D and child != wheel_root and not child.is_queued_for_deletion():
+			base_positions[child.name] = child.position
+	base_shell = get_node("Body/Shell").mesh
 	apply_customization(Customization.new())
 
 func apply_customization(state: Resource) -> void:
@@ -172,6 +207,62 @@ func apply_customization(state: Resource) -> void:
 	if current_audio != state.audio_setup:
 		Accessories.audio(self,get_node("TrunkAudio"),state.audio_setup)
 		current_audio = state.audio_setup
+
+	apply_exterior(state)
+
+func apply_exterior(state: Resource) -> void:
+	var signature: Array = [state.bumper_style,state.fender_style,state.body_kit,state.sticker_style,state.sticker_color,state.body_color,state.finish,state.gloss,state.lowering_cm]
+	decal_material.albedo_color = Color(state.sticker_color,1.0)
+	decal_material.roughness = 0.6
+	decal_material.cull_mode = BaseMaterial3D.CULL_DISABLED
+	if signature != exterior_signature:
+		Exterior.build(self,get_node("Exterior"),state,decal_material)
+		exterior_signature = signature.duplicate()
+	for node in get_node("Body").get_children():
+		var label := str(node.name)
+		if label in ["FrontBumper","RearBumper"] or label.begins_with("Fog") or label.begins_with("LowerGrille") or label.begins_with("LowerSlat"):
+			node.visible = state.bumper_style == 0
+		if node is MeshInstance3D:
+			var material_source: Material = node.mesh.surface_get_material(0)
+			if str(node.name).begins_with("TailLamp") and material_source != null and material_source.resource_name in ["RedLens","ReverseLens","AmberLens"]:
+				var lamp := material_source.duplicate() as StandardMaterial3D
+				if state.taillight_style == 1:
+					lamp.albedo_color = Color("343039")
+				elif state.taillight_style == 2:
+					lamp.albedo_color = Color("bac3cb")
+				elif state.taillight_style == 3:
+					lamp.albedo_color = Color("b7192b")
+				node.material_override = lamp
+	var drop: float = state.lowering_cm/100.0
+	for key in base_positions:
+		var node := get_node(NodePath(key)) as Node3D
+		node.position = base_positions[key]-Vector3(0,drop,0)
+	for node in get_node("Interior").get_children():
+		if str(node.name).begins_with("InnerWheelTub"):
+			node.position.y = drop
+	for node in get_node("Body").get_children():
+		if str(node.name).begins_with("WheelArchLiner"):
+			node.position.y = drop
+	for wheel in wheels:
+		wheel.position.x = signf(wheel.position.x)*(0.70+0.02*state.fender_style)
+	if not is_equal_approx(last_drop,drop):
+		# Preserve tyre clearance by raising only the rolled wheel opening, fading
+		# the correction into the wing. Wheels never move vertically.
+		var updated := ArrayMesh.new()
+		for surface in base_shell.get_surface_count():
+			var arrays := base_shell.surface_get_arrays(surface)
+			var vertices: PackedVector3Array = arrays[Mesh.ARRAY_VERTEX].duplicate()
+			for i in vertices.size():
+				var p := vertices[i]
+				for zc in [-1.22,1.23]:
+					var dz: float = absf(p.z-zc)
+					if dz < 0.40 and p.y < 1.0:
+						var edge := maxf(0.51,0.425+sqrt(maxf(0.0,0.355*0.355-dz*dz)))
+						vertices[i].y += drop*clampf((1.0-p.y)/(1.0-edge),0.0,1.0)
+			arrays[Mesh.ARRAY_VERTEX] = vertices
+			updated.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES,arrays)
+		get_node("Body/Shell").mesh = updated
+		last_drop = drop
 
 func quad(parent: Node3D, label: String, points: Array[Vector3], mat: Material) -> void:
 	var st := SurfaceTool.new()

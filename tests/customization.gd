@@ -29,8 +29,8 @@ func run() -> void:
 	var ui: CanvasLayer = garage.customization_ui
 	var car: Node3D = garage.get_node("VehicleVisual")
 	var state: Resource = garage.customization
-	check(ui.tabs.get_tab_count() == 6, "Seis categorias disponíveis")
-	check(ui.wheel_option.item_count == 5, "Cinco desenhos de rodas")
+	check(ui.tabs.get_tab_count() == 9, "Seis categorias disponíveis")
+	check(ui.wheel_option.item_count == 10, "Cinco desenhos de rodas")
 	check(ui.film_option.item_count == 6, "Seis opções de película")
 	var original_glass: Color = car.glass_material.albedo_color
 	ui.body_picker.color = Color("c23a38")
@@ -47,7 +47,7 @@ func run() -> void:
 	check(car.body_material.metallic > 0.45, "Pintura metálica")
 	choose(ui.finish_option,2)
 	check(car.body_material.roughness > 0.77 and not car.body_material.clearcoat_enabled, "Acabamento fosco")
-	for model in 5:
+	for model in 10:
 		choose(ui.wheel_option, model)
 		for wheel in car.wheels:
 			check(wheel.get_meta("model") == model, "Modelo aplicado nas quatro rodas")
@@ -55,7 +55,7 @@ func run() -> void:
 			for child in wheel.get_children():
 				if child is MeshInstance3D and child.mesh is BoxMesh:
 					spoke_count += 1
-			check(spoke_count == [10,12,20,20,16][model], "Geometria do desenho de roda")
+			check(spoke_count == [10,12,20,20,16,16,24,40,6,12][model], "Geometria do desenho de roda")
 		await process_frame
 	var wheel_child: Node = car.wheels[0].get_child(0)
 	ui.wheel_picker.color = Color("c6a253")

@@ -7,3 +7,5 @@
 - Não publicar capturas com dados pessoais no GitHub; preservar originais fora da publicação e usar versões recortadas quando disponíveis.
 
 - O jogo não depende de Blender: use o GLB em assets/vehicles/gol_study. Fonte e gerador em tools/blender (ignorado pelo importador). Antes dos testes em checkout novo, executar ./tools/godot-cloud.sh --headless --editor --import. Não apagar saves para mostrar a nova aparência.
+
+- O usuário solicitou e autorizou tunagem externa: para-choques, alargadores de para-lama, body kits, lanternas, adesivos, rebaixamento visual, dez rodas e mais cores. Versão 0.6.0, schema de save 3 com leitura de 1/2; aguardar teste. Pediu também sugestões, fornecidas no README, sem autorizar implementação dessas ideias.
