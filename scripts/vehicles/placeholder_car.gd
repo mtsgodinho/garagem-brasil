@@ -34,8 +34,8 @@ func profile(parent: Node3D, label: String, points: Array[Vector2], width: float
 	var count := points.size()
 	var face := Geometry2D.triangulate_polygon(PackedVector2Array(points))
 	for i in range(0, face.size(), 3):
-		indices.append_array(PackedInt32Array([face[i + 2], face[i + 1], face[i]]))
-		indices.append_array(PackedInt32Array([face[i] + count, face[i + 1] + count, face[i + 2] + count]))
+		indices.append_array(PackedInt32Array([face[i], face[i + 1], face[i + 2]]))
+		indices.append_array(PackedInt32Array([face[i + 2] + count, face[i + 1] + count, face[i] + count]))
 	for i in count:
 		var next := (i + 1) % count
 		indices.append_array(PackedInt32Array([i, next, next + count, i, next + count, i + count]))

@@ -20,6 +20,17 @@ func run() -> void:
 	for group in ["Body","Glass","Interior","Wheels"]:
 		check(car.has_node(group), "Grupo substituível: " + group)
 	check(car.get_node("Body").get_child_count() > 10, "Carroceria e detalhes presentes")
+	# Faces das laterais precisam apontar para fora; evita carroceria invisível.
+	var shell: MeshInstance3D = car.get_node("Body/Shell")
+	var arrays: Array = shell.mesh.surface_get_arrays(0)
+	var vertices: PackedVector3Array = arrays[Mesh.ARRAY_VERTEX]
+	var normals: PackedVector3Array = arrays[Mesh.ARRAY_NORMAL]
+	var side_vertices := 0
+	for i in vertices.size():
+		if absf(normals[i].x) > 0.99:
+			side_vertices += 1
+			check(vertices[i].x * normals[i].x > 0.0, "Normal lateral aponta para fora")
+	check(side_vertices > 6, "As duas laterais possuem faces")
 	var camera := garage.get_node("OrbitCamera")
 	var start: Vector3 = camera.position
 	var down := InputEventMouseButton.new()
