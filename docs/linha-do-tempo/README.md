@@ -108,6 +108,20 @@ Não substituir imagens antigas: criar arquivos numerados para cada novo marco.
 | 094 | 30/10/2026 | traseiro baixo final | Captura Linux / 0.8.0 | [Imagem](imagens/094-traseiro-baixo-final.png) |
 | 095 | 30/10/2026 | duplo fluxo final | Captura Linux / 0.8.0 | [Imagem](imagens/095-duplo-fluxo-final.png) |
 
+| 096 | 30/10/2026 | menu oficina | Captura Linux / 0.10.0 | [Imagem](imagens/096-menu-oficina.png) |
+| 097 | 30/10/2026 | configuracoes | Captura Linux / 0.10.0 | [Imagem](imagens/097-configuracoes.png) |
+| 098 | 30/10/2026 | oficina bancadas e ferramentas | Captura Linux / 0.10.0 | [Imagem](imagens/098-oficina-bancadas-e-ferramentas.png) |
+| 099 | 30/10/2026 | preparacao e nitro | Captura Linux / 0.10.0 | [Imagem](imagens/099-preparacao-e-nitro.png) |
+| 100 | 30/10/2026 | nitro na pista | Captura Linux / 0.10.0 | [Imagem](imagens/100-nitro-na-pista.png) |
+| 101 | 30/10/2026 | danos no capo | Captura Linux / 0.10.0 | [Imagem](imagens/101-danos-no-capo.png) |
+| 102 | 30/10/2026 | carro reparado | Captura Linux / 0.10.0 | [Imagem](imagens/102-carro-reparado.png) |
+| 103 | 30/10/2026 | menu retorno | Captura Linux / 0.10.0 | [Imagem](imagens/103-menu-retorno.png) |
+| 104 | 30/10/2026 | oficina bancada e estantes | Captura Linux / 0.10.0 | [Imagem](imagens/104-oficina-bancada-e-estantes.png) |
+| 105 | 30/10/2026 | oficina pneus e armarios | Captura Linux / 0.10.0 | [Imagem](imagens/105-oficina-pneus-e-armarios.png) |
+| 106 | 30/10/2026 | oficina mesa e compressor | Captura Linux / 0.10.0 | [Imagem](imagens/106-oficina-mesa-e-compressor.png) |
+
+| 107 | 30/10/2026 | oficina fotografada pelo jogo exportado, personalização vermelha de teste | Linux release / 0.10.0 | [Imagem](imagens/107-oficina-foto-no-jogo-exportado.png) |
+
 ## Registro relatado pelo usuário
 
 Em 30/10/2026, o usuário enviou no chat uma captura mostrando a primeira execução no Windows, antes da correção das faces laterais. A imagem permanece no histórico da conversa; o arquivo original não está disponível no sistema de arquivos deste ambiente e não foi incluído nesta pasta. Não confundir a captura Linux acima com a captura Windows do usuário.
@@ -156,3 +170,11 @@ Os registros 066–067 preservam o refinamento das tampas internas das caixas de
 O usuário autorizou pista e modo foto após mostrar o Estúdio 06 no Windows. Durante a implementação pediu mais filtros, roncos conforme filtro e opções independentes de dianteiro/traseiro/saia que arrastem no chão. Os registros 068–085 documentam pista/foto, incluindo a prévia inicial e a correção da câmera de capô; 086–095 documentam filtros e peças baixas, com acabamento final dos volumes em 092–095. PNGs sem interface na pista e garagem foram gerados pelo modo foto real do jogo. Fotos enviadas pelo usuário continuam apenas no chat quando o arquivo original não está acessível.
 
 As peças baixas encostam visualmente no piso; não há simulação de desgaste/raspagem. Áudio sintetizado foi validado por amostras numéricas e arquivos WAV; o ambiente Linux usa driver Dummy e a verificação auditiva no Windows permanece pendente. Não foi publicado áudio pessoal ou material externo.
+
+## Oficina e mecânicas — 0.10.0
+
+O usuário mostrou o modo foto na pista no Windows e definiu objetivo futuro de corrida pela cidade com prêmios usados em peças. Também pediu velocidade, nitro, danos, reparo e interior de oficina. Os registros 096–103 mostram menu/configurações, oficina e preparação, nitro e sequência de dano/reparo; 104–106 mostram a oficina sem interface, com móveis/ferramentas de vários ângulos. São capturas reais Godot/OpenGL no Linux. A captura Windows enviada continua somente no chat, sem original acessível para cópia. Nenhuma imagem anterior foi sobrescrita.
+
+O registro 107 foi gravado pelo modo foto da versão Linux exportada, durante o teste do executável, com cor e rodas de teste.
+
+**Total arquivado: 107 capturas.**

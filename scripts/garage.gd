@@ -76,9 +76,6 @@ func _ready() -> void:
 	add_child(platform)
 	for x in [-5.0,5.0]:
 		helper.box(self,"WallColumn",Vector3(0.2,4.8,0.3),Vector3(x,2.3,6.8),trim)
-	for z in [3.5,5.8]:
-		helper.box(self,"Workbench",Vector3(2,0.1,0.7),Vector3(-6.4,0.95,z),trim)
-		helper.box(self,"ToolCabinet",Vector3(1.8,0.85,0.6),Vector3(-6.4,0.47,z),wall)
 	for x in [-3.0,0.0,3.0]:
 		helper.box(self,"LightFixture",Vector3(0.15,0.08,3),Vector3(x,4.0,0),helper.material(Color("e9edf0")))
 		var light := OmniLight3D.new()
@@ -121,6 +118,8 @@ func _ready() -> void:
 	contact.material_override = shadow_material
 	contact.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	add_child(contact)
+	var workshop: Node3D = load("res://scripts/environment/workshop.gd").new()
+	add_child(workshop)
 	helper.free()
 	var car := Car.new()
 	car.name = "VehicleVisual"
@@ -146,6 +145,7 @@ func create_ui() -> void:
 	customization_ui.exit_requested.connect(request_exit)
 	customization_ui.save_requested.connect(save_now)
 	customization_ui.view_requested.connect(camera.focus_detail)
+	customization_ui.repair_requested.connect(repair_vehicle)
 	customization_ui.menu_requested.connect(func() -> void: menu_requested.emit())
 	customization_ui.preview_requested.connect(func(active: bool) -> void: preview_engine = active)
 	customization_ui.drive_requested.connect(enter_track)
@@ -214,6 +214,7 @@ func enter_track() -> void:
 	track.customization = customization
 	track.garage_requested.connect(leave_track)
 	track.photo_requested.connect(enter_photo)
+	track.vitals_changed.connect(driving_changed)
 	get_tree().root.add_child(track)
 
 func leave_track() -> void:
@@ -224,6 +225,8 @@ func leave_track() -> void:
 	track.queue_free()
 	track = null
 	get_node("WorldEnvironment").environment = studio_environment
+	apply_customization()
+	customization_ui.refresh_condition()
 	visible = true
 	customization_ui.show()
 	camera.set_process_input(true)
@@ -274,3 +277,15 @@ func _process(_delta: float) -> void:
 	var rev := 1.0 if Input.is_physical_key_pressed(KEY_W) else 0.15
 	engine_audio.update_engine(customization,0,rev,active)
 	if active: engine_audio.target_rpm = lerpf(950,5000,rev)
+
+func driving_changed() -> void:
+	customization_ui.refresh_condition()
+	if persistence_enabled:
+		dirty = true
+		if save_timer.is_stopped(): save_timer.start()
+
+func repair_vehicle() -> void:
+	customization.vehicle_health = 100.0
+	customization.nitro_charge = 100.0
+	customization_changed()
+	customization_ui.refresh_condition()

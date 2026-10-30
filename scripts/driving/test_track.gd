@@ -2,6 +2,7 @@ extends Node3D
 
 const Car = preload("res://scripts/vehicles/placeholder_car.gd")
 const Driver = preload("res://scripts/driving/vehicle_driver.gd")
+signal vitals_changed
 signal garage_requested
 signal photo_requested
 var customization: Resource
@@ -9,6 +10,8 @@ var driver: CharacterBody3D
 var camera: Camera3D
 var hud: CanvasLayer
 var speed_label: Label
+var condition_label: Label
+var message_label: Label
 var pause_panel: PanelContainer
 var paused := false
 var camera_mode := 0
@@ -115,6 +118,7 @@ func _ready() -> void:
 	driver = Driver.new()
 	driver.customization = customization
 	add_child(driver)
+	driver.vitals_changed.connect(func() -> void: vitals_changed.emit())
 	camera = Camera3D.new()
 	camera.current = true
 	camera.fov = 62
@@ -139,16 +143,23 @@ func build_ui() -> void:
 	title.text = "  GARAGEM BRASIL / PISTA DE TESTES"
 	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	row.add_child(title)
-	for spec in [["Voltar à garagem",func() -> void: garage_requested.emit()],["Modo foto (P)",func() -> void: photo_requested.emit()],["Reposicionar (R)",func() -> void: driver.reset_vehicle()]]:
+	for spec in [["Voltar à garagem",func() -> void: garage_requested.emit()],["Modo foto (P)",func() -> void: photo_requested.emit()],["Reposicionar (R)",func() -> void: driver.reset_vehicle()],["Reparar (parado)",repair]]:
 		var button := Button.new()
 		button.text = spec[0]
 		button.focus_mode = Control.FOCUS_NONE
 		button.pressed.connect(spec[1])
 		row.add_child(button)
 	var info := Label.new()
-	info.text = "W: acelerar • S: frear/ré • A/D: virar • Espaço: freio de mão\nC: câmera • ESC: menu • P: foto • R: reposicionar"
+	info.text = "W: acelerar • S: frear/ré • A/D: virar • Espaço: freio de mão\nSHIFT: nitro • C: câmera • ESC: menu • P: foto • R: reposicionar"
 	info.position = Vector2(24,64)
 	root.add_child(info)
+	message_label = Label.new()
+	message_label.position = Vector2(24,125)
+	root.add_child(message_label)
+	condition_label = Label.new()
+	condition_label.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_LEFT)
+	condition_label.position = Vector2(24,-45)
+	root.add_child(condition_label)
 	speed_label = Label.new()
 	speed_label.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_LEFT)
 	speed_label.position = Vector2(24,-88)
@@ -179,6 +190,8 @@ func set_paused(value: bool) -> void:
 
 func _process(delta: float) -> void:
 	speed_label.text = "%03d km/h  %s" % [roundi(absf(driver.speed)*3.6),"RÉ" if driver.speed < -0.2 else ""]
+	condition_label.text = "Estado: %.0f%% • Nitro: %.0f%%  %s" % [customization.vehicle_health,customization.nitro_charge,"NITRO ATIVO" if driver.nitro_active else ""]
+	if customization.vehicle_health <= 0: message_label.text = "Motor avariado. Pare e repare, ou volte à garagem."
 	if not photo_mode: update_camera(delta)
 
 func update_camera(delta: float) -> void:
@@ -196,3 +209,7 @@ func _unhandled_key_input(event: InputEvent) -> void:
 		update_camera(1)
 	elif event.keycode == KEY_R: driver.reset_vehicle()
 	elif event.keycode == KEY_P: photo_requested.emit()
+
+func repair() -> void:
+	if driver.service(): message_label.text = "Veículo reparado e nitro recarregado."
+	else: message_label.text = "Pare o carro para reparar."

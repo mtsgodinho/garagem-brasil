@@ -21,8 +21,8 @@ func run() -> void:
 	await process_frame
 	var ui: CanvasLayer = garage.customization_ui
 	var car: Node3D = garage.get_node("VehicleVisual")
-	check(ui.tabs.get_tab_count() == 9,"Seis categorias")
-	for i in 9:
+	check(ui.tabs.get_tab_count() == 10,"Seis categorias")
+	for i in 10:
 		ui.category_buttons[i].pressed.emit()
 		check(ui.tabs.current_tab == i,"Botão abre categoria")
 	for key in ["left_door","right_door","hood","trunk"]:

@@ -3,7 +3,7 @@ extends RefCounted
 ## Arquivos inválidos nunca são apagados: são preservados antes da gravação.
 
 const State = preload("res://scripts/customization/vehicle_customization.gd")
-const SCHEMA_VERSION := 4
+const SCHEMA_VERSION := 5
 const VEHICLE_ID := "gol_g3_placeholder"
 const MAX_BYTES := 65536
 
@@ -52,6 +52,7 @@ func document(state: Resource) -> Dictionary:
 		"body_kit":state.body_kit,"taillight_style":state.taillight_style,
 		"sticker_style":state.sticker_style,"lowering_cm":state.lowering_cm,
 		"sticker_color":[state.sticker_color.r,state.sticker_color.g,state.sticker_color.b],
+		"performance_level":state.performance_level,"nitro_enabled":state.nitro_enabled,"vehicle_health":state.vehicle_health,"nitro_charge":state.nitro_charge,
 		"intake_style":state.intake_style,"engine_sound":state.engine_sound,"engine_volume":state.engine_volume,
 		"front_bumper_style":state.front_bumper_style,"rear_bumper_style":state.rear_bumper_style,"side_skirt_style":state.side_skirt_style,
 	}
@@ -86,6 +87,11 @@ func decode(data: Variant) -> Resource:
 		for field in [["intake_style",0,3],["engine_sound",0,4],["engine_volume",0,1],["front_bumper_style",-1,3],["rear_bumper_style",-1,3],["side_skirt_style",-1,2]]:
 			if not number(data.get(field[0]),field[1],field[2],field[0] != "engine_volume"):
 				return null
+	if int(data.schema_version) >= 5:
+		if not number(data.get("performance_level"),0,3,true) or typeof(data.get("nitro_enabled")) != TYPE_BOOL:
+			return null
+		if not number(data.get("vehicle_health"),0,100) or not number(data.get("nitro_charge"),0,100):
+			return null
 	var state := State.new()
 	state.body_color = Color(data.body_color[0],data.body_color[1],data.body_color[2])
 	state.wheel_color = Color(data.wheel_color[0],data.wheel_color[1],data.wheel_color[2])
@@ -112,6 +118,8 @@ func decode(data: Variant) -> Resource:
 			state.set(key,data[key])
 	else:
 		state.intake_style = 1 if state.sport_intake else 0
+	if int(data.schema_version) >= 5:
+		for key in ["performance_level","nitro_enabled","vehicle_health","nitro_charge"]: state.set(key,data[key])
 	return state
 
 func read_state(file_path: String) -> Resource:

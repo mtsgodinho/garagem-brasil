@@ -50,3 +50,9 @@ const ENGINE_SOUNDS := ["Automático pelo filtro", "Original suave", "Grave enco
 @export var front_bumper_style := -1
 @export var rear_bumper_style := -1
 @export var side_skirt_style := -1
+
+const PREPARATIONS := ["Original • 126 km/h", "Rua • 144 km/h", "Esportivo • 162 km/h", "Competição • 180 km/h"]
+@export var performance_level := 0
+@export var nitro_enabled := false
+@export_range(0.0,100.0) var vehicle_health := 100.0
+@export_range(0.0,100.0) var nitro_charge := 100.0

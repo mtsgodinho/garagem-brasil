@@ -47,7 +47,7 @@ func build_menu() -> void:
 	title.add_theme_font_size_override("font_size",42)
 	column.add_child(title)
 	var subtitle := Label.new()
-	subtitle.text = "PROTÓTIPO 0.9.0 • GOL G3\nMonte seu carro. Teste na pista."
+	subtitle.text = "PROTÓTIPO 0.10.0 • GOL G3\nMonte seu carro. Teste na pista."
 	column.add_child(subtitle)
 	for spec in [["Jogar • testar carro",play],["Garagem • personalizar",open_garage],["Configurações",func() -> void: options.open()],["Sair",func() -> void: garage.request_exit()]]:
 		var button := Button.new()

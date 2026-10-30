@@ -30,11 +30,11 @@ assert data[:2]==b'MZ'
 pe=struct.unpack_from('<I',data,0x3c)[0]
 assert data[pe:pe+4]==b'PE\0\0' and struct.unpack_from('<H',data,pe+4)[0]==0x8664
 assert data[-4:]==b'GDPC','Embedded PCK missing'
-version='0.9.0'
+version=re.search(r'config/version="([^"]+)"',(ROOT/'project.godot').read_text()).group(1)
 folder=ROOT/'releases'
 folder.mkdir(exist_ok=True)
 archive=folder/f'GaragemBrasil-{version}-Windows-x64.zip'
-readme=f'''GARAGEM BRASIL {version} - WINDOWS x64\n\n1. Extraia todo o ZIP.\n2. Abra GaragemBrasil.exe. Nao precisa instalar Godot ou Blender.\n3. No menu: Garagem para personalizar, Jogar para a pista, Configuracoes para qualidade/tela/volume.\n\nSeus saves e fotos ficam em %APPDATA%\\Godot\\app_userdata\\Garagem Brasil.\nEsta exportacao foi gerada no Linux. A execucao no Windows precisa do teste do usuario.\nExecutavel sem assinatura digital.\n\nO projeto e um prototipo. Corridas com adversarios, cidade e dinheiro estao planejadas, ainda nao implementadas.\n'''
+readme=f'''GARAGEM BRASIL {version} - WINDOWS x64\n\n1. Extraia todo o ZIP.\n2. Abra GaragemBrasil.exe. Nao precisa instalar Godot ou Blender.\n3. No menu: Garagem para personalizar, Jogar para a pista, Configuracoes para qualidade/tela/volume.\n\nControles: W acelera, S freia/re, A/D viram, Espaco freio de mao.\nSHIFT usa nitro instalado na aba Desempenho. C alterna camera, ESC abre menu, R reposiciona.\nReparar (parado) recupera estado e nitro; na garagem use Desempenho > Reparar.\nP abre modo foto, F12 fotografa.\n\nSeus saves e fotos ficam em %APPDATA%\\Godot\\app_userdata\\Garagem Brasil.\nEsta exportacao foi gerada no Linux. A execucao no Windows precisa do teste do usuario.\nExecutavel sem assinatura digital.\n\nO projeto e um prototipo. Corridas com adversarios, cidade e dinheiro estao planejadas, ainda nao implementadas.\n'''
 with zipfile.ZipFile(archive,'w',zipfile.ZIP_DEFLATED,compresslevel=9) as z:
     z.write(exe,'GaragemBrasil.exe')
     z.writestr('LEIA-ME.txt',readme)

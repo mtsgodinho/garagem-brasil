@@ -22,6 +22,9 @@ var current_wheel_model := -1
 var current_wheel_inches := -1
 
 var base_positions: Dictionary = {}
+var base_hood: Mesh
+var damage_marks: Node3D
+var last_health := -1.0
 var base_shell: Mesh
 var last_drop := -1.0
 var exterior_signature: Array = []
@@ -168,6 +171,10 @@ func _ready() -> void:
 		if child is Node3D and child != wheel_root and not child.is_queued_for_deletion():
 			base_positions[child.name] = child.position
 	base_shell = get_node("Body/Shell").mesh
+	base_hood = get_node("Hood/HoodPanel").mesh
+	damage_marks = Node3D.new()
+	damage_marks.name = "DamageMarks"
+	get_node("Hood").add_child(damage_marks)
 	apply_customization(Customization.new())
 
 func apply_customization(state: Resource) -> void:
@@ -216,9 +223,10 @@ func apply_customization(state: Resource) -> void:
 		current_audio = state.audio_setup
 
 	apply_exterior(state)
+	apply_damage(state.vehicle_health)
 
 func apply_exterior(state: Resource) -> void:
-	var signature: Array = [state.bumper_style,state.fender_style,state.body_kit,state.sticker_style,state.sticker_color,state.body_color,state.finish,state.gloss,state.lowering_cm,state.front_bumper_style,state.rear_bumper_style,state.side_skirt_style]
+	var signature: Array = [state.bumper_style,state.fender_style,state.body_kit,state.sticker_style,state.sticker_color,state.body_color,state.finish,state.gloss,state.lowering_cm,state.front_bumper_style,state.rear_bumper_style,state.side_skirt_style,state.vehicle_health]
 	decal_material.albedo_color = Color(state.sticker_color,1.0)
 	decal_material.roughness = 0.6
 	decal_material.cull_mode = BaseMaterial3D.CULL_DISABLED
@@ -309,3 +317,32 @@ func set_part_open(key: String, opened: bool, animate: bool = true) -> void:
 		tween.tween_property(hinges[key],property,angle,0.32).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN_OUT)
 	else:
 		hinges[key].set_indexed(NodePath(property),angle)
+
+func apply_damage(health: float) -> void:
+	if is_equal_approx(health,last_health): return
+	last_health = health
+	var amount := 1.0-clampf(health/100.0,0,1)
+	for old in damage_marks.get_children():
+		damage_marks.remove_child(old)
+		old.queue_free()
+	if amount == 0:
+		get_node("Hood/HoodPanel").mesh = base_hood
+		return
+	var dented := ArrayMesh.new()
+	for surface in base_hood.get_surface_count():
+		var arrays := base_hood.surface_get_arrays(surface)
+		var vertices: PackedVector3Array = arrays[Mesh.ARRAY_VERTEX].duplicate()
+		for i in vertices.size():
+			var p := vertices[i]
+			vertices[i].y -= 0.055*amount*exp(-pow((p.x-0.25)/0.35,2)-pow((p.z+0.9)/0.3,2))
+		arrays[Mesh.ARRAY_VERTEX] = vertices
+		dented.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES,arrays)
+	get_node("Hood/HoodPanel").mesh = dented
+	var scratch := material(Color("71767a"),0.8,0.6)
+	for i in 7:
+		var x := 0.08+i*0.055
+		var z := -0.97+i*0.02
+		var v := (z+1.215)/1.215
+		var y := -0.062+0.065*v+0.023*(1-pow(x/(0.762-0.006*cos(v*PI)),2))*sin(v*PI*0.9)
+		y -= 0.055*amount*exp(-pow((x-0.25)/0.35,2)-pow((z+0.9)/0.3,2))
+		box(damage_marks,"Scratch",Vector3(0.003+0.003*amount,0.002,0.07+amount*0.12),Vector3(x,y,z),scratch)

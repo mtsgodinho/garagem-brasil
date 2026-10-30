@@ -2,6 +2,7 @@ extends CanvasLayer
 
 const State = preload("res://scripts/customization/vehicle_customization.gd")
 
+signal repair_requested
 signal menu_requested
 signal preview_requested(active: bool)
 signal drive_requested
@@ -50,6 +51,9 @@ var preview_check: CheckButton
 var front_option: OptionButton
 var rear_option: OptionButton
 var skirt_option: OptionButton
+var performance_option: OptionButton
+var nitro_check: CheckButton
+var condition_label: Label
 var category_buttons: Array[Button] = []
 
 func setup(customization: Resource) -> void:
@@ -115,7 +119,7 @@ func build() -> void:
 	root.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	root.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(root)
-	var heading := label("GARAGEM BRASIL\nESTÚDIO 09 / GARAGEM BRASIL",22)
+	var heading := label("GARAGEM BRASIL\nESTÚDIO 10 / OFICINA E CORRIDAS",22)
 	heading.position = Vector2(28,22)
 	root.add_child(heading)
 	var panel := PanelContainer.new()
@@ -146,7 +150,7 @@ func build() -> void:
 	categories.add_theme_constant_override("v_separation",4)
 	column.add_child(categories)
 	var group := ButtonGroup.new()
-	var titles := ["Pintura","Rodas","Vidros","Aberturas","Motor / som","Interior","Exterior","Adesivos","Suspensão"]
+	var titles := ["Pintura","Rodas","Vidros","Aberturas","Motor / som","Interior","Exterior","Adesivos","Suspensão","Desempenho"]
 	for index in titles.size():
 		var button := Button.new()
 		button.text = titles[index]
@@ -172,6 +176,7 @@ func build() -> void:
 	build_exterior(page("Exterior"))
 	build_stickers(page("Adesivos"))
 	build_suspension(page("Suspensão"))
+	build_performance(page("Desempenho"))
 	save_button = Button.new()
 	save_button.text = "Salvar modificações"
 	save_button.custom_minimum_size.y = 36
@@ -481,3 +486,23 @@ func independent_option(column: VBoxContainer, title: String, options: Array, fi
 		state.set(field,index-1)
 		changed())
 	return option
+
+func build_performance(column: VBoxContainer) -> void:
+	performance_option = exterior_option(column,"Preparação do motor",State.PREPARATIONS,"performance_level")
+	nitro_check = check_button(column,"Instalar nitro",state.nitro_enabled)
+	nitro_check.toggled.connect(func(enabled: bool) -> void:
+		state.nitro_enabled = enabled
+		changed())
+	condition_label = label("")
+	column.add_child(condition_label)
+	refresh_condition()
+	var repair := Button.new()
+	repair.text = "Reparar e recarregar nitro"
+	repair.custom_minimum_size.y = 38
+	repair.pressed.connect(func() -> void: repair_requested.emit())
+	column.add_child(repair)
+	note(column,"Preparações aumentam aceleração e velocidade. Na pista, segure SHIFT ao acelerar para usar nitro. Colisões reduzem o estado e o desempenho; em 0% o motor deixa de acelerar. Reparo e melhorias estão livres para teste nesta versão.")
+
+func refresh_condition() -> void:
+	if condition_label != null:
+		condition_label.text = "Estado: %.0f%% • Nitro: %.0f%%" % [state.vehicle_health,state.nitro_charge]

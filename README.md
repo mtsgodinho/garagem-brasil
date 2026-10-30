@@ -1,17 +1,29 @@
 # Garagem Brasil
 
-Protótipo 0.8.0 em **Godot 4.6.3 / GDScript**, renderer **Compatibility**.
-A garagem e a personalização foram aprovadas pelo usuário no Windows. O usuário confirmou o salvamento e pediu mais semelhança com fotos reais. Esta entrega revisa **carroceria, materiais, pneus, iluminação e enquadramento**, preservando as personalizações e os saves.
+Protótipo 0.10.0 em **Godot 4.6.3 / GDScript**, renderer **Compatibility**.
+A garagem e a personalização foram aprovadas pelo usuário no Windows. O usuário confirmou o salvamento e pediu mais semelhança com fotos reais. Esta entrega adiciona **oficina equipada, preparação do motor, nitro, danos, reparo, menu e configurações**, preservando personalizações e saves. O objetivo futuro é correr pela cidade e comprar peças com prêmios das corridas.
 
-## Abrir no Windows (sem programação)
+## Jogar no Windows
 
-1. Baixe o Godot **4.6.3 Standard**, para Windows x86_64, no site oficial https://godotengine.org/download/archive/4.6.3-stable/ . Não precisa da edição .NET nem de instalar Blender para executar este protótipo.
-2. Extraia o ZIP do Godot e a pasta deste projeto em seu computador.
-3. Abra o executável do Godot. No gerenciador de projetos, clique em **Importar**, escolha o arquivo **project.godot** desta pasta e abra o projeto.
-4. Aguarde a importação e pressione **F6** com `scenes/garage.tscn` aberta, ou **F5** para executar o projeto.
-5. Arraste com o botão esquerdo sobre a cena para girar ao redor do carro. Use a roda do mouse para aproximar/afastar. Pressione **R** ou clique em **Restaurar câmera** para voltar à posição inicial. **Sair** fecha o jogo.
+1. Na pasta [releases](releases/), baixe **GaragemBrasil-0.10.0-Windows-x64.zip**.
+2. Extraia o ZIP inteiro e abra **GaragemBrasil.exe**. Não precisa instalar Godot ou Blender.
+3. Escolha **Garagem • personalizar** para ver a oficina ou **Jogar • testar carro** para dirigir.
 
-Não há executável Windows exportado nesta entrega. O projeto deve ser executado pelo Godot; exportação e validação do executável pertencem à finalização. Não houve teste em Windows neste ambiente Linux.
+Exportação x64 com recursos embutidos, sem assinatura digital. O pacote foi gerado no Linux; sua execução no Windows ainda precisa do teste do usuário. A versão Linux exportada é usada nos testes locais. Não apagar saves ao atualizar.
+
+Para editar o projeto, instale [Godot 4.6.3 Standard](https://godotengine.org/download/archive/4.6.3-stable/), extraia o código-fonte, importe **project.godot** e pressione **F5**. **F6** com `garage.tscn` abre a garagem diretamente.
+
+## Novidades 0.10.0 — oficina, desempenho, nitro e reparo
+
+A garagem agora tem bancada e painel com chaves/ferramentas, morsa, armários com gavetas, estantes de caixas, carrinho de ferramentas, pneus, compressor, tambores, macaco, extintor e mesa com computador/cadeira. Objetos são cenográficos e ficam fora da plataforma central. Arraste para girar a câmera e ver os diferentes cantos.
+
+A nova aba **Desempenho** oferece Original, Rua, Esportivo e Competição, aumentando aceleração e limite de velocidade. Ative **Instalar nitro**, entre na pista e segure **SHIFT + W** em movimento. A carga é finita e aparece no HUD.
+
+Colisões com barreiras causam danos conforme a força do impacto: reduzem desempenho e deixam amassado/riscos no capô. Com estado zero o motor não acelera. **Reparar (parado)** na pista ou **Reparar e recarregar nitro** na garagem recupera o veículo e a carga. **R** somente reposiciona. Danos, carga e preparação são salvos.
+
+Menu principal com acesso à garagem, pista, configurações e saída. Configurações persistem resolução, tela cheia, qualidade e volume geral. Alterações de tela têm confirmação de 15 segundos; sem confirmar, o jogo restaura a configuração anterior.
+
+Preparações e serviços estão gratuitos no protótipo. **Corridas, cidade, dinheiro e compra de peças ainda são etapas futuras**, descritas em [próximas etapas de corrida](docs/CORRIDAS_E_OFICINA.md).
 
 ## Novidade 0.8.0 — filtros, roncos e peças baixas
 
@@ -31,7 +43,7 @@ No rodapé, **Testar carro** abre a estrada de 2,4 km com seu carro personalizad
 
 ## Personalização: como usar
 
-O painel à direita tem nove categorias: Pintura, Rodas, Vidros, Aberturas, Motor / som, Interior, Exterior, Adesivos e Suspensão. As mudanças aparecem imediatamente, sem botão de confirmação:
+O painel à direita tem dez categorias: Pintura, Rodas, Vidros, Aberturas, Motor / som, Interior, Exterior, Adesivos, Suspensão e Desempenho. As mudanças aparecem imediatamente, sem botão de confirmação:
 
 - **Pintura:** clique na amostra grande para escolher qualquer cor, ou em uma das seis cores rápidas. Selecione Brilhante, Metálica ou Fosca e ajuste o brilho.
 - **Rodas:** escolha um dos dez desenhos, clique na amostra para mudar a cor e ajuste o aro de 13 a 17 polegadas. As quatro rodas mudam juntas. O diâmetro externo do pneu permanece igual; o perfil muda para acomodar o aro.
@@ -45,11 +57,11 @@ O painel à direita tem nove categorias: Pintura, Rodas, Vidros, Aberturas, Moto
 - **Interior:** escolha Tecido, Couro sintético ou Esportivo bicolor. Há cores independentes para bancos e painel/portas. No bicolor, as laterais dos bancos usam a cor do interior. **Ver interior** abre as portas e aproxima a câmera.
 - **Restaurar câmera** ou R retorna à vista geral, inclusive depois de usar os botões de detalhe.
 
-As peças do motor não alteram potência; o ronco do motor agora é sintetizado e ajustável. As caixas do porta-malas ainda não reproduzem áudio. O interior e a geometria continuam simplificados. Ao reabrir o jogo, as peças começam fechadas; as escolhas de acessórios e cores são preservadas.
+Os filtros e o turbo dessa aba são visuais; a preparação da aba Desempenho altera potência; o ronco do motor agora é sintetizado e ajustável. As caixas do porta-malas ainda não reproduzem áudio. O interior e a geometria continuam simplificados. Ao reabrir o jogo, as peças começam fechadas; as escolhas de acessórios e cores são preservadas.
 
 ## Salvamento: como usar
 
-A versão atual mostra **ESTÚDIO 08 / PISTA E RONCOS** e o botão **Salvar modificações** abaixo das abas.
+A versão atual mostra **ESTÚDIO 10 / OFICINA E CORRIDAS** e o botão **Salvar modificações** abaixo das abas.
 
 - Ao parar de alterar uma opção por 0,6 segundo, o jogo salva automaticamente. O rodapé indica alterações pendentes, sucesso ou falha.
 - O botão **Salvar modificações** grava imediatamente.
@@ -59,13 +71,13 @@ A versão atual mostra **ESTÚDIO 08 / PISTA E RONCOS** e o botão **Salvar modi
 
 No Windows, os dados ficam em `%APPDATA%\Godot\app_userdata\Garagem Brasil\garagem\customization.json`. Para abrir a pasta, pressione **Win+R**, cole `%APPDATA%\Godot\app_userdata\Garagem Brasil\garagem` e pressione Enter. Não é necessário editar esse arquivo para jogar.
 
-O formato atual (schema 4) lê saves dos schemas 1 a 3, mantendo pintura/rodas/vidros e usando padrões para as novas opções. O jogo mantém `.bak` com a versão válida anterior. Se o principal estiver inválido, tenta esse backup; se ambos forem inválidos, abre com os padrões e mostra um aviso. Arquivos inválidos ou incompatíveis são preservados como `.invalid-<data>.json` antes de uma nova gravação. Falha em preservar ou gravar interrompe o salvamento e mantém o estado pendente.
+O formato atual (schema 5) lê saves dos schemas 1 a 4, mantendo pintura/rodas/vidros e usando padrões para as novas opções. O jogo mantém `.bak` com a versão válida anterior. Se o principal estiver inválido, tenta esse backup; se ambos forem inválidos, abre com os padrões e mostra um aviso. Arquivos inválidos ou incompatíveis são preservados como `.invalid-<data>.json` antes de uma nova gravação. Falha em preservar ou gravar interrompe o salvamento e mantém o estado pendente.
 
 O arquivo é compartilhado pelas cópias do projeto com o nome Garagem Brasil no mesmo usuário Windows: extrair uma versão nova em outra pasta não deve apagar as escolhas já salvas. As escolhas feitas na versão anterior sem salvamento não podem ser recuperadas automaticamente.
 
 ## O que testar para aprovar esta entrega
 
-1. Abra a versão que mostra **ESTÚDIO 08 / PISTA E RONCOS**.
+1. Abra a versão que mostra **ESTÚDIO 10 / OFICINA E CORRIDAS**.
 2. Escolha uma cor diferente, acabamento e brilho; troque modelo, cor e tamanho das rodas; escolha uma película e intensidade.
 3. Teste abrir/fechar todas as peças; selecione peças de motor, uma caixa de som, estofado e cores do interior.
 4. Clique em **Salvar modificações** e confira a mensagem verde **Modificações salvas neste computador**.
@@ -143,10 +155,16 @@ O teste gráfico `tests/render_capture.gd` requer display X11/OpenGL no Linux e 
 - Garagem e personalização foram executadas e aprovadas pelo usuário no Windows. O usuário confirmou salvamento e acessórios no Windows. A revisão visual 0.5.0 **ainda precisa do teste do usuário no Windows**.
 - A leitura GitHub funciona pela configuração de rede do ambiente; nenhum token foi solicitado.
 
-Consulte [o planejamento e a arquitetura](docs/PLANO.md). A direção arcade está implementada; a exportação de executável ainda está pendente.
+Consulte [o planejamento e a arquitetura](docs/PLANO.md). A direção arcade está implementada; a exportação Windows está disponível em releases, com teste da execução Windows pendente.
 
 Validação 0.6.0: testes de exterior/suspensão (55 verificações), dez rodas, migração de saves antigos e gravação/reabertura de todas as novas escolhas; capturas reais dos kits e adesivos. Executados no Linux; a versão nova ainda precisa do teste no Windows.
 
 Validação 0.7.0: 18 verificações de direção/colisão/pausa/foto/retorno e PNGs reais salvos na pista e garagem. As verificações das etapas anteriores continuam executadas por tools/verify-cloud.py.
 
 Validação 0.8.0: 55 verificações de filtros/roncos/peças baixas, geração de quatro WAVs de teste e reabertura em processos independentes com os novos campos. Áudio gerado em 16 kHz e reproduzido pelo motor; validação auditiva em Windows pendente.
+
+Validação 0.10.0: testes de menu/configurações, oficina, preparação, nitro finito, danos com perda de potência e reparo, migração do schema 4 e reabertura com estado/carga em processos independentes. Capturas OpenGL reais documentadas na linha do tempo. Oficina usa geometria estática agrupada por material; isso reduz chamadas de desenho, mas não substitui medição no PC do usuário.
+
+Para gerar as exportações, execute `python3 tools/build-release.py`. O instalador obtém templates oficiais fixados na versão e verifica SHA-512; builds ficam em `builds/` e o ZIP Windows e SHA-256 em `releases/`.
+
+Exportação 0.10.0: ZIP Windows x64 verificado (PE x64, recursos embutidos, integridade ZIP e SHA-256). Versão Linux release executada com sucesso em modo headless e OpenGL: menu, carro personalizado, direção, retorno e PNG sem interface. O EXE Windows não foi executado neste ambiente.

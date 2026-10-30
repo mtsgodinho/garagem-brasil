@@ -51,6 +51,10 @@ func run() -> void:
 		choose(ui.tail_option,1)
 		choose(ui.sticker_option,2)
 		ui.lowering_slider.value = 5
+		choose(ui.performance_option,3)
+		ui.nitro_check.button_pressed = true
+		state.vehicle_health = 62
+		state.nitro_charge = 34
 		choose(ui.intake_option,2)
 		choose(ui.sound_option,3)
 		ui.volume_slider.value = 0.6
@@ -93,6 +97,7 @@ func run() -> void:
 		check(ui.bumper_option.selected == 1 and ui.lowering_slider.value == 5,"Controles externos sincronizados")
 		check(state.intake_style == 2 and state.engine_sound == 3 and is_equal_approx(state.engine_volume,0.6),"Filtro ronco volume restaurados em novo processo")
 		check(state.front_bumper_style == 3 and state.rear_bumper_style == 2 and state.side_skirt_style == 2,"Peças baixas independentes restauradas")
+		check(state.performance_level == 3 and state.nitro_enabled and state.vehicle_health == 62 and state.nitro_charge == 34,"Preparação dano e nitro restaurados em novo processo")
 		check(ui.status.text == "Modificações carregadas.","Carregamento informado")
 		var visual: Node3D = garage.get_node("VehicleVisual")
 		check(visual.body_material.albedo_color.is_equal_approx(expected),"Visual inicia com cor salva")

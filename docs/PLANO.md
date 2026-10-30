@@ -76,3 +76,7 @@ Etapa autorizada pelo usuário após Estúdio 06. Pista de 2,4 km com gravidade,
 ## Filtros, roncos e kits baixos — 0.8.0
 
 Escopo adicional autorizado durante pista/foto. Quatro filtros, quatro timbres sintetizados e automático conforme filtro/turbo. AudioStreamGenerator independente do visual, com volume e prévia na garagem; sem amostras externas. Partes mecânicas não alteram potência. Dianteiro/traseiro/saia têm escolhas próprias e versão baixa que toca o piso visualmente, sem atrito/dano de raspagem. Schema 4 mantém migração de schemas 1–3. Testes numéricos e WAVs não substituem teste auditivo no Windows.
+
+## Menu, oficina e mecânicas — 0.10.0
+
+Solicitado pelo usuário durante a entrega. Entrada agora em scenes/main.tscn; menu, configurações persistentes e confirmação de tela com reversão em 15 segundos. Exportação reproduzível Windows e Linux com templates oficiais verificados. Oficina estática agrupada por material, preparação real no controlador, nitro finito, dano com perda de desempenho e reparo; schema 5. Consulte [documentação e caminho para corridas urbanas](CORRIDAS_E_OFICINA.md). O objetivo futuro é corrida na cidade com compra de peças por prêmios; ainda sem corrida cronometrada, IA ou economia.

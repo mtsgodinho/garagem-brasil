@@ -128,7 +128,9 @@ static func build(car: Node3D, parent: Node3D, state: Resource, decal: Material)
 						if roof:
 							points.append(Vector3(px,1.492+0.05*(1-pow(px/(0.674+0.024*sin(v*PI)),2))-0.012*pow(2*v-1,4),-0.22+1.36*v))
 						else:
-							points.append(Vector3(px,-0.062+0.065*v+0.023*(1-pow(px/(0.762-0.006*cos(v*PI)),2))*sin(v*PI*0.9),-1.215+1.215*v))
+							var z := -1.215+1.215*v
+							var dent: float = 0.055*(1-state.vehicle_health/100.0)*exp(-pow((px-0.25)/0.35,2)-pow((z+0.9)/0.3,2))
+							points.append(Vector3(px,-0.062+0.065*v+0.023*(1-pow(px/(0.762-0.006*cos(v*PI)),2))*sin(v*PI*0.9)-dent,z))
 				for i in 24:
 					for index in [i*2,i*2+1,i*2+3,i*2,i*2+3,i*2+2]:
 						st.add_vertex(points[index])
