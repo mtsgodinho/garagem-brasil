@@ -2,6 +2,7 @@ extends CanvasLayer
 
 const State = preload("res://scripts/customization/vehicle_customization.gd")
 
+signal menu_requested
 signal preview_requested(active: bool)
 signal drive_requested
 signal photo_requested
@@ -114,7 +115,7 @@ func build() -> void:
 	root.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	root.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(root)
-	var heading := label("GARAGEM BRASIL\nESTÚDIO 08 / PISTA E RONCOS",22)
+	var heading := label("GARAGEM BRASIL\nESTÚDIO 09 / GARAGEM BRASIL",22)
 	heading.position = Vector2(28,22)
 	root.add_child(heading)
 	var panel := PanelContainer.new()
@@ -134,6 +135,10 @@ func build() -> void:
 	var column := VBoxContainer.new()
 	column.add_theme_constant_override("separation",12)
 	panel.add_child(column)
+	var menu_button := Button.new()
+	menu_button.text = "Menu principal (ESC)"
+	menu_button.pressed.connect(func() -> void: menu_requested.emit())
+	column.add_child(menu_button)
 	column.add_child(label("PERSONALIZAR",20))
 	var categories := GridContainer.new()
 	categories.columns = 3

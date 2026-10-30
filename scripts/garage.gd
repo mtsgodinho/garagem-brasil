@@ -1,4 +1,5 @@
 extends Node3D
+signal menu_requested
 
 const ProceduralMaterials = preload("res://scripts/rendering/procedural_materials.gd")
 const Car = preload("res://scripts/vehicles/placeholder_car.gd")
@@ -145,6 +146,7 @@ func create_ui() -> void:
 	customization_ui.exit_requested.connect(request_exit)
 	customization_ui.save_requested.connect(save_now)
 	customization_ui.view_requested.connect(camera.focus_detail)
+	customization_ui.menu_requested.connect(func() -> void: menu_requested.emit())
 	customization_ui.preview_requested.connect(func(active: bool) -> void: preview_engine = active)
 	customization_ui.drive_requested.connect(enter_track)
 	customization_ui.photo_requested.connect(enter_photo)
@@ -258,6 +260,10 @@ func leave_photo() -> void:
 		camera.set_process_unhandled_input(true)
 
 func _unhandled_key_input(event: InputEvent) -> void:
+	if track == null and photo == null and event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_ESCAPE:
+		get_viewport().set_input_as_handled()
+		menu_requested.emit()
+		return
 	if track == null and photo == null and event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_P:
 		get_viewport().set_input_as_handled()
 		enter_photo()
