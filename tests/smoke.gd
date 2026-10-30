@@ -13,6 +13,7 @@ func run() -> void:
 	var scene := load("res://scenes/garage.tscn") as PackedScene
 	check(scene != null, "Cena principal deve carregar")
 	var garage := scene.instantiate()
+	garage.persistence_enabled = false
 	root.add_child(garage)
 	await process_frame
 	var car := garage.get_node("VehicleVisual")

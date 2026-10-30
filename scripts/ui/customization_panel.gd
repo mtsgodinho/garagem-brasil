@@ -4,6 +4,7 @@ const State = preload("res://scripts/customization/vehicle_customization.gd")
 
 signal customization_changed
 signal restore_camera
+signal save_requested
 signal exit_requested
 
 var state: Resource
@@ -20,6 +21,7 @@ var film_value: Label
 var finish_value: Label
 var size_value: Label
 var status: Label
+var save_button: Button
 
 func setup(customization: Resource) -> void:
 	state = customization
@@ -84,7 +86,7 @@ func build() -> void:
 	root.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	root.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(root)
-	var heading := label("GARAGEM BRASIL\nESTÚDIO 02 / PERSONALIZAÇÃO",22)
+	var heading := label("GARAGEM BRASIL\nESTÚDIO 03 / SALVAMENTO",22)
 	heading.position = Vector2(28,22)
 	root.add_child(heading)
 	var panel := PanelContainer.new()
@@ -111,6 +113,11 @@ func build() -> void:
 	build_paint(page("Pintura"))
 	build_wheels(page("Rodas"))
 	build_film(page("Vidros"))
+	save_button = Button.new()
+	save_button.text = "Salvar modificações"
+	save_button.custom_minimum_size.y = 36
+	save_button.pressed.connect(func() -> void: save_requested.emit())
+	column.add_child(save_button)
 	var bottom := PanelContainer.new()
 	bottom.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_WIDE)
 	bottom.offset_top = -96
@@ -130,7 +137,8 @@ func build() -> void:
 	row.add_child(info)
 	info.add_child(label("GOL G3 • MODELO PROVISÓRIO / geometria aproximada",15))
 	info.add_child(label("Arraste na cena: girar • Roda do mouse: zoom • R: restaurar câmera",14))
-	status = label("Alterações desta sessão • salvamento na próxima etapa",14)
+	status = label("Personalize seu carro • salvamento automático ativo",14)
+	status.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	status.modulate = Color("e3b36c")
 	info.add_child(status)
 	var reset := Button.new()
@@ -230,3 +238,7 @@ func build_film(column: VBoxContainer) -> void:
 		film_value.text = "Intensidade: %d%%" % roundi(value * 100)
 		changed())
 	note(column,"Intensidade visual, sem equivalência com transmissão luminosa legal. A espelhada usa reflexos leves do céu; não reflete todos os objetos da garagem.")
+
+func set_save_status(text: String, warning: bool = false) -> void:
+	status.text = text
+	status.modulate = Color("e3b36c") if warning else Color("98d7b0")

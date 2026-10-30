@@ -3,12 +3,28 @@ extends Node3D
 const Car = preload("res://scripts/vehicles/placeholder_car.gd")
 const Orbit = preload("res://scripts/camera/orbit_camera.gd")
 const Customization = preload("res://scripts/customization/vehicle_customization.gd")
+const SaveStore = preload("res://scripts/persistence/customization_store.gd")
 const CustomizationPanel = preload("res://scripts/ui/customization_panel.gd")
 var customization := Customization.new()
 var customization_ui: CanvasLayer
 var camera: Camera3D
+var persistence_enabled := true
+var save_path := "user://garagem/customization.json"
+var store: RefCounted
+var save_timer: Timer
+var dirty := false
+var exit_dialog: ConfirmationDialog
 
 func _ready() -> void:
+	store = SaveStore.new(save_path)
+	if persistence_enabled:
+		customization = store.load_customization()
+	get_tree().auto_accept_quit = false
+	save_timer = Timer.new()
+	save_timer.one_shot = true
+	save_timer.wait_time = 0.6
+	save_timer.timeout.connect(save_now)
+	add_child(save_timer)
 	var environment := Environment.new()
 	environment.background_mode = Environment.BG_COLOR
 	environment.background_color = Color("172330")
@@ -95,10 +111,48 @@ func create_ui() -> void:
 	customization_ui.name = "CustomizationPanel"
 	add_child(customization_ui)
 	customization_ui.setup(customization)
-	customization_ui.customization_changed.connect(apply_customization)
+	customization_ui.customization_changed.connect(customization_changed)
 	customization_ui.restore_camera.connect(camera.reset_view)
-	customization_ui.exit_requested.connect(get_tree().quit)
+	customization_ui.exit_requested.connect(request_exit)
+	customization_ui.save_requested.connect(save_now)
+	if persistence_enabled:
+		customization_ui.set_save_status(store.message,store.load_result in ["invalid","recovered"])
 	apply_customization()
 
 func apply_customization() -> void:
 	get_node("VehicleVisual").apply_customization(customization)
+
+func customization_changed() -> void:
+	apply_customization()
+	if persistence_enabled:
+		dirty = true
+		customization_ui.set_save_status("Alterações pendentes • salvando automaticamente…")
+		save_timer.start()
+
+func save_now() -> bool:
+	if not persistence_enabled:
+		return true
+	save_timer.stop()
+	var success: bool = store.save_customization(customization)
+	if success:
+		dirty = false
+	customization_ui.set_save_status(store.message,not success)
+	return success
+
+func request_exit() -> void:
+	if dirty and not save_now():
+		if exit_dialog == null:
+			exit_dialog = ConfirmationDialog.new()
+			exit_dialog.title = "Não foi possível salvar"
+			exit_dialog.dialog_text = "As últimas alterações não foram salvas. Deseja sair mesmo assim?"
+			exit_dialog.ok_button_text = "Sair sem salvar"
+			exit_dialog.cancel_button_text = "Voltar"
+			exit_dialog.confirmed.connect(get_tree().quit)
+			add_child(exit_dialog)
+		exit_dialog.popup_centered()
+		return
+	get_tree().quit()
+
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_WM_CLOSE_REQUEST and is_node_ready():
+		request_exit()

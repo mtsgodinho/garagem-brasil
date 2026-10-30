@@ -1,7 +1,7 @@
 # Garagem Brasil
 
 Protótipo inicial em **Godot 4.6.3 / GDScript**, renderer **Compatibility**.
-A garagem inicial foi aprovada pelo usuário após abrir no Windows. Esta entrega adiciona **personalização em tempo real** e aguarda novo teste antes do salvamento e da direção.
+A garagem e a personalização foram aprovadas pelo usuário no Windows. Esta entrega adiciona **salvamento e carregamento local** e aguarda novo teste antes da direção.
 
 ## Abrir no Windows (sem programação)
 
@@ -21,9 +21,34 @@ O painel à direita tem três abas. As mudanças aparecem imediatamente, sem bot
 - **Rodas:** escolha um dos cinco desenhos, clique na amostra para mudar a cor e ajuste o aro de 13 a 17 polegadas. As quatro rodas mudam juntas. O diâmetro externo do pneu permanece igual; o perfil muda para acomodar o aro.
 - **Vidros:** escolha Sem película, Clara, Média, Escura, Extremamente escura ou Espelhada. O tipo define uma intensidade inicial; o slider permite ajustar. Sem película desativa o slider. A intensidade é apenas visual. A espelhada usa reflexos do céu e não reflete todos os objetos da garagem.
 
-**As escolhas ainda duram somente durante a sessão. Fechar e abrir o jogo restaura os valores iniciais.** Salvamento será a próxima entrega, após aprovação desta personalização. Ainda não há direção.
+## Salvamento: como usar
+
+A versão atual mostra **ESTÚDIO 03 / SALVAMENTO** e o botão **Salvar modificações** abaixo das abas.
+
+- Ao parar de alterar uma opção por 0,6 segundo, o jogo salva automaticamente. O rodapé indica alterações pendentes, sucesso ou falha.
+- O botão **Salvar modificações** grava imediatamente.
+- **Sair** e o X da janela do jogo tentam gravar qualquer alteração pendente antes de fechar. Se falhar, o jogo oferece Voltar ou Sair sem salvar.
+- Ao abrir novamente, cor, acabamento, brilho, desenho/cor/aro das rodas e tipo/intensidade da película são carregados e aparecem tanto no carro quanto nos controles.
+- Não precisa de Internet, conta ou banco de dados. Ainda não há direção.
+
+No Windows, os dados ficam em `%APPDATA%\Godot\app_userdata\Garagem Brasil\garagem\customization.json`. Para abrir a pasta, pressione **Win+R**, cole `%APPDATA%\Godot\app_userdata\Garagem Brasil\garagem` e pressione Enter. Não é necessário editar esse arquivo para jogar.
+
+O jogo mantém `.bak` com a versão válida anterior. Se o principal estiver inválido, tenta esse backup; se ambos forem inválidos, abre com os padrões e mostra um aviso. Arquivos inválidos ou incompatíveis são preservados como `.invalid-<data>.json` antes de uma nova gravação. Falha em preservar ou gravar interrompe o salvamento e mantém o estado pendente.
+
+O arquivo é compartilhado pelas cópias do projeto com o nome Garagem Brasil no mesmo usuário Windows: extrair uma versão nova em outra pasta não deve apagar as escolhas já salvas. As escolhas feitas na versão anterior sem salvamento não podem ser recuperadas automaticamente.
 
 ## O que testar para aprovar esta entrega
+
+1. Abra a versão que mostra **ESTÚDIO 03 / SALVAMENTO**.
+2. Escolha uma cor diferente, acabamento e brilho; troque modelo, cor e tamanho das rodas; escolha uma película e intensidade.
+3. Clique em **Salvar modificações** e confira a mensagem verde **Modificações salvas neste computador**.
+4. Clique em **Sair**; no editor, pressione **F5** novamente.
+5. Confira se todas as escolhas voltaram no carro e nas abas, com a mensagem **Modificações carregadas**.
+6. Faça outra mudança, espere a confirmação automática e repita Sair/F5 sem clicar em Salvar.
+
+Não use o botão de parada forçada do editor para este teste: ele pode encerrar o processo antes de uma alteração pendente ser gravada. O fluxo de fechamento normal é Sair ou o X da janela do jogo.
+
+Verificações de personalização que continuam disponíveis:
 
 - Trocar pintura e acabamento com o carro visível; experimentar uma cor escura e uma clara.
 - Comparar os cinco desenhos de rodas e os aros 13 e 17, girando a câmera para ver os dois lados.
@@ -40,8 +65,7 @@ O ambiente disponível tem Godot 4.6.3 e Blender 4.3.2. Não são necessários p
 
 ```bash
 cd /workspace/garagem-brasil
-./tools/godot-cloud.sh --headless --script tests/smoke.gd
-./tools/godot-cloud.sh --headless --script tests/customization.gd
+python3 tools/verify-cloud.py
 ./tools/godot-cloud.sh --headless --quit-after 120
 ```
 
@@ -55,7 +79,11 @@ O teste gráfico `tests/render_capture.gd` requer display X11/OpenGL no Linux e 
 - `tests/interaction.gd`: mouse enviado ao viewport real; slider altera o brilho sem girar a câmera, arrasto na cena gira a câmera, soltar sobre interface encerra o arrasto e clique abre o seletor de cores. Executado com display virtual.
 - `tests/render_customization.gd`: **15 capturas** OpenGL com cinco rodas, seis películas, pinturas e lados do veículo. Comparação de pixels da região do carro confirmou diferenças de pintura e transparência. Capturas finais arquivadas em [linha do tempo](docs/linha-do-tempo/README.md).
 - Testes gráficos executados em Linux / Mesa llvmpipe. O display virtual emite aviso de VSync não suportado. Isso não constitui medição de desempenho em hardware modesto.
-- A primeira entrega foi executada pelo usuário no Windows. A personalização desta entrega **ainda precisa do teste do usuário no Windows**.
+- `tests/persistence.gd`: **48 verificações** de serialização completa, backup, arquivo ausente/inválido, validação de tipos/limites/versão, preservação do original e falhas de gravação.
+- `tests/persistence_process.gd`: processos independentes gravaram por autosave, reabriram recuperando todos os campos, fecharam com alteração pendente e reabriram novamente; falha de gravação deixou o estado pendente e mostrou confirmação ao sair.
+- `tests/render_persistence.gd`: capturas da interface com sucesso de gravação, carregamento e recuperação de backup.
+- `tools/verify-cloud.py`: executa os testes sem tocar no arquivo do jogador, com timeout e detecção de erros de script mesmo quando o Godot retorna código zero.
+- Garagem e personalização foram executadas e aprovadas pelo usuário no Windows. O salvamento desta entrega **ainda precisa do teste do usuário no Windows**.
 - A leitura GitHub funciona pela configuração de rede do ambiente; nenhum token foi solicitado.
 
-Consulte [o planejamento e a arquitetura](docs/PLANO.md). Salvamento, direção e exportação de executável ainda não estão implementados.
+Consulte [o planejamento e a arquitetura](docs/PLANO.md). Direção e exportação de executável ainda não estão implementadas.

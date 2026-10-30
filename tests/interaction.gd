@@ -21,6 +21,7 @@ func motion(at: Vector2, delta: Vector2) -> void:
 
 func run() -> void:
 	var garage: Node3D = load("res://scenes/garage.tscn").instantiate()
+	garage.persistence_enabled = false
 	root.add_child(garage)
 	for i in 5:
 		await process_frame

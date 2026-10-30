@@ -5,6 +5,7 @@ func _initialize() -> void:
 
 func capture() -> void:
 	var garage: Node3D = load("res://scenes/garage.tscn").instantiate()
+	garage.persistence_enabled = false
 	root.add_child(garage)
 	for i in 12:
 		await process_frame

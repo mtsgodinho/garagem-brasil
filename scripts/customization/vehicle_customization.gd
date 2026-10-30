@@ -1,5 +1,5 @@
 extends Resource
-## Estado independente do visual. Persistência será adicionada na próxima entrega.
+## Estado independente do visual. Serialização gerenciada por customization_store.gd.
 
 const FINISHES := ["Brilhante", "Metálica", "Fosca"]
 const WHEEL_NAMES := ["Estrela • 5 raios", "Clássica • 6 raios", "Turbina • 10 raios", "Esportiva • raios duplos", "Disco • 8 janelas"]

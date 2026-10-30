@@ -33,6 +33,7 @@ func different_pixels(first: Image, second: Image, region: Rect2i) -> int:
 func run() -> void:
 	DirAccess.make_dir_recursive_absolute(output)
 	garage = load("res://scenes/garage.tscn").instantiate()
+	garage.persistence_enabled = false
 	root.add_child(garage)
 	var state: Resource = garage.customization
 	var ui: CanvasLayer = garage.customization_ui

@@ -13,7 +13,7 @@ Godot 4.6.3 Standard, GDScript, Compatibility, unidades em metros, frente do ve�
 
 O veículo expõe nós `Body`, `Glass`, `Interior` e `Wheels`; cada roda tem seu próprio nó. A garagem instancia o visual em `VehicleVisual`. Um modelo definitivo deverá manter um adaptador para esses grupos, materiais próprios por instância, origem no chão e escala em metros. Não vincular regras de personalização à triangulação deste modelo provisório.
 
-## Personalização — implementada, aguarda teste do usuário
+## Personalização — aprovada pelo usuário em 30/10/2026
 
 - `scripts/customization/vehicle_customization.gd`: Resource com estado da sessão, nomes de opções e presets. Independente da malha e pronto para futura serialização.
 - `scripts/ui/customization_panel.gd`: painel de categorias, cor, acabamento, brilho, desenho/aro/cor das rodas e película/intensidade. Emite sinais para a garagem aplicar o estado ao visual.
@@ -21,7 +21,16 @@ O veículo expõe nós `Body`, `Glass`, `Interior` e `Wheels`; cada roda tem seu
 - `apply_customization` no visual: aplica estado a materiais próprios por instância e só reconstrói rodas quando desenho ou aro mudam.
 - Ambiente de reflexão do céu de baixa resolução, sem reflection probes dinâmicos ou efeitos pesados.
 
-Não há persistência ainda. O estado volta aos padrões ao reiniciar. A aprovação desta entrega precede implementação de salvamento/direção.
+## Salvamento — implementado, aguarda teste do usuário
+
+- `scripts/persistence/customization_store.gd`: JSON schema 1 associado ao veículo, validação estrita de todos os campos e valores, arquivo temporário, backup válido anterior e preservação de originais inválidos/incompatíveis antes de substituir.
+- `garage.gd`: carrega antes de montar a interface, aplica ao visual, agenda autosave após 0,6 s sem mudanças, permite gravação manual e tenta gravar ao sair. Em falha, conserva estado pendente e solicita confirmação antes de descartar ao sair.
+- `customization_panel.gd`: botão de gravação e mensagens de estado; controles iniciam com dados carregados.
+- Os testes usam caminhos isolados ou desativam persistência para não modificar dados reais do jogador. O teste entre processos usa a mesma inicialização da cena do jogo.
+
+O salvamento atual atende um veículo e um usuário local. Próximos veículos exigirão novos identificadores e migração/catálogo; o formato versionado permite evoluir sem usar a cena como arquivo de save. Não há serviço remoto.
+
+Aprovação desta entrega precede implementação de direção.
 
 ## Plano das entregas
 

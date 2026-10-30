@@ -23,6 +23,10 @@ Não substituir imagens antigas: criar arquivos numerados para cada novo marco.
 | 015 | 30/10/2026 | Película espelhada | Captura Linux / protótipo 0.2.0 | [Imagem](imagens/015-pelicula-5.png) |
 | 016 | 30/10/2026 | Outro lado do carro com película espelhada | Captura Linux / protótipo 0.2.0 | [Imagem](imagens/016-outro-lado-espelhada.png) |
 
+| 017 | 30/10/2026 | Modificações gravadas localmente com confirmação na interface | Captura Linux / protótipo 0.3.0 | [Imagem](imagens/017-modificacoes-salvas.png) |
+| 018 | 30/10/2026 | Nova instância da garagem carregando as escolhas do arquivo | Captura Linux / protótipo 0.3.0 | [Imagem](imagens/018-modificacoes-carregadas.png) |
+| 019 | 30/10/2026 | Recuperação do backup após corrupção simulada do principal | Captura Linux / protótipo 0.3.0 | [Imagem](imagens/019-recuperacao-de-backup.png) |
+
 ## Registro relatado pelo usuário
 
 Em 30/10/2026, o usuário enviou no chat uma captura mostrando a primeira execução no Windows, antes da correção das faces laterais. A imagem permanece no histórico da conversa; o arquivo original não está disponível no sistema de arquivos deste ambiente e não foi incluído nesta pasta. Não confundir a captura Linux acima com a captura Windows do usuário.
@@ -41,3 +45,7 @@ Em 30/10/2026, o usuário confirmou o funcionamento da garagem corrigida no Wind
 ## Teste de personalização no Windows — 30/10/2026
 
 O usuário enviou no chat uma captura do Estúdio 02 em execução no Windows, com carroceria azul, rodas escuras e a aba Vidros exibindo película Espelhada com intensidade de 100%. A captura confirma a abertura da nova interface e essas escolhas visíveis. Ainda não constitui aprovação de todos os controles nem autorização para avançar ao salvamento. O original da imagem permanece no chat, sem arquivo acessível para cópia neste ambiente; não foi incluído entre as imagens arquivadas no GitHub.
+
+## Aceite da personalização
+
+Em 30/10/2026, após mostrar o Estúdio 02 no Windows, o usuário autorizou a próxima entrega de salvamento. Os registros 017–019 documentam testes isolados no Linux e não substituem o teste de salvamento no Windows.

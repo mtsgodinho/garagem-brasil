@@ -20,6 +20,7 @@ func choose(option: OptionButton, index: int) -> void:
 
 func run() -> void:
 	var garage: Node3D = load("res://scenes/garage.tscn").instantiate()
+	garage.persistence_enabled = false
 	root.add_child(garage)
 	await process_frame
 	var ui: CanvasLayer = garage.customization_ui
