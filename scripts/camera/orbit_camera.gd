@@ -1,19 +1,19 @@
 extends Camera3D
 
 var yaw := 0.65
-var pitch := 0.27
-var distance := 6.6
-var target := Vector3(0, 0.95, 0)
+var pitch := 0.15
+var distance := 6.1
+var target := Vector3(0, 0.86, 0)
 var dragging := false
 
 func _ready() -> void:
 	update_view()
 
 func reset_view() -> void:
-	target = Vector3(0,0.95,0)
+	target = Vector3(0,0.86,0)
 	yaw = 0.65
-	pitch = 0.27
-	distance = 6.6
+	pitch = 0.15
+	distance = 6.1
 	update_view()
 
 func update_view() -> void:

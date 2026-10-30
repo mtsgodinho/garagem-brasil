@@ -21,7 +21,7 @@ O veículo expõe nós `Body`, `Glass`, `Interior` e `Wheels`; cada roda tem seu
 - `apply_customization` no visual: aplica estado a materiais próprios por instância e só reconstrói rodas quando desenho ou aro mudam.
 - Ambiente de reflexão do céu de baixa resolução, sem reflection probes dinâmicos ou efeitos pesados.
 
-## Salvamento — implementado, aguarda teste do usuário
+## Salvamento — confirmado pelo usuário no Windows
 
 - `scripts/persistence/customization_store.gd`: JSON schema 2 (com leitura/migração do schema 1) associado ao veículo, validação estrita de todos os campos e valores, arquivo temporário, backup válido anterior e preservação de originais inválidos/incompatíveis antes de substituir.
 - `garage.gd`: carrega antes de montar a interface, aplica ao visual, agenda autosave após 0,6 s sem mudanças, permite gravação manual e tenta gravar ao sair. Em falha, conserva estado pendente e solicita confirmação antes de descartar ao sair.
@@ -32,7 +32,7 @@ O salvamento atual atende um veículo e um usuário local. Próximos veículos e
 
 Aprovação desta entrega precede implementação de direção.
 
-## Ampliação solicitada — garagem interativa (aguarda teste do usuário)
+## Ampliação solicitada — garagem interativa testada no Windows
 
 - `placeholder_car.gd` mantém pivôs independentes de portas esquerda/direita, capô e hatch traseiro; os tweens podem ser invertidos sem reconstruir o carro. Janelas e painéis acompanham seus pivôs e compartilham os materiais de personalização.
 - Carroceria recortada para deixar vãos reais, capô com perfil inclinado e molduras próprias da tampa traseira; cofre e porta-malas deixam de depender da silhueta fechada.
@@ -41,6 +41,14 @@ Aprovação desta entrega precede implementação de direção.
 - Seis categorias visíveis no painel, controles de aberturas e botões que enquadram motor, porta-malas e interior.
 - Schema 2 persiste as novas escolhas; a posição aberta/fechada é transitória e reinicia fechada. Schema 1 é lido com os padrões das novas opções.
 - Não implementa potência, física, áudio de caixas, animação de personagens ou modelo definitivo do Gol G3.
+
+## Revisão visual — versão 0.5.0, aguarda aprovação
+
+O usuário confirmou os saves e pediu aparência mais próxima das duas fotografias enviadas. Criamos malha própria GLB em Blender, sem recurso pago, com origem e pivôs compatíveis com os controles existentes. `placeholder_car.gd` agora é o adaptador de materiais/animação do GLB; o nome do arquivo é mantido para não quebrar referências.
+
+As rodas continuam procedurais com pneus arredondados e bitola corrigida. Iluminação neutra, shader de reflexos de estúdio, sombra de contato, MSAA 2x e microtexturas leves substituem a iluminação azulada/chapada. O renderer continua Compatibility; não há ray tracing, SSR ou AO pesado. O desempenho precisa de medição no computador do usuário.
+
+Fonte: `tools/blender/source/gol_study.blend`; gerador: `tools/blender/build_gol_study.py`; recurso de execução: `assets/vehicles/gol_study/gol_study.glb`. O diretório da fonte usa `.gdignore`, portanto Blender não é necessário no Windows para jogar. O modelo permanece estudo aproximado de duas portas, não a reprodução fiel de quatro portas da primeira referência.
 
 ## Plano das entregas
 

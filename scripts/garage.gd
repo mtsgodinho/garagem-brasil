@@ -1,5 +1,6 @@
 extends Node3D
 
+const ProceduralMaterials = preload("res://scripts/rendering/procedural_materials.gd")
 const Car = preload("res://scripts/vehicles/placeholder_car.gd")
 const Orbit = preload("res://scripts/camera/orbit_camera.gd")
 const Customization = preload("res://scripts/customization/vehicle_customization.gd")
@@ -27,35 +28,35 @@ func _ready() -> void:
 	add_child(save_timer)
 	var environment := Environment.new()
 	environment.background_mode = Environment.BG_COLOR
-	environment.background_color = Color("172330")
+	environment.background_color = Color("171c22")
 	environment.ambient_light_source = Environment.AMBIENT_SOURCE_COLOR
-	environment.ambient_light_color = Color("b2c8df")
-	environment.ambient_light_energy = 0.65
+	environment.ambient_light_color = Color("d5d5d2")
+	environment.ambient_light_energy = 0.55
 	var sky := Sky.new()
-	var sky_material := ProceduralSkyMaterial.new()
-	sky_material.sky_top_color = Color("536e93")
-	sky_material.sky_horizon_color = Color("ccd7df")
-	sky_material.ground_horizon_color = Color("9ca4ab")
-	sky_material.ground_bottom_color = Color("29333d")
+	var sky_material := ShaderMaterial.new()
+	sky_material.shader = load("res://shaders/studio_sky.gdshader")
 	sky.sky_material = sky_material
-	sky.radiance_size = Sky.RADIANCE_SIZE_128
+	sky.radiance_size = Sky.RADIANCE_SIZE_256
 	environment.sky = sky
 	environment.reflected_light_source = Environment.REFLECTION_SOURCE_SKY
-	environment.tonemap_mode = Environment.TONE_MAPPER_FILMIC
+	environment.tonemap_mode = Environment.TONE_MAPPER_REINHARDT
 	var world := WorldEnvironment.new()
+	world.name = "WorldEnvironment"
 	world.environment = environment
 	add_child(world)
 	var helper := Car.new()
-	var concrete := helper.material(Color("454f58"),0.0,0.95)
-	var wall := helper.material(Color("253340"),0.0,0.9)
+	var concrete := helper.material(Color("43484c"),0.0,0.88)
+	var wall := helper.material(Color("292f35"),0.0,0.92)
+	ProceduralMaterials.add_grain(concrete,42,0.24,Vector3(12,12,12))
 	var trim := helper.material(Color("d39d51"),0.35,0.4)
 	helper.box(self,"ConcreteFloor",Vector3(24,0.15,24),Vector3(0,-0.10,0),concrete)
 	helper.box(self,"BackWall",Vector3(24,5,0.2),Vector3(0,2.4,7),wall)
 	helper.box(self,"LeftWall",Vector3(0.2,5,24),Vector3(-8,2.4,0),wall)
-	for x in range(-7,9):
-		helper.box(self,"FloorJoint",Vector3(0.018,0.005,23),Vector3(x*1.5,-0.02,0),wall)
-	for z in range(-7,8):
-		helper.box(self,"FloorJoint",Vector3(23,0.005,0.018),Vector3(0,-0.019,z*1.5),wall)
+	var joint := helper.material(Color("373c40"),0.0,0.96)
+	for x in range(-3,4):
+		helper.box(self,"FloorJoint",Vector3(0.008,0.002,23),Vector3(x*3.0,-0.021,0),joint)
+	for z in range(-3,4):
+		helper.box(self,"FloorJoint",Vector3(23,0.002,0.008),Vector3(0,-0.020,z*3.0),joint)
 	var platform := MeshInstance3D.new()
 	platform.name = "Platform"
 	var cylinder := CylinderMesh.new()
@@ -65,7 +66,7 @@ func _ready() -> void:
 	cylinder.radial_segments = 64
 	platform.mesh = cylinder
 	platform.position.y = 0.045
-	platform.material_override = helper.material(Color("232c35"),0.25,0.7)
+	platform.material_override = helper.material(Color("30353a"),0.18,0.65)
 	add_child(platform)
 	for x in [-5.0,5.0]:
 		helper.box(self,"WallColumn",Vector3(0.2,4.8,0.3),Vector3(x,2.3,6.8),trim)
@@ -76,23 +77,44 @@ func _ready() -> void:
 		helper.box(self,"LightFixture",Vector3(0.15,0.08,3),Vector3(x,4.0,0),helper.material(Color("e9edf0")))
 		var light := OmniLight3D.new()
 		light.position = Vector3(x,3.7,0)
-		light.light_color = Color("e1efff")
-		light.light_energy = 0.65
+		light.light_color = Color("f2eeea")
+		light.light_energy = 0.22
 		light.omni_range = 9
 		add_child(light)
 	var sun := DirectionalLight3D.new()
 	sun.rotation_degrees = Vector3(-55,-30,0)
-	sun.light_energy = 0.8
+	sun.light_energy = 0.65
+	sun.light_color = Color("fff4e8")
+	sun.shadow_blur = 2.0
+	sun.shadow_opacity = 0.62
 	sun.shadow_enabled = true
 	add_child(sun)
+	var fill := DirectionalLight3D.new()
+	fill.rotation_degrees = Vector3(-35,145,0)
+	fill.light_color = Color("e0e8f0")
+	fill.light_energy = 0.22
+	fill.shadow_enabled = false
+	add_child(fill)
 	var sign := Label3D.new()
 	sign.text = "GARAGEM / BRASIL"
-	sign.position = Vector3(0,3.0,6.85)
+	sign.position = Vector3(0,2.8,6.85)
 	sign.rotation.y = PI
-	sign.font_size = 72
+	sign.font_size = 40
 	sign.pixel_size = 0.008
 	sign.modulate = Color("dfaf66")
 	add_child(sign)
+	var contact := MeshInstance3D.new()
+	contact.name = "ContactShadow"
+	var shadow_mesh := QuadMesh.new()
+	shadow_mesh.size = Vector2(1.9,4.2)
+	contact.mesh = shadow_mesh
+	contact.rotation.x = -PI/2.0
+	contact.position.y = 0.107
+	var shadow_material := ShaderMaterial.new()
+	shadow_material.shader = load("res://shaders/contact_shadow.gdshader")
+	contact.material_override = shadow_material
+	contact.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	add_child(contact)
 	helper.free()
 	var car := Car.new()
 	car.name = "VehicleVisual"
@@ -100,7 +122,7 @@ func _ready() -> void:
 	camera = Orbit.new()
 	camera.name = "OrbitCamera"
 	camera.current = true
-	camera.fov = 48
+	camera.fov = 44
 	camera.near = 0.1
 	camera.h_offset = 0.9
 	add_child(camera)

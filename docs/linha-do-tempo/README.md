@@ -46,6 +46,28 @@ Não substituir imagens antigas: criar arquivos numerados para cada novo marco.
 | 036 | 30/10/2026 | Estofado de couro sintético | Captura Linux / protótipo 0.4.0 | [Imagem](imagens/036-estofado-1.png) |
 | 037 | 30/10/2026 | Estofado esportivo bicolor | Captura Linux / protótipo 0.4.0 | [Imagem](imagens/037-estofado-2.png) |
 
+| 038 | 30/10/2026 | Primeira malha curva | Captura Linux / prévia 0.5.0 | [Imagem](imagens/038-primeira-malha-curva.png) |
+| 039 | 30/10/2026 | Ajuste de sombras e pneus | Captura Linux / prévia 0.5.0 | [Imagem](imagens/039-ajuste-de-sombras-e-pneus.png) |
+| 040 | 30/10/2026 | Microtexturas e iluminacao neutra | Captura Linux / prévia 0.5.0 | [Imagem](imagens/040-microtexturas-e-iluminacao-neutra.png) |
+| 041 | 30/10/2026 | Revisao visual prata frente | Captura Linux / prévia 0.5.0 | [Imagem](imagens/041-revisao-visual-prata-frente.png) |
+| 042 | 30/10/2026 | Revisao visual prata lateral | Captura Linux / prévia 0.5.0 | [Imagem](imagens/042-revisao-visual-prata-lateral.png) |
+| 043 | 30/10/2026 | Revisao visual prata traseira | Captura Linux / prévia 0.5.0 | [Imagem](imagens/043-revisao-visual-prata-traseira.png) |
+| 044 | 30/10/2026 | Revisao visual cinza aro17 | Captura Linux / prévia 0.5.0 | [Imagem](imagens/044-revisao-visual-cinza-aro17.png) |
+| 045 | 30/10/2026 | Revisao visual pecas abertas | Captura Linux / prévia 0.5.0 | [Imagem](imagens/045-revisao-visual-pecas-abertas.png) |
+| 046 | 30/10/2026 | Revisao visual interior | Captura Linux / prévia 0.5.0 | [Imagem](imagens/046-revisao-visual-interior.png) |
+| 047 | 30/10/2026 | Revisao visual porta malas | Captura Linux / prévia 0.5.0 | [Imagem](imagens/047-revisao-visual-porta-malas.png) |
+| 048 | 30/10/2026 | Revisao visual detalhe frontal | Captura Linux / prévia 0.5.0 | [Imagem](imagens/048-revisao-visual-detalhe-frontal.png) |
+| 049 | 30/10/2026 | Revisao visual prata frente | Captura Linux / prévia 0.5.0 | [Imagem](imagens/049-revisao-visual-prata-frente.png) |
+| 050 | 30/10/2026 | Revisao visual prata lateral | Captura Linux / prévia 0.5.0 | [Imagem](imagens/050-revisao-visual-prata-lateral.png) |
+| 051 | 30/10/2026 | Revisao visual prata traseira | Captura Linux / prévia 0.5.0 | [Imagem](imagens/051-revisao-visual-prata-traseira.png) |
+| 052 | 30/10/2026 | Revisao visual cinza aro17 | Captura Linux / prévia 0.5.0 | [Imagem](imagens/052-revisao-visual-cinza-aro17.png) |
+| 053 | 30/10/2026 | Revisao visual pecas abertas | Captura Linux / prévia 0.5.0 | [Imagem](imagens/053-revisao-visual-pecas-abertas.png) |
+| 054 | 30/10/2026 | Revisao visual interior | Captura Linux / prévia 0.5.0 | [Imagem](imagens/054-revisao-visual-interior.png) |
+| 055 | 30/10/2026 | Revisao visual porta malas | Captura Linux / prévia 0.5.0 | [Imagem](imagens/055-revisao-visual-porta-malas.png) |
+| 056 | 30/10/2026 | Revisao visual detalhe frontal | Captura Linux / prévia 0.5.0 | [Imagem](imagens/056-revisao-visual-detalhe-frontal.png) |
+| 057 | 30/10/2026 | Revisao final prata frente | Captura Linux / revisão final 0.5.0 | [Imagem](imagens/057-revisao-final-prata-frente.png) |
+| 058 | 30/10/2026 | Revisao final prata lateral | Captura Linux / revisão final 0.5.0 | [Imagem](imagens/058-revisao-final-prata-lateral.png) |
+
 ## Registro relatado pelo usuário
 
 Em 30/10/2026, o usuário enviou no chat uma captura mostrando a primeira execução no Windows, antes da correção das faces laterais. A imagem permanece no histórico da conversa; o arquivo original não está disponível no sistema de arquivos deste ambiente e não foi incluído nesta pasta. Não confundir a captura Linux acima com a captura Windows do usuário.
@@ -76,3 +98,9 @@ Em 30/10/2026, durante a implementação do salvamento autorizado, o usuário pe
 ## Capturas do Estúdio 04 no Windows — 30/10/2026
 
 O usuário enviou duas imagens no chat mostrando a versão 0.4.0 no Windows: vista traseira com caixa de quatro falantes e vista lateral com portas, capô e tampa traseira abertos. As imagens mostram bancos roxos, interior azul e a mensagem “Modificações salvas neste computador”. Isso confirma a exibição desses recursos e a indicação de gravação; ainda falta confirmar que as escolhas voltam após fechar e reabrir. O editor mostra “Depurador (5)”, sem o conteúdo das mensagens visível; não é possível classificá-las por essas capturas. Os arquivos originais não estão acessíveis neste ambiente e permanecem no histórico do chat, sem cópia na pasta de imagens.
+
+## Confirmação de salvamento e referências de realismo
+
+Em 30/10/2026, o usuário confirmou que o salvamento funcionou e pediu aparência mais próxima de fotos reais. Enviou uma referência prata de quatro portas e outra cinza rebaixada. As imagens originais permanecem no chat, sem arquivo original acessível para cópia neste ambiente. O estudo desta revisão mantém duas portas e não pretende equivaler a uma reprodução fiel da referência de quatro portas.
+
+Os registros 038–040 mostram a evolução inicial da malha/luz; 041–048 e 049–056 preservam as duas passagens de inspeção; 057–058 mostram a revisão final após corrigir a posição das rodas. Todos são capturas reais do Godot no Linux, não imagens geradas por IA nem fotos do computador do usuário. Nenhuma captura antiga foi sobrescrita.

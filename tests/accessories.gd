@@ -1,15 +1,18 @@
 extends SceneTree
 
+var failed := false
+
 var checks := 0
 func _initialize() -> void:
 	call_deferred("run")
 
 func check(condition: bool, message: String) -> void:
 	checks += 1
-	if not condition:
+	if not condition and not failed:
+		failed = true
 		push_error(message)
 		quit(1)
-		assert(condition,message)
+		return
 
 func run() -> void:
 	var garage: Node3D = load("res://scenes/garage.tscn").instantiate()
@@ -45,7 +48,7 @@ func run() -> void:
 	ui.view_requested.emit("trunk")
 	check(is_equal_approx(garage.camera.yaw,2.65),"Ver porta-malas enquadra a traseira")
 	garage.camera.reset_view()
-	check(garage.camera.target.is_equal_approx(Vector3(0,0.95,0)),"Restaurar câmera desfaz enquadramento")
+	check(garage.camera.target.is_equal_approx(Vector3(0,0.86,0)),"Restaurar câmera desfaz enquadramento")
 	# Inverter a animação a meio caminho sem acumular tweens.
 	car.set_part_open("hood",true)
 	await create_timer(0.1).timeout
@@ -84,5 +87,7 @@ func run() -> void:
 			check(car.seat_material.roughness < 0.4,"Couro sintético mais liso")
 		if upholstery == 2:
 			check(car.seat_trim_material.albedo_color == car.interior_material.albedo_color,"Esportivo bicolor")
+	if failed:
+		return
 	print("PASS: %d verificações de aberturas, motor, caixas de som e interior" % checks)
-	quit(0)
+	quit(1 if failed else 0)

@@ -73,7 +73,7 @@ static func audio(car: Node3D, parent: Node3D, setup: int) -> void:
 	var cone: Material = car.material(Color("10151c"),0.0,0.75)
 	var rim: Material = car.material(Color("8b98a4"),0.55,0.32)
 	var height := 0.55 if setup == 3 else 0.43
-	car.box(parent,"SpeakerCabinet",Vector3(1.12,height,0.35),Vector3(0,height/2,0),cabinet)
+	car.box(parent,"SpeakerCabinet",Vector3(1.0,height,0.35),Vector3(0,height/2,0),cabinet)
 	var centers: Array[Vector2] = [Vector2(0,0.22)]
 	var radius := 0.16
 	if setup == 2:

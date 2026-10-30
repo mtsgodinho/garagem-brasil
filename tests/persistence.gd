@@ -1,5 +1,7 @@
 extends SceneTree
 
+var failed := false
+
 const Store = preload("res://scripts/persistence/customization_store.gd")
 const State = preload("res://scripts/customization/vehicle_customization.gd")
 var checks := 0
@@ -10,10 +12,11 @@ func _initialize() -> void:
 
 func check(condition: bool, message: String) -> void:
 	checks += 1
-	if not condition:
+	if not condition and not failed:
+		failed = true
 		push_error(message)
 		quit(1)
-		assert(condition,message)
+		return
 
 func raw(path: String, contents: String) -> void:
 	var file := FileAccess.open(path,FileAccess.WRITE)
@@ -123,5 +126,7 @@ func run() -> void:
 	check(store.last_error != OK,"Erro exposto à interface")
 	check(FileAccess.get_file_as_string(path) == before,"Falha preserva versão principal")
 	check(store.read_state(path + ".bak") != null,"Falha preserva backup")
+	if failed:
+		return
 	print("PASS: %d verificações de JSON, backup, recuperação e falhas de gravação" % checks)
-	quit(0)
+	quit(1 if failed else 0)

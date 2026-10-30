@@ -1,14 +1,17 @@
 extends SceneTree
+
+var failed := false
 ## Rodar em processos separados: write, read, exit, read-exit, failure.
 
 func _initialize() -> void:
 	call_deferred("run")
 
 func check(condition: bool, message: String) -> void:
-	if not condition:
+	if not condition and not failed:
+		failed = true
 		push_error(message)
 		quit(1)
-		assert(condition,message)
+		return
 
 func choose(option: OptionButton, index: int) -> void:
 	option.select(index)
@@ -80,10 +83,14 @@ func run() -> void:
 	elif mode == "exit":
 		ui.body_picker.color_changed.emit(Color("268349"))
 		check(garage.dirty,"Há alteração ainda não salva")
+		if failed:
+			return
 		print("PASS: fechamento com alteração pendente solicitado")
 		garage.notification(Node.NOTIFICATION_WM_CLOSE_REQUEST)
 		return
 	else:
 		check(false,"Modo desconhecido")
+	if failed:
+		return
 	print("PASS: processo " + mode)
-	quit(0)
+	quit(1 if failed else 0)

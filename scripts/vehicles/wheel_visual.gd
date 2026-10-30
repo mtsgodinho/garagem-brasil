@@ -41,6 +41,32 @@ static func spoke(parent: Node3D, angle: float, radius: float, width: float, x: 
 	part.position = Vector3(x, cos(angle) * center, sin(angle) * center)
 	parent.add_child(part)
 
+static func tire_mesh(parent: Node3D, radius: float, mat: Material) -> void:
+	var profile: Array[Vector2] = [Vector2(-0.10,radius-0.005),Vector2(-0.112,radius+0.025),Vector2(-0.111,0.283),Vector2(-0.083,0.314),Vector2(-0.045,0.32),Vector2(0.045,0.32),Vector2(0.083,0.314),Vector2(0.111,0.283),Vector2(0.112,radius+0.025),Vector2(0.10,radius-0.005)]
+	var st := SurfaceTool.new()
+	st.begin(Mesh.PRIMITIVE_TRIANGLES)
+	var segments := 64
+	for j in profile.size():
+		var tangent := (profile[(j+1)%profile.size()]-profile[(j-1+profile.size())%profile.size()]).normalized()
+		for i in segments:
+			var angle := TAU*float(i)/float(segments)
+			st.set_normal(Vector3(-tangent.y,tangent.x*cos(angle),tangent.x*sin(angle)))
+			st.set_uv(Vector2(float(i)/segments,float(j)/profile.size()))
+			st.add_vertex(Vector3(profile[j].x,profile[j].y*cos(angle),profile[j].y*sin(angle)))
+	for j in profile.size():
+		for i in segments:
+			var a := j*segments+i
+			var b := ((j+1)%profile.size())*segments+i
+			var c := ((j+1)%profile.size())*segments+(i+1)%segments
+			var d := j*segments+(i+1)%segments
+			for index in [a,b,c,a,c,d]:
+				st.add_index(index)
+	var tire := MeshInstance3D.new()
+	tire.name = "Tire"
+	tire.mesh = st.commit()
+	tire.material_override = mat
+	parent.add_child(tire)
+
 static func build(parent: Node3D, model: int, inches: int, rim: Material, tire: Material, dark: Material) -> void:
 	# Só recriar geometria quando modelo/aro muda; a cor usa material compartilhado.
 	for old in parent.get_children():
@@ -50,7 +76,24 @@ static func build(parent: Node3D, model: int, inches: int, rim: Material, tire: 
 	parent.set_meta("model", model)
 	parent.set_meta("inches", inches)
 	parent.set_meta("rim_radius", radius)
-	cylinder(parent, "Tire", 0.32, 0.21, 0.0, tire)
+	tire_mesh(parent,radius,tire)
+	parent.set_meta("outer_radius",0.32)
+	var groove_material := StandardMaterial3D.new()
+	groove_material.albedo_color = Color("15181b")
+	groove_material.roughness = 0.98
+	for groove_x in [-0.028,0.028]:
+		var groove := TorusMesh.new()
+		groove.inner_radius = 0.319
+		groove.outer_radius = 0.3205
+		groove.rings = 64
+		groove.ring_segments = 6
+		var part := MeshInstance3D.new()
+		part.name = "TreadGroove"
+		part.mesh = groove
+		part.material_override = groove_material
+		part.rotation.z = PI/2.0
+		part.position.x = groove_x
+		parent.add_child(part)
 	for side in [-1.0, 1.0]:
 		var x: float = side * 0.118
 		cylinder(parent, "BrakeDrum", radius - 0.009, 0.012, side * 0.111, dark)

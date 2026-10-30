@@ -1,5 +1,7 @@
 extends SceneTree
 
+var failed := false
+
 const State = preload("res://scripts/customization/vehicle_customization.gd")
 const Car = preload("res://scripts/vehicles/placeholder_car.gd")
 var checks := 0
@@ -9,10 +11,11 @@ func _initialize() -> void:
 
 func check(condition: bool, message: String) -> void:
 	checks += 1
-	if not condition:
+	if not condition and not failed:
+		failed = true
 		push_error(message)
 		quit(1)
-		assert(condition,message)
+		return
 
 func choose(option: OptionButton, index: int) -> void:
 	option.select(index)
@@ -41,7 +44,7 @@ func run() -> void:
 	check(car.body_material.roughness < low_gloss, "Mais brilho reduz rugosidade")
 	check(is_zero_approx(car.body_material.metallic), "Pintura brilhante não metálica")
 	choose(ui.finish_option,1)
-	check(car.body_material.metallic > 0.7, "Pintura metálica")
+	check(car.body_material.metallic > 0.45, "Pintura metálica")
 	choose(ui.finish_option,2)
 	check(car.body_material.roughness > 0.77 and not car.body_material.clearcoat_enabled, "Acabamento fosco")
 	for model in 5:
@@ -65,7 +68,7 @@ func run() -> void:
 			check(wheel.get_meta("inches") == inches, "Tamanho aplicado a todas as rodas")
 			check(is_equal_approx(wheel.get_meta("rim_radius"),inches * 0.0254 / 2.0), "Escala do aro em metros")
 			var tire: MeshInstance3D = wheel.get_node("Tire")
-			check(is_equal_approx(tire.mesh.top_radius,0.32), "Diâmetro externo do pneu preservado")
+			check(is_equal_approx(tire.get_aabb().size.y/2.0,0.32), "Diâmetro externo do pneu preservado")
 		await process_frame
 	var previous_alpha := 0.0
 	for film in range(5):
@@ -90,5 +93,7 @@ func run() -> void:
 	check(other.body_material != car.body_material, "Materiais próprios por instância")
 	other.queue_free()
 	await process_frame
+	if failed:
+		return
 	print("PASS: %d verificações de personalização pela interface" % checks)
-	quit(0)
+	quit(1 if failed else 0)

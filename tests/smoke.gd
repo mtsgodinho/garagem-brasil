@@ -1,13 +1,16 @@
 extends SceneTree
 
+var failed := false
+
 func _initialize() -> void:
 	call_deferred("run")
 
 func check(condition: bool, message: String) -> void:
-	if not condition:
+	if not condition and not failed:
+		failed = true
 		push_error(message)
 		quit(1)
-		assert(condition, message)
+		return
 
 func run() -> void:
 	var scene := load("res://scenes/garage.tscn") as PackedScene
@@ -21,17 +24,25 @@ func run() -> void:
 	for group in ["Body","Glass","Interior","Wheels"]:
 		check(car.has_node(group), "Grupo substituível: " + group)
 	check(car.get_node("Body").get_child_count() > 10, "Carroceria e detalhes presentes")
-	# Faces das laterais precisam apontar para fora; evita carroceria invisível.
+	# Testar o primeiro encontro do raio com cada para-lama externo. A malha
+	# GLB tem espessura: suas faces internas apontam legitimamente para dentro.
 	var shell: MeshInstance3D = car.get_node("Body/Shell")
-	var arrays: Array = shell.mesh.surface_get_arrays(0)
-	var vertices: PackedVector3Array = arrays[Mesh.ARRAY_VERTEX]
-	var normals: PackedVector3Array = arrays[Mesh.ARRAY_NORMAL]
-	var side_vertices := 0
-	for i in vertices.size():
-		if absf(normals[i].x) > 0.99:
-			side_vertices += 1
-			check(vertices[i].x * normals[i].x > 0.0, "Normal lateral aponta para fora")
-	check(side_vertices > 6, "As duas laterais possuem faces")
+	for side in [-1.0,1.0]:
+		var origin := Vector3(side*2.0,0.92,-1.22)
+		var closest := INF
+		var normal_x := 0.0
+		for surface in shell.mesh.get_surface_count():
+			var arrays := shell.mesh.surface_get_arrays(surface)
+			var vertices: PackedVector3Array = arrays[Mesh.ARRAY_VERTEX]
+			var normals: PackedVector3Array = arrays[Mesh.ARRAY_NORMAL]
+			var indices: PackedInt32Array = arrays[Mesh.ARRAY_INDEX]
+			for i in range(0,indices.size(),3):
+				var hit: Variant = Geometry3D.ray_intersects_triangle(origin,Vector3(-side,0,0),vertices[indices[i]],vertices[indices[i+1]],vertices[indices[i+2]])
+				if hit != null and origin.distance_to(hit) < closest:
+					closest = origin.distance_to(hit)
+					normal_x = (normals[indices[i]].x+normals[indices[i+1]].x+normals[indices[i+2]].x)/3.0
+		check(is_finite(closest),"Raio encontra a lateral do para-lama")
+		check(side*normal_x > 0.5,"Face mais próxima do para-lama aponta para fora")
 	var camera := garage.get_node("OrbitCamera")
 	var start: Vector3 = camera.position
 	var down := InputEventMouseButton.new()
@@ -57,5 +68,7 @@ func run() -> void:
 	check(camera.position.is_finite(), "Órbita completa válida")
 	camera.reset_view()
 	check(camera.position.distance_to(start) < 0.001, "Restaurar câmera")
+	if failed:
+		return
 	print("PASS: cena, peças, quatro rodas, órbita, arrasto, zoom e restauração")
-	quit(0)
+	quit(1 if failed else 0)

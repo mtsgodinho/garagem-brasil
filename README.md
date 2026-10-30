@@ -1,7 +1,7 @@
 # Garagem Brasil
 
-Protótipo inicial em **Godot 4.6.3 / GDScript**, renderer **Compatibility**.
-A garagem e a personalização foram aprovadas pelo usuário no Windows. Esta entrega adiciona **salvamento local, aberturas articuladas e acessórios visuais** e aguarda novo teste antes da direção.
+Protótipo 0.5.0 em **Godot 4.6.3 / GDScript**, renderer **Compatibility**.
+A garagem e a personalização foram aprovadas pelo usuário no Windows. O usuário confirmou o salvamento e pediu mais semelhança com fotos reais. Esta entrega revisa **carroceria, materiais, pneus, iluminação e enquadramento**, preservando as personalizações e os saves.
 
 ## Abrir no Windows (sem programação)
 
@@ -19,7 +19,7 @@ O painel à direita tem seis categorias: Pintura, Rodas, Vidros, Aberturas, Moto
 
 - **Pintura:** clique na amostra grande para escolher qualquer cor, ou em uma das seis cores rápidas. Selecione Brilhante, Metálica ou Fosca e ajuste o brilho.
 - **Rodas:** escolha um dos cinco desenhos, clique na amostra para mudar a cor e ajuste o aro de 13 a 17 polegadas. As quatro rodas mudam juntas. O diâmetro externo do pneu permanece igual; o perfil muda para acomodar o aro.
-- **Vidros:** escolha Sem película, Clara, Média, Escura, Extremamente escura ou Espelhada. O tipo define uma intensidade inicial; o slider permite ajustar. Sem película desativa o slider. A intensidade é apenas visual. A espelhada usa reflexos do céu e não reflete todos os objetos da garagem.
+- **Vidros:** escolha Sem película, Clara, Média, Escura, Extremamente escura ou Espelhada. O tipo define uma intensidade inicial; o slider permite ajustar. Sem película desativa o slider. A intensidade é apenas visual. A espelhada usa reflexos do ambiente de estúdio e não reflete todos os objetos da garagem.
 
 ## Portas, capô, motor, som e interior
 
@@ -33,7 +33,7 @@ Motor e som são montagens visuais nesta entrega: não alteram potência nem rep
 
 ## Salvamento: como usar
 
-A versão atual mostra **ESTÚDIO 04 / GARAGEM INTERATIVA** e o botão **Salvar modificações** abaixo das abas.
+A versão atual mostra **ESTÚDIO 05 / REVISÃO VISUAL** e o botão **Salvar modificações** abaixo das abas.
 
 - Ao parar de alterar uma opção por 0,6 segundo, o jogo salva automaticamente. O rodapé indica alterações pendentes, sucesso ou falha.
 - O botão **Salvar modificações** grava imediatamente.
@@ -49,7 +49,7 @@ O arquivo é compartilhado pelas cópias do projeto com o nome Garagem Brasil no
 
 ## O que testar para aprovar esta entrega
 
-1. Abra a versão que mostra **ESTÚDIO 04 / GARAGEM INTERATIVA**.
+1. Abra a versão que mostra **ESTÚDIO 05 / REVISÃO VISUAL**.
 2. Escolha uma cor diferente, acabamento e brilho; troque modelo, cor e tamanho das rodas; escolha uma película e intensidade.
 3. Teste abrir/fechar todas as peças; selecione peças de motor, uma caixa de som, estofado e cores do interior.
 4. Clique em **Salvar modificações** e confira a mensagem verde **Modificações salvas neste computador**.
@@ -68,7 +68,17 @@ Verificações de personalização que continuam disponíveis:
 - Arrastar sliders e abrir seletores sem que a câmera gire; girar a câmera arrastando diretamente na cena.
 - Conferir se o painel e seus textos cabem na janela do seu computador.
 
-O hatch é um **modelo procedural provisório**, com dimensões aproximadas de 3,92 × 1,64 m. Não é uma reprodução fiel do Volkswagen Gol G3 e não utiliza modelo pago. Vidros, carroceria, interior simplificado, faróis, lanternas, para-choques, retrovisores e quatro rodas são peças separadas. A fidelidade visual ainda não foi aprovada.
+O hatch agora usa uma **malha GLB original de estudo**, criada no Blender com carroceria curva, arcos de roda, faróis com refletores e interior arredondado. A estrutura tem cerca de 3,92 m de comprimento e 1,68 m de largura, sem retrovisores. Não é uma reprodução fiel do Volkswagen Gol G3 e não utiliza modelo pago. Vidros, carroceria, interior simplificado, faróis, lanternas, para-choques, retrovisores e quatro rodas são peças separadas. A fidelidade visual ainda não foi aprovada.
+
+## Revisão visual 0.5.0
+
+Carroceria, teto, capô e para-lamas usam superfícies curvas; faróis têm carcaça, lente e refletores separados. Para-choques, frisos, retrovisores, volante, painel e bancos foram remodelados. Pneus têm laterais arredondadas e sulcos, com contato ajustado à plataforma. O estúdio usa luz neutra, reflexos de painéis, sombra de contato, microtexturas de 256 px e MSAA 2x em Compatibility.
+
+O modelo continua com **duas portas**, e sua fidelidade ainda precisa de aprovação. A foto prata enviada mostra quatro portas; não foi feita uma conversão para quatro portas nesta etapa. Não é fotorealismo nem digitalização de um veículo real. Os materiais de motor e caixas continuam simplificados.
+
+A nova versão lê o mesmo arquivo de salvamento; não é necessário apagar ou editar seus dados. Confira se as escolhas antigas aparecem e teste as quatro aberturas. A aparência antiga foi preservada no histórico Git e nas imagens da linha do tempo.
+
+Blender é necessário apenas para editar/regenerar a fonte. Veja [a documentação do modelo](assets/vehicles/gol_study/README.md). No Windows, importe a pasta nova e aguarde o Godot importar o GLB antes de pressionar F5.
 
 ## Desenvolvimento na nuvem
 
@@ -76,6 +86,7 @@ O ambiente disponível tem Godot 4.6.3 e Blender 4.3.2. Não são necessários p
 
 ```bash
 cd /workspace/garagem-brasil
+./tools/godot-cloud.sh --headless --editor --import
 python3 tools/verify-cloud.py
 ./tools/godot-cloud.sh --headless --quit-after 120
 ```
@@ -83,20 +94,22 @@ python3 tools/verify-cloud.py
 Para editar em um ambiente com display: `./tools/godot-cloud.sh --editor`.
 O teste gráfico `tests/render_capture.gd` requer display X11/OpenGL no Linux e grava uma imagem com nome único em `/workspace/.runtime/`; não deve ser usado como comando de execução no Windows.
 
-## Validação desta entrega
+## Validação e histórico de testes
 
 - Smoke test: cena, grupos de peças, quatro rodas, faces laterais voltadas para fora, câmera, zoom e restauração.
 - `tests/customization.gd`: **131 verificações** acionando a interface para cores, acabamentos, cinco geometrias, aros 13–17 nas quatro rodas, presets de película, intensidade, ausência de reconstrução ao trocar cor e isolamento de materiais entre veículos.
 - `tests/interaction.gd`: mouse enviado ao viewport real; slider altera o brilho sem girar a câmera, arrasto na cena gira a câmera, soltar sobre interface encerra o arrasto e clique abre o seletor de cores. Executado com display virtual.
-- `tests/render_customization.gd`: **15 capturas** OpenGL com cinco rodas, seis películas, pinturas e lados do veículo. Comparação de pixels da região do carro confirmou diferenças de pintura e transparência. Capturas finais arquivadas em [linha do tempo](docs/linha-do-tempo/README.md).
+- Na etapa 0.2, `tests/render_customization.gd` produziu **15 capturas** OpenGL com cinco rodas, seis películas, pinturas e lados do veículo. Comparação de pixels da região do carro confirmou diferenças de pintura e transparência. Capturas finais arquivadas em [linha do tempo](docs/linha-do-tempo/README.md).
 - Testes gráficos executados em Linux / Mesa llvmpipe. O display virtual emite aviso de VSync não suportado. Isso não constitui medição de desempenho em hardware modesto.
 - `tests/persistence.gd`: **63 verificações** de serialização completa, backup, arquivo ausente/inválido, validação de tipos/limites/versão, migração de schema 1 para 2, preservação do original e falhas de gravação.
 - `tests/accessories.gd`: **51 verificações** de categorias, pivôs, animações e reversão, materiais nas peças móveis, filtros/turbo/barra, quatro opções de caixa, estofados, cores e enquadramento de detalhe.
-- `tests/render_accessories.gd`: nove capturas finais das peças fechadas/abertas, motor, três caixas e três estofados; a primeira prévia também foi preservada na linha do tempo.
+- Na etapa 0.4, `tests/render_accessories.gd` produziu nove capturas finais das peças fechadas/abertas, motor, três caixas e três estofados; a primeira prévia também foi preservada na linha do tempo.
 - `tests/persistence_process.gd`: processos independentes gravaram por autosave, reabriram recuperando todos os campos, fecharam com alteração pendente e reabriram novamente; falha de gravação deixou o estado pendente e mostrou confirmação ao sair.
-- `tests/render_persistence.gd`: capturas da interface com sucesso de gravação, carregamento e recuperação de backup.
+- Na etapa 0.3, `tests/render_persistence.gd` produziu capturas da interface com sucesso de gravação, carregamento e recuperação de backup.
+- `tests/visual_model.gd`: **18 verificações** de grupos GLB, dimensões, coordenadas finitas, contato dos pneus e orçamento de até 120 mil triângulos com rodas/acessórios. O conjunto validado fica abaixo desse limite.
+- `tests/render_visual_revision.gd`: vistas reais de frente, lateral, traseira, aro 17, peças abertas, interior, porta-malas e detalhe frontal; prévias também preservadas na linha do tempo.
 - `tools/verify-cloud.py`: executa os testes sem tocar no arquivo do jogador, com timeout e detecção de erros de script mesmo quando o Godot retorna código zero.
-- Garagem e personalização foram executadas e aprovadas pelo usuário no Windows. O salvamento e os acessórios desta entrega **ainda precisam do teste do usuário no Windows**.
+- Garagem e personalização foram executadas e aprovadas pelo usuário no Windows. O usuário confirmou salvamento e acessórios no Windows. A revisão visual 0.5.0 **ainda precisa do teste do usuário no Windows**.
 - A leitura GitHub funciona pela configuração de rede do ambiente; nenhum token foi solicitado.
 
 Consulte [o planejamento e a arquitetura](docs/PLANO.md). Direção e exportação de executável ainda não estão implementadas.

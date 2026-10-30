@@ -97,7 +97,7 @@ func build() -> void:
 	root.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	root.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(root)
-	var heading := label("GARAGEM BRASIL\nESTÚDIO 04 / GARAGEM INTERATIVA",22)
+	var heading := label("GARAGEM BRASIL\nESTÚDIO 05 / REVISÃO VISUAL",22)
 	heading.position = Vector2(28,22)
 	root.add_child(heading)
 	var panel := PanelContainer.new()
@@ -271,7 +271,7 @@ func build_film(column: VBoxContainer) -> void:
 		state.film_intensity = value
 		film_value.text = "Intensidade: %d%%" % roundi(value * 100)
 		changed())
-	note(column,"Intensidade visual, sem equivalência com transmissão luminosa legal. A espelhada usa reflexos leves do céu; não reflete todos os objetos da garagem.")
+	note(column,"Ajuste a transparência. A espelhada usa o ambiente de iluminação; não mostra um reflexo exato dos objetos da garagem.")
 
 func set_save_status(text: String, warning: bool = false) -> void:
 	status.text = text
