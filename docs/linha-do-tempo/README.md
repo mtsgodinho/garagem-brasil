@@ -37,3 +37,7 @@ Em 30/10/2026, o usuário enviou no chat uma captura mostrando a primeira execu�
 ## Aceite da etapa inicial
 
 Em 30/10/2026, o usuário confirmou o funcionamento da garagem corrigida no Windows e aprovou o avanço para personalização. As capturas enviadas por ele permanecem no chat, sem arquivo original acessível no ambiente. Os registros 002–016 são capturas do ambiente Linux, não capturas do computador do usuário.
+
+## Teste de personalização no Windows — 30/10/2026
+
+O usuário enviou no chat uma captura do Estúdio 02 em execução no Windows, com carroceria azul, rodas escuras e a aba Vidros exibindo película Espelhada com intensidade de 100%. A captura confirma a abertura da nova interface e essas escolhas visíveis. Ainda não constitui aprovação de todos os controles nem autorização para avançar ao salvamento. O original da imagem permanece no chat, sem arquivo acessível para cópia neste ambiente; não foi incluído entre as imagens arquivadas no GitHub.
