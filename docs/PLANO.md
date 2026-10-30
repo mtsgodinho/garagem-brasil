@@ -1,6 +1,6 @@
 # Plano progressivo
 
-## Entrega inicial — estrutura e visualização (aguarda aprovação)
+## Entrega inicial — estrutura e visualização (aprovada em 30/10/2026)
 
 Godot 4.6.3 Standard, GDScript, Compatibility, unidades em metros, frente do veículo em -Z. Cenário procedural sem texturas externas, janela inicial 1280 × 720 com interface adaptável.
 
@@ -13,7 +13,17 @@ Godot 4.6.3 Standard, GDScript, Compatibility, unidades em metros, frente do ve�
 
 O veículo expõe nós `Body`, `Glass`, `Interior` e `Wheels`; cada roda tem seu próprio nó. A garagem instancia o visual em `VehicleVisual`. Um modelo definitivo deverá manter um adaptador para esses grupos, materiais próprios por instância, origem no chão e escala em metros. Não vincular regras de personalização à triangulação deste modelo provisório.
 
-## Próximas entregas, somente após aprovação
+## Personalização — implementada, aguarda teste do usuário
+
+- `scripts/customization/vehicle_customization.gd`: Resource com estado da sessão, nomes de opções e presets. Independente da malha e pronto para futura serialização.
+- `scripts/ui/customization_panel.gd`: painel de categorias, cor, acabamento, brilho, desenho/aro/cor das rodas e película/intensidade. Emite sinais para a garagem aplicar o estado ao visual.
+- `scripts/vehicles/wheel_visual.gd`: fábrica procedural dos cinco desenhos; diâmetro externo preservado, material compartilhado entre as quatro rodas do mesmo veículo. Mudança de cor não recria geometria.
+- `apply_customization` no visual: aplica estado a materiais próprios por instância e só reconstrói rodas quando desenho ou aro mudam.
+- Ambiente de reflexão do céu de baixa resolução, sem reflection probes dinâmicos ou efeitos pesados.
+
+Não há persistência ainda. O estado volta aos padrões ao reiniciar. A aprovação desta entrega precede implementação de salvamento/direção.
+
+## Plano das entregas
 
 1. **Personalização:** recurso `VehicleDefinition` para catálogo e cenas de cada carro; estado `VehicleCustomization` separado do visual; controladores de materiais de carroceria/vidros e catálogo de cinco rodas. Interface lateral em português. Validar mudança visual imediata.
 2. **Salvamento:** serialização versionada do estado em `user://`, valores validados, defaults e recuperação de arquivo inválido. Testar reinício e preservação do estado.

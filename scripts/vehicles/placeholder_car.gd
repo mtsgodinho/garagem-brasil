@@ -2,6 +2,15 @@ extends Node3D
 ## Modelo procedural provisório: não é uma reprodução fiel/licenciada do Gol G3.
 ## Frente em -Z, metros. Substituir este nó por GLB mantendo os grupos de peças.
 
+const Customization = preload("res://scripts/customization/vehicle_customization.gd")
+const WheelVisual = preload("res://scripts/vehicles/wheel_visual.gd")
+
+var wheel_material := StandardMaterial3D.new()
+var tire_material := StandardMaterial3D.new()
+var drum_material := StandardMaterial3D.new()
+var current_wheel_model := -1
+var current_wheel_inches := -1
+
 var body_material := StandardMaterial3D.new()
 var glass_material := StandardMaterial3D.new()
 var wheels: Array[Node3D] = []
@@ -59,8 +68,9 @@ func _ready() -> void:
 	glass_material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
 	glass_material.cull_mode = BaseMaterial3D.CULL_DISABLED
 	var black := material(Color("161c24"))
-	var rubber := material(Color("121519"), 0.0, 0.92)
-	var silver := material(Color("9daab8"), 0.75, 0.23)
+	tire_material = material(Color("121519"), 0.0, 0.92)
+	drum_material = material(Color("252a30"), 0.25, 0.7)
+	wheel_material = material(Color("b7c1cb"), 0.75, 0.23)
 	var body := Node3D.new()
 	body.name = "Body"
 	add_child(body)
@@ -104,14 +114,29 @@ func _ready() -> void:
 			wheel.position = Vector3(x,0.45,z)
 			wheel_root.add_child(wheel)
 			wheels.append(wheel)
-			for spec in [[0.32,0.21,rubber],[0.22,0.225,silver],[0.075,0.24,black]]:
-				var cylinder := CylinderMesh.new()
-				cylinder.top_radius = spec[0]
-				cylinder.bottom_radius = spec[0]
-				cylinder.height = spec[1]
-				cylinder.radial_segments = 24
-				var mesh := MeshInstance3D.new()
-				mesh.mesh = cylinder
-				mesh.material_override = spec[2]
-				mesh.rotation.z = PI / 2
-				wheel.add_child(mesh)
+	apply_customization(Customization.new())
+
+func apply_customization(state: Resource) -> void:
+	body_material.albedo_color = Color(state.body_color, 1.0)
+	body_material.metallic = 0.8 if state.finish == 1 else 0.0
+	body_material.roughness = lerpf(0.38, 0.08, state.gloss)
+	if state.finish == 2:
+		body_material.roughness = lerpf(1.0, 0.78, state.gloss)
+	body_material.clearcoat_enabled = state.finish != 2
+	body_material.clearcoat = 0.6 * state.gloss if state.finish != 2 else 0.0
+	body_material.clearcoat_roughness = 0.12
+	wheel_material.albedo_color = Color(state.wheel_color, 1.0)
+	if current_wheel_model != state.wheel_model or current_wheel_inches != state.wheel_inches:
+		for wheel in wheels:
+			WheelVisual.build(wheel, state.wheel_model, state.wheel_inches, wheel_material, tire_material, drum_material)
+		current_wheel_model = state.wheel_model
+		current_wheel_inches = state.wheel_inches
+	var intensity: float = 0.0 if state.film == 0 else clampf(state.film_intensity, 0.0, 1.0)
+	var tint := Color(0.17, 0.25, 0.29).lerp(Color(0.012, 0.018, 0.024), intensity)
+	glass_material.albedo_color = Color(tint, lerpf(0.12, 0.99, intensity))
+	glass_material.metallic = 0.15
+	glass_material.roughness = 0.12
+	if state.film == 5:
+		glass_material.albedo_color = Color(0.62, 0.72, 0.80, lerpf(0.3, 0.98, intensity))
+		glass_material.metallic = 0.95
+		glass_material.roughness = 0.05

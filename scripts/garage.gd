@@ -2,6 +2,10 @@ extends Node3D
 
 const Car = preload("res://scripts/vehicles/placeholder_car.gd")
 const Orbit = preload("res://scripts/camera/orbit_camera.gd")
+const Customization = preload("res://scripts/customization/vehicle_customization.gd")
+const CustomizationPanel = preload("res://scripts/ui/customization_panel.gd")
+var customization := Customization.new()
+var customization_ui: CanvasLayer
 var camera: Camera3D
 
 func _ready() -> void:
@@ -11,6 +15,16 @@ func _ready() -> void:
 	environment.ambient_light_source = Environment.AMBIENT_SOURCE_COLOR
 	environment.ambient_light_color = Color("b2c8df")
 	environment.ambient_light_energy = 0.65
+	var sky := Sky.new()
+	var sky_material := ProceduralSkyMaterial.new()
+	sky_material.sky_top_color = Color("536e93")
+	sky_material.sky_horizon_color = Color("ccd7df")
+	sky_material.ground_horizon_color = Color("9ca4ab")
+	sky_material.ground_bottom_color = Color("29333d")
+	sky.sky_material = sky_material
+	sky.radiance_size = Sky.RADIANCE_SIZE_128
+	environment.sky = sky
+	environment.reflected_light_source = Environment.REFLECTION_SOURCE_SKY
 	environment.tonemap_mode = Environment.TONE_MAPPER_FILMIC
 	var world := WorldEnvironment.new()
 	world.environment = environment
@@ -47,7 +61,7 @@ func _ready() -> void:
 		var light := OmniLight3D.new()
 		light.position = Vector3(x,3.7,0)
 		light.light_color = Color("e1efff")
-		light.light_energy = 1.6
+		light.light_energy = 0.65
 		light.omni_range = 9
 		add_child(light)
 	var sun := DirectionalLight3D.new()
@@ -72,51 +86,19 @@ func _ready() -> void:
 	camera.current = true
 	camera.fov = 48
 	camera.near = 0.1
+	camera.h_offset = 0.9
 	add_child(camera)
 	create_ui()
 
 func create_ui() -> void:
-	var layer := CanvasLayer.new()
-	add_child(layer)
-	var root := Control.new()
-	root.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	root.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	layer.add_child(root)
-	var margin := MarginContainer.new()
-	margin.set_anchors_and_offsets_preset(Control.PRESET_TOP_WIDE)
-	margin.add_theme_constant_override("margin_left",32)
-	margin.add_theme_constant_override("margin_top",24)
-	margin.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	root.add_child(margin)
-	var heading := Label.new()
-	heading.text = "GARAGEM BRASIL\nESTÚDIO 01 / VISUALIZAÇÃO"
-	heading.add_theme_font_size_override("font_size",24)
-	heading.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	margin.add_child(heading)
-	var panel := PanelContainer.new()
-	panel.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_WIDE)
-	panel.offset_top = -110
-	var style := StyleBoxFlat.new()
-	style.bg_color = Color(0.035,0.05,0.07,0.96)
-	style.content_margin_left = 28
-	style.content_margin_right = 28
-	style.content_margin_top = 16
-	style.content_margin_bottom = 16
-	panel.add_theme_stylebox_override("panel",style)
-	root.add_child(panel)
-	var row := HBoxContainer.new()
-	row.add_theme_constant_override("separation",24)
-	panel.add_child(row)
-	var info := Label.new()
-	info.text = "GOL G3 • ESTUDO PROVISÓRIO\nModelo geométrico aproximado — não é uma reprodução fiel.\nArraste para girar • Roda do mouse: zoom • R: restaurar câmera"
-	info.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	info.add_theme_font_size_override("font_size",16)
-	row.add_child(info)
-	var reset := Button.new()
-	reset.text = "Restaurar câmera"
-	reset.pressed.connect(camera.reset_view)
-	row.add_child(reset)
-	var quit := Button.new()
-	quit.text = "Sair"
-	quit.pressed.connect(get_tree().quit)
-	row.add_child(quit)
+	customization_ui = CustomizationPanel.new()
+	customization_ui.name = "CustomizationPanel"
+	add_child(customization_ui)
+	customization_ui.setup(customization)
+	customization_ui.customization_changed.connect(apply_customization)
+	customization_ui.restore_camera.connect(camera.reset_view)
+	customization_ui.exit_requested.connect(get_tree().quit)
+	apply_customization()
+
+func apply_customization() -> void:
+	get_node("VehicleVisual").apply_customization(customization)
