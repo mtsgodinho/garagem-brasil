@@ -68,3 +68,7 @@ Nenhum recurso pago ou modelo externo foi usado. O modelo definitivo exige geome
 `exterior_visual.gd` cria para-choques, alargadores, saias/lip/aero e adesivos; catálogos no Resource de personalização. O adaptador alterna as peças originais, tinturas de lanternas e cria acessórios ligados aos pivôs quando necessário. Suspensão visual desloca o corpo, mantendo rodas no chão e deformando apenas a região dos arcos, com caixas internas protegendo os pneus. Não é simulação de suspensão.
 
 Schema 3 persiste sete campos adicionais e amplia o catálogo para dez rodas, preservando a leitura de schemas 1/2. UI com nove categorias, 18 cores rápidas e seletores livres. Testes de reabertura verificam os novos campos. Os próximos recursos sugeridos continuam planejamento; não avançar para direção sem orientação do usuário.
+
+## Pista e modo foto — 0.7.0
+
+Etapa autorizada pelo usuário após Estúdio 06. Pista de 2,4 km com gravidade, colisão e direção arcade CharacterBody3D; cenas/visuais separados do estado de personalização. HUD, duas câmeras, menu de pausa, reposicionamento e retorno à garagem sem perder escolhas. Modo foto orbital reutilizado em garagem/pista, congela movimento e grava PNG sem HUD, com nomes sem sobrescrita. Validado no Linux; aguarda teste no Windows. Consulte PISTA_E_FOTOS.md.

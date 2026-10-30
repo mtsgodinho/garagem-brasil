@@ -20,7 +20,7 @@ def run(script, *args):
     if result.returncode or re.search(r'(?m)^(SCRIPT ERROR:|ERROR:)', result.stdout):
         raise SystemExit(f'FAILED: {script} {args} (exit={result.returncode})')
 
-for script in ('tests/smoke.gd', 'tests/customization.gd', 'tests/persistence.gd', 'tests/accessories.gd', 'tests/visual_model.gd', 'tests/exterior.gd'):
+for script in ('tests/smoke.gd', 'tests/customization.gd', 'tests/persistence.gd', 'tests/accessories.gd', 'tests/visual_model.gd', 'tests/exterior.gd', 'tests/driving.gd'):
     run(script)
 path = str(fixture / 'customization.json')
 for mode in ('write', 'read', 'exit', 'read-exit'):

@@ -2,6 +2,8 @@ extends CanvasLayer
 
 const State = preload("res://scripts/customization/vehicle_customization.gd")
 
+signal drive_requested
+signal photo_requested
 signal customization_changed
 signal restore_camera
 signal view_requested(part: String)
@@ -104,7 +106,7 @@ func build() -> void:
 	root.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	root.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(root)
-	var heading := label("GARAGEM BRASIL\nESTÚDIO 06 / TUNAGEM EXTERNA",22)
+	var heading := label("GARAGEM BRASIL\nESTÚDIO 07 / GARAGEM E PISTA",22)
 	heading.position = Vector2(28,22)
 	root.add_child(heading)
 	var panel := PanelContainer.new()
@@ -185,6 +187,14 @@ func build() -> void:
 	status.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	status.modulate = Color("e3b36c")
 	info.add_child(status)
+	var drive := Button.new()
+	drive.text = "Testar carro"
+	drive.pressed.connect(func() -> void: drive_requested.emit())
+	row.add_child(drive)
+	var photo := Button.new()
+	photo.text = "Modo foto"
+	photo.pressed.connect(func() -> void: photo_requested.emit())
+	row.add_child(photo)
 	var reset := Button.new()
 	reset.text = "Restaurar câmera"
 	reset.pressed.connect(func() -> void: restore_camera.emit())

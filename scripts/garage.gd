@@ -15,6 +15,9 @@ var store: RefCounted
 var save_timer: Timer
 var dirty := false
 var exit_dialog: ConfirmationDialog
+var track: Node3D
+var photo: Node3D
+var studio_environment: Environment
 
 func _ready() -> void:
 	store = SaveStore.new(save_path)
@@ -138,6 +141,8 @@ func create_ui() -> void:
 	customization_ui.exit_requested.connect(request_exit)
 	customization_ui.save_requested.connect(save_now)
 	customization_ui.view_requested.connect(camera.focus_detail)
+	customization_ui.drive_requested.connect(enter_track)
+	customization_ui.photo_requested.connect(enter_photo)
 	customization_ui.opening_requested.connect(get_node("VehicleVisual").set_part_open)
 	if persistence_enabled:
 		customization_ui.set_save_status(store.message,store.load_result in ["invalid","recovered"])
@@ -180,3 +185,65 @@ func request_exit() -> void:
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_WM_CLOSE_REQUEST and is_node_ready():
 		request_exit()
+
+func enter_track() -> void:
+	if track != null or photo != null: return
+	if dirty and not save_now(): return
+	studio_environment = get_node("WorldEnvironment").environment
+	get_node("WorldEnvironment").environment = null
+	visible = false
+	customization_ui.hide()
+	camera.set_process_input(false)
+	camera.set_process_unhandled_input(false)
+	track = load("res://scripts/driving/test_track.gd").new()
+	track.customization = customization
+	track.garage_requested.connect(leave_track)
+	track.photo_requested.connect(enter_photo)
+	get_tree().root.add_child(track)
+
+func leave_track() -> void:
+	if track == null: return
+	track.world.environment = null
+	track.driver.controls_enabled = false
+	track.queue_free()
+	track = null
+	get_node("WorldEnvironment").environment = studio_environment
+	visible = true
+	customization_ui.show()
+	camera.set_process_input(true)
+	camera.set_process_unhandled_input(true)
+	camera.make_current()
+
+func enter_photo() -> void:
+	if photo != null: return
+	photo = load("res://scripts/photo/photo_mode.gd").new()
+	if track != null:
+		track.photo_mode = true
+		track.driver.controls_enabled = false
+		track.hud.hide()
+		photo.target = track.driver.global_position
+		photo.previous_camera = track.camera
+	else:
+		customization_ui.hide()
+		camera.set_process_input(false)
+		camera.set_process_unhandled_input(false)
+		photo.target = Vector3.ZERO
+		photo.previous_camera = camera
+	photo.finished.connect(leave_photo)
+	get_tree().root.add_child(photo)
+
+func leave_photo() -> void:
+	photo = null
+	if track != null:
+		track.photo_mode = false
+		track.driver.controls_enabled = not track.paused
+		track.hud.show()
+	else:
+		customization_ui.show()
+		camera.set_process_input(true)
+		camera.set_process_unhandled_input(true)
+
+func _unhandled_key_input(event: InputEvent) -> void:
+	if track == null and photo == null and event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_P:
+		get_viewport().set_input_as_handled()
+		enter_photo()

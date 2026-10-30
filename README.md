@@ -1,6 +1,6 @@
 # Garagem Brasil
 
-Protótipo 0.6.0 em **Godot 4.6.3 / GDScript**, renderer **Compatibility**.
+Protótipo 0.7.0 em **Godot 4.6.3 / GDScript**, renderer **Compatibility**.
 A garagem e a personalização foram aprovadas pelo usuário no Windows. O usuário confirmou o salvamento e pediu mais semelhança com fotos reais. Esta entrega revisa **carroceria, materiais, pneus, iluminação e enquadramento**, preservando as personalizações e os saves.
 
 ## Abrir no Windows (sem programação)
@@ -12,6 +12,14 @@ A garagem e a personalização foram aprovadas pelo usuário no Windows. O usuá
 5. Arraste com o botão esquerdo sobre a cena para girar ao redor do carro. Use a roda do mouse para aproximar/afastar. Pressione **R** ou clique em **Restaurar câmera** para voltar à posição inicial. **Sair** fecha o jogo.
 
 Não há executável Windows exportado nesta entrega. O projeto deve ser executado pelo Godot; exportação e validação do executável pertencem à finalização. Não houve teste em Windows neste ambiente Linux.
+
+## Novidade 0.7.0 — dirigir e fotografar
+
+No rodapé, **Testar carro** abre a estrada de 2,4 km com seu carro personalizado. **W** acelera, **S** freia/dá ré, **A/D** viram, **Espaço** freia, **C** alterna câmera e **ESC** abre o menu. **R** reposiciona. Use **Voltar à garagem** para retornar com suas modificações.
+
+**Modo foto** ou **P** abre a câmera orbital na garagem e na pista. **F12** ou Fotografar salva PNG sem interface; **Abrir pasta** mostra os arquivos, **TAB** oculta os controles e **P/ESC** retorna. Na pista, o carro fica congelado enquanto você fotografa. Fotos no Windows: `%APPDATA%\Godot\app_userdata\Garagem Brasil\photos`.
+
+[Instruções detalhadas e roteiro de teste](docs/PISTA_E_FOTOS.md). A condução é arcade e a pista é simples; a versão nova ainda precisa de teste no Windows. Fotos locais não são enviadas automaticamente ao GitHub.
 
 ## Personalização: como usar
 
@@ -33,13 +41,13 @@ Motor e som são montagens visuais nesta entrega: não alteram potência nem rep
 
 ## Salvamento: como usar
 
-A versão atual mostra **ESTÚDIO 06 / TUNAGEM EXTERNA** e o botão **Salvar modificações** abaixo das abas.
+A versão atual mostra **ESTÚDIO 07 / GARAGEM E PISTA** e o botão **Salvar modificações** abaixo das abas.
 
 - Ao parar de alterar uma opção por 0,6 segundo, o jogo salva automaticamente. O rodapé indica alterações pendentes, sucesso ou falha.
 - O botão **Salvar modificações** grava imediatamente.
 - **Sair** e o X da janela do jogo tentam gravar qualquer alteração pendente antes de fechar. Se falhar, o jogo oferece Voltar ou Sair sem salvar.
 - Ao abrir novamente, cor, acabamento, brilho, desenho/cor/aro das rodas, tipo/intensidade da película, peças do motor, caixa de som, estofado e cores do interior são carregados e aparecem tanto no carro quanto nos controles.
-- Não precisa de Internet, conta ou banco de dados. Ainda não há direção.
+- Não precisa de Internet, conta ou banco de dados. A pista de teste está disponível pelo botão Testar carro.
 
 No Windows, os dados ficam em `%APPDATA%\Godot\app_userdata\Garagem Brasil\garagem\customization.json`. Para abrir a pasta, pressione **Win+R**, cole `%APPDATA%\Godot\app_userdata\Garagem Brasil\garagem` e pressione Enter. Não é necessário editar esse arquivo para jogar.
 
@@ -49,7 +57,7 @@ O arquivo é compartilhado pelas cópias do projeto com o nome Garagem Brasil no
 
 ## O que testar para aprovar esta entrega
 
-1. Abra a versão que mostra **ESTÚDIO 06 / TUNAGEM EXTERNA**.
+1. Abra a versão que mostra **ESTÚDIO 07 / GARAGEM E PISTA**.
 2. Escolha uma cor diferente, acabamento e brilho; troque modelo, cor e tamanho das rodas; escolha uma película e intensidade.
 3. Teste abrir/fechar todas as peças; selecione peças de motor, uma caixa de som, estofado e cores do interior.
 4. Clique em **Salvar modificações** e confira a mensagem verde **Modificações salvas neste computador**.
@@ -83,7 +91,7 @@ Tudo é salvo automaticamente. O schema 3 mantém leitura dos saves anteriores, 
 
 Os acessórios novos são estudos procedurais próprios; não representam peças reais licenciadas. Para testar: compare cada opção, abra portas/capô/tampa com adesivos e aero, experimente altura 0/3/6 cm e confirme que as escolhas voltam após Sair/F5.
 
-Ideias para as próximas entregas: pista e direção, modo foto, perfis de montagens, faróis/setas funcionais, cambagem/espaçadores, som do motor/escapamento e outros veículos (Celta, Uno, Palio). Essas ideias ainda não foram implementadas nem autorizadas para a próxima etapa.
+Ideias para as próximas entregas: pista e direção, modo foto, perfis de montagens, faróis/setas funcionais, cambagem/espaçadores, som do motor/escapamento e outros veículos (Celta, Uno, Palio). Pista/direção e modo foto foram posteriormente autorizados e implementados na versão 0.7.0; as outras ideias continuam planejadas.
 
 ## Revisão visual 0.5.0
 
@@ -127,6 +135,8 @@ O teste gráfico `tests/render_capture.gd` requer display X11/OpenGL no Linux e 
 - Garagem e personalização foram executadas e aprovadas pelo usuário no Windows. O usuário confirmou salvamento e acessórios no Windows. A revisão visual 0.5.0 **ainda precisa do teste do usuário no Windows**.
 - A leitura GitHub funciona pela configuração de rede do ambiente; nenhum token foi solicitado.
 
-Consulte [o planejamento e a arquitetura](docs/PLANO.md). Direção e exportação de executável ainda não estão implementadas.
+Consulte [o planejamento e a arquitetura](docs/PLANO.md). A direção arcade está implementada; a exportação de executável ainda está pendente.
 
 Validação 0.6.0: testes de exterior/suspensão (55 verificações), dez rodas, migração de saves antigos e gravação/reabertura de todas as novas escolhas; capturas reais dos kits e adesivos. Executados no Linux; a versão nova ainda precisa do teste no Windows.
+
+Validação 0.7.0: 18 verificações de direção/colisão/pausa/foto/retorno e PNGs reais salvos na pista e garagem. As verificações das etapas anteriores continuam executadas por tools/verify-cloud.py.
